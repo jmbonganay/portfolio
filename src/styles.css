@@ -9003,3 +9003,76 @@ body.is-preloading {
   background: rgba(22, 214, 200, 0.14);
   box-shadow: 0 0 0 4px rgba(22, 214, 200, 0.08);
 }
+
+
+/* =========================================================
+   AUTOMATION — MOBILE SAFE HIGHLIGHT FIX
+   Prevents active nodes from shifting/cutting off on mobile
+   ========================================================= */
+
+.automation-map--mobile-safe {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (min-width: 769px) {
+  .automation-node--hub-zapier.is-highlighted,
+  .automation-node--hub-n8n.is-highlighted {
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  .automation-node:not(.automation-node--hub-zapier):not(.automation-node--hub-n8n).is-highlighted {
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 768px) {
+  .automation-layout {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  .automation-map,
+  .automation-map--mobile-safe {
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .automation-node,
+  .automation-node.is-highlighted,
+  .automation-node.is-dimmed,
+  .automation-node--hub-zapier,
+  .automation-node--hub-zapier.is-highlighted,
+  .automation-node--hub-n8n,
+  .automation-node--hub-n8n.is-highlighted {
+    transform: none !important;
+  }
+
+  .automation-node.is-highlighted {
+    opacity: 1;
+    border-color: rgba(22, 214, 200, 0.82);
+    background:
+      radial-gradient(circle at 20% 16%, rgba(22, 214, 200, 0.18), transparent 38%),
+      linear-gradient(135deg, rgba(22, 214, 200, 0.14), rgba(248, 243, 232, 0.045)),
+      rgba(7, 17, 16, 0.96);
+    box-shadow:
+      inset 0 0 0 1px rgba(22, 214, 200, 0.35),
+      0 0 0 2px rgba(22, 214, 200, 0.16),
+      0 0 28px rgba(22, 214, 200, 0.16);
+  }
+
+  .automation-map.has-active-feature .automation-node.is-dimmed {
+    opacity: 0.45;
+    filter: saturate(0.65);
+  }
+
+  .connection-path.is-active {
+    stroke-width: 2.4;
+  }
+}

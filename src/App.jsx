@@ -1046,8 +1046,8 @@ function AutomationSection() {
           <div
             className={
               hasActiveFeature
-                ? "automation-map has-active-feature"
-                : "automation-map"
+                ? "automation-map automation-map--mobile-safe has-active-feature"
+                : "automation-map automation-map--mobile-safe"
             }
             aria-label="Marketing workflow integration map"
           >
