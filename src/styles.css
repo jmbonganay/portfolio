@@ -9076,3 +9076,63 @@ body.is-preloading {
     stroke-width: 2.4;
   }
 }
+
+
+/* =========================================================
+   SELECTED WORKS — MOBILE FILTER SCROLL FADE HINT
+   ========================================================= */
+
+.work-controls-shell--fade {
+  position: sticky;
+}
+
+.work-controls-shell--fade::after {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .work-controls-shell--fade {
+    position: sticky;
+    overflow: hidden;
+  }
+
+  .work-controls-shell--fade::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    z-index: 5;
+    display: block;
+    width: 56px;
+    pointer-events: none;
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(
+      90deg,
+      rgba(3, 9, 9, 0) 0%,
+      rgba(3, 9, 9, 0.58) 52%,
+      rgba(3, 9, 9, 0.92) 100%
+    );
+  }
+
+  .work-controls-shell--fade .work-controls {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-right: 56px;
+    scroll-padding-right: 56px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .work-controls-shell--fade .work-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .work-controls-shell--fade .work-filter {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}

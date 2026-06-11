@@ -1966,7 +1966,7 @@ function App() {
             </div>
           </div>
 
-          <div className="work-controls-shell">
+          <div className="work-controls-shell work-controls-shell--fade">
             <div className="work-controls" aria-label="Filter selected works by platform">
               {workFilters.map((filter) => {
                 const isActive = activeWorkFilter === filter.id;
