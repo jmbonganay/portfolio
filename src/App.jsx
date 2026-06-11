@@ -13,6 +13,7 @@ import {
   Lock,
   Mail,
   MapPin,
+  Menu,
   Search,
   Send,
   Settings,
@@ -45,6 +46,13 @@ const workFilters = [
   { id: "shopify", label: "Shopify" },
   { id: "gohighlevel", label: "GoHighLevel" },
   { id: "netlify", label: "Netlify" },
+];
+
+const navLinks = [
+  { label: "Work", href: "#work" },
+  { label: "Experience", href: "#experience" },
+  { label: "Capabilities", href: "#capabilities" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const heroPlatformTags = [
@@ -1335,6 +1343,7 @@ function App() {
   const [selectedCaseStudyId, setSelectedCaseStudyId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoaderExiting, setIsLoaderExiting] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const workFilterTimers = useRef([]);
   const workSectionRef = useRef(null);
 
@@ -1586,6 +1595,22 @@ function App() {
   }
 
 
+  function handleNavClick(event, href) {
+    event.preventDefault();
+    setIsMobileMenuOpen(false);
+
+    const targetSection = document.querySelector(href);
+
+    if (targetSection) {
+      targetSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      window.history.pushState(null, "", href);
+    }
+  }
+
   function handleHeroPlatformClick(filterId) {
     handleWorkFilterChange(filterId);
 
@@ -1779,21 +1804,63 @@ function App() {
         <div className="hero__overlay" />
         <div className="hero__grain" />
 
-        <header className="site-nav" aria-label="Primary navigation">
+        <header className="site-nav site-nav--responsive" aria-label="Primary navigation">
           <a
             className="brand"
             href="#top"
+            onClick={(event) => handleNavClick(event, "#top")}
             aria-label="John Michael Bonganay home"
           >
             <span>JM</span>
             <strong>Bonganay</strong>
           </a>
-          <nav className="nav-links">
-            <a href="#work">Work</a>
-            <a href="#experience">Experience</a>
-            <a href="#capabilities">Capabilities</a>
-            <a href="#contact">Contact</a>
+
+          <nav className="nav-links" aria-label="Desktop navigation">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(event) => handleNavClick(event, link.href)}
+              >
+                {link.label}
+              </a>
+            ))}
           </nav>
+
+          <button
+            className="site-nav__menu-button"
+            type="button"
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+            aria-label={
+              isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+          >
+            {isMobileMenuOpen ? (
+              <X size={22} aria-hidden="true" />
+            ) : (
+              <Menu size={22} aria-hidden="true" />
+            )}
+          </button>
+
+          {isMobileMenuOpen ? (
+            <nav
+              className="site-nav__mobile-menu"
+              id="mobile-navigation"
+              aria-label="Mobile navigation"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(event) => handleNavClick(event, link.href)}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          ) : null}
         </header>
 
         <div
