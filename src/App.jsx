@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react";
 import ReactGA from "react-ga4";
 import {
   ArrowUpRight,
@@ -23,13 +23,28 @@ import {
   Workflow,
   X,
 } from "lucide-react";
-import heroImage from "./assets/hero-command-center.png";
-import johnMichaelPortrait from "./assets/john-michael.png";
-import CroSlider from "./components/CroSlider";
-import AboutMetrics from "./components/AboutMetrics";
+import heroImage from "./assets/hero-command-center.webp";
+import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
+import { imageDimensions } from "./data/imageDimensions";
+
+
+const AboutMetrics = lazy(() => import("./components/AboutMetrics"));
+const CroSlider = lazy(() => import("./components/CroSlider"));
+
+function SectionFallback() {
+  return (
+    <div className="section-suspense-fallback" aria-hidden="true">
+      <span />
+    </div>
+  );
+}
+
+function getImageDimensions(src, fallback = { width: 1200, height: 900 }) {
+  return imageDimensions[src] ?? fallback;
+}
 
 const techStackItems = [
   { name: "Figma", mark: "Fg" },
@@ -42,13 +57,91 @@ const techStackItems = [
 const WORK_PAGE_SIZE = 6;
 const WEB3FORMS_ACCESS_KEY = "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
 
-const workFilters = [
-  { id: "all", label: "All" },
-  { id: "wordpress", label: "WordPress" },
-  { id: "shopify", label: "Shopify" },
-  { id: "gohighlevel", label: "GoHighLevel" },
-  { id: "netlify", label: "Netlify" },
+const ALL_WORK_FILTER = "all";
+
+const preferredWorkFilterOrder = [
+  "shopify",
+  "wordpress",
+  "gohighlevel",
+  "netlify",
+  "cro-audits",
+  "automations",
+  "ui-figma",
 ];
+
+const workFilterLabels = {
+  all: "All",
+  shopify: "Shopify",
+  wordpress: "WordPress",
+  gohighlevel: "GoHighLevel",
+  netlify: "Netlify",
+  "cro-audits": "CRO Audits",
+  automations: "Automations",
+  "ui-figma": "UI/Figma",
+};
+
+const platformFilterMap = {
+  shopify: "shopify",
+  wordpress: "wordpress",
+  gohighlevel: "gohighlevel",
+  netlify: "netlify",
+};
+
+function normalizeProjectText(project) {
+  return [
+    project.id,
+    project.type,
+    project.title,
+    project.summary,
+    project.role,
+    project.focus,
+    ...(project.tags ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function getProjectFilterTags(project) {
+  const filterTags = new Set();
+  const platforms = project.platforms?.length ? project.platforms : [project.category];
+
+  platforms.forEach((platform) => {
+    const platformFilter = platformFilterMap[platform];
+
+    if (platformFilter) {
+      filterTags.add(platformFilter);
+    }
+  });
+
+  const projectText = normalizeProjectText(project);
+
+  if (
+    /cro|conversion|offer|cta|checkout|funnel|sales|product page|landing page|direct response|proof|upsell|bundle|purchase flow|lead generation/.test(
+      projectText,
+    )
+  ) {
+    filterTags.add("cro-audits");
+  }
+
+  if (
+    /automation|workflow|zapier|make|integromat|gohighlevel|lead flow|crm|forms|web3forms|tracking|ga4|analytics|conversion tracking/.test(
+      projectText,
+    )
+  ) {
+    filterTags.add("automations");
+  }
+
+  if (
+    /figma|ui|design|designer|visual|brand website|collection|collections|responsive design|front-end|homepage|agency website|interface|layout/.test(
+      projectText,
+    )
+  ) {
+    filterTags.add("ui-figma");
+  }
+
+  return Array.from(filterTags);
+}
 
 const navLinks = [
   { label: "Work", href: "#work" },
@@ -451,8 +544,12 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
         <BlurImage
           className="project-media__image"
+          wrapperClassName="project-media__image-shell"
           src={project.image}
           alt={project.imageAlt}
+          width={getImageDimensions(project.image).width}
+          height={getImageDimensions(project.image).height}
+          sizes="(max-width: 720px) 92vw, (max-width: 1120px) 46vw, 360px"
           loading="lazy"
           decoding="async"
         />
@@ -501,8 +598,12 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
             <BlurImage
               className="project-proof-shot"
+              wrapperClassName="project-proof-shot-shell"
               src={project.proofImage}
               alt=""
+              width={getImageDimensions(project.proofImage, { width: 1200, height: 675 }).width}
+              height={getImageDimensions(project.proofImage, { width: 1200, height: 675 }).height}
+              sizes="(max-width: 720px) 88vw, 320px"
               loading="lazy"
               decoding="async"
               aria-hidden="true"
@@ -626,7 +727,16 @@ function CaseStudyDrawer({ project, onClose }) {
             <p>{projectHost}</p>
           </div>
 
-          <img src={project.image} alt={project.imageAlt} />
+          <BlurImage
+            src={project.image}
+            alt={project.imageAlt}
+            width={getImageDimensions(project.image).width}
+            height={getImageDimensions(project.image).height}
+            sizes="(max-width: 720px) 92vw, 720px"
+            wrapperClassName="case-drawer__image-shell"
+            loading="lazy"
+            decoding="async"
+          />
         </div>
 
         <div className="case-drawer__content">
@@ -1015,8 +1125,8 @@ function CapabilitiesSection() {
 }
 
 function App() {
-  const [activeWorkFilter, setActiveWorkFilter] = useState("all");
-  const [renderedWorkFilter, setRenderedWorkFilter] = useState("all");
+  const [activeWorkFilter, setActiveWorkFilter] = useState(ALL_WORK_FILTER);
+  const [renderedWorkFilter, setRenderedWorkFilter] = useState(ALL_WORK_FILTER);
   const [workGridPhase, setWorkGridPhase] = useState("is-ready");
   const [visibleWorkCount, setVisibleWorkCount] = useState(WORK_PAGE_SIZE);
   const [contactForm, setContactForm] = useState(initialContactForm);
@@ -1044,33 +1154,53 @@ function App() {
         .map((project) => ({
           id: project.id,
           project,
-          platforms: project.platforms?.length
-            ? project.platforms
-            : [project.category],
+          filterTags: getProjectFilterTags(project),
         })),
     [],
   );
-  const workFilterCounts = useMemo(
-    () =>
-      workFilters.reduce((counts, filter) => {
-        counts[filter.id] =
-          filter.id === "all"
-            ? selectedWorkEntries.length
-            : selectedWorkEntries.filter((entry) =>
-                entry.platforms.includes(filter.id),
-              ).length;
 
-        return counts;
-      }, {}),
-    [selectedWorkEntries],
-  );
+  const workFilters = useMemo(() => {
+    const filterCounts = selectedWorkEntries.reduce((counts, entry) => {
+      entry.filterTags.forEach((tag) => {
+        counts[tag] = (counts[tag] ?? 0) + 1;
+      });
+
+      return counts;
+    }, {});
+
+    const availableFilters = Object.keys(filterCounts);
+    const orderedFilters = [
+      ...preferredWorkFilterOrder.filter((filterId) =>
+        availableFilters.includes(filterId),
+      ),
+      ...availableFilters
+        .filter((filterId) => !preferredWorkFilterOrder.includes(filterId))
+        .sort((a, b) =>
+          (workFilterLabels[a] ?? a).localeCompare(workFilterLabels[b] ?? b),
+        ),
+    ];
+
+    return [
+      {
+        id: ALL_WORK_FILTER,
+        label: workFilterLabels[ALL_WORK_FILTER],
+        count: selectedWorkEntries.length,
+      },
+      ...orderedFilters.map((filterId) => ({
+        id: filterId,
+        label: workFilterLabels[filterId] ?? filterId,
+        count: filterCounts[filterId] ?? 0,
+      })),
+    ];
+  }, [selectedWorkEntries]);
+
   const selectedWorkProjects = useMemo(
     () =>
       selectedWorkEntries
         .filter(
           (entry) =>
-            renderedWorkFilter === "all" ||
-            entry.platforms.includes(renderedWorkFilter),
+            renderedWorkFilter === ALL_WORK_FILTER ||
+            entry.filterTags.includes(renderedWorkFilter),
         )
         .map((entry) => entry.project),
     [renderedWorkFilter, selectedWorkEntries],
@@ -1475,7 +1605,12 @@ function App() {
           className="hero__image"
           src={heroImage}
           alt=""
+          width="1500"
+          height="844"
           aria-hidden="true"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
         />
         <div className="hero__overlay" />
         <div className="hero__grain" />
@@ -1616,6 +1751,8 @@ function App() {
                   src={johnMichaelPortrait}
                   alt="John Michael Bonganay, front-end and CRO developer"
                   className="hero-portrait__image"
+                  width="900"
+                  height="1125"
                   loading="eager"
                   decoding="async"
                 />
@@ -1627,7 +1764,7 @@ function App() {
 
                   <div
                     className="hero-portrait__tags"
-                    aria-label="Filter selected works by platform"
+                    aria-label="Filter selected works by platform or skill category"
                   >
                     {heroPlatformTags.map((tag) => (
                       <button
@@ -1714,10 +1851,10 @@ function App() {
           </div>
 
           <div className="work-controls-shell work-controls-shell--fade">
-            <div className="work-controls" aria-label="Filter selected works by platform">
+            <div className="work-controls" aria-label="Filter selected works by platform or skill category">
               {workFilters.map((filter) => {
                 const isActive = activeWorkFilter === filter.id;
-                const count = workFilterCounts[filter.id] ?? 0;
+                const count = filter.count ?? 0;
 
                 return (
                   <button
@@ -1776,13 +1913,17 @@ function App() {
         </div>
       </section>
 
-      <AboutMetrics />
+      <Suspense fallback={<SectionFallback />}>
+        <AboutMetrics />
+      </Suspense>
 
       <CapabilitiesSection />
 
       <AutomationSection />
 
-      <CroSlider />
+      <Suspense fallback={<SectionFallback />}>
+        <CroSlider />
+      </Suspense>
 
       <section
         className="contact-section"
