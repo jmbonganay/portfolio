@@ -4,7 +4,10 @@ import ReactGA from "react-ga4";
 import App from "./App.jsx";
 import "./styles.css";
 
-const GA4_MEASUREMENT_ID = import.meta.env.VITE_GA4_MEASUREMENT_ID;
+// GA4 measurement IDs are public frontend identifiers.
+// Use VITE_GA4_MEASUREMENT_ID in Vercel to override this fallback.
+const GA4_MEASUREMENT_ID =
+  import.meta.env.VITE_GA4_MEASUREMENT_ID || "G-LS3188BW9V";
 
 if (GA4_MEASUREMENT_ID) {
   ReactGA.initialize(GA4_MEASUREMENT_ID);

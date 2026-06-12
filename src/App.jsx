@@ -56,8 +56,14 @@ const techStackItems = [
 ];
 const WORK_PAGE_SIZE = 6;
 const heroImage = "/assets/hero-command-center.webp";
-const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
-const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY;
+// These are public frontend identifiers, not private server secrets.
+// Vercel/Vite environment variables still override these defaults in production.
+const DEFAULT_WEB3FORMS_ACCESS_KEY = "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
+const DEFAULT_HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+const WEB3FORMS_ACCESS_KEY =
+  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || DEFAULT_WEB3FORMS_ACCESS_KEY;
+const HCAPTCHA_SITE_KEY =
+  import.meta.env.VITE_HCAPTCHA_SITE_KEY || DEFAULT_HCAPTCHA_SITE_KEY;
 
 const ALL_WORK_FILTER = "all";
 
@@ -2253,7 +2259,7 @@ function App() {
                       />
                     ) : (
                       <small className="contact-captcha__error" role="alert">
-                        hCaptcha site key is missing. Add VITE_HCAPTCHA_SITE_KEY in Vercel.
+                        hCaptcha site key is missing. Add VITE_HCAPTCHA_SITE_KEY in Vercel or .env.local.
                       </small>
                     )}
 
