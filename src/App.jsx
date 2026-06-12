@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react";
 import ReactGA from "react-ga4";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import {
   ArrowUpRight,
   BarChart3,
@@ -56,6 +57,7 @@ const techStackItems = [
 ];
 const WORK_PAGE_SIZE = 6;
 const WEB3FORMS_ACCESS_KEY = "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
+const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
 
 const ALL_WORK_FILTER = "all";
 
@@ -1137,11 +1139,14 @@ function App() {
   const [contactErrors, setContactErrors] = useState({});
   const [contactSubmitting, setContactSubmitting] = useState(false);
   const [contactStatus, setContactStatus] = useState({ type: "", message: "" });
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
   const [emailCopied, setEmailCopied] = useState(false);
   const [selectedCaseStudyId, setSelectedCaseStudyId] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const workFilterTimers = useRef([]);
   const workSectionRef = useRef(null);
+  const captchaRef = useRef(null);
 
   const selectedWorkEntries = useMemo(
     () =>
@@ -1448,6 +1453,9 @@ function App() {
 
     setContactForm(nextForm);
     setContactStatus({ type: "", message: "" });
+    if (captchaError) {
+      setCaptchaError("");
+    }
 
     if (contactTouched[name]) {
       setContactErrors(validateContactForm(nextForm, selectedProjectType));
@@ -1509,19 +1517,31 @@ function App() {
       return;
     }
 
+    if (!captchaToken) {
+      const message = "Please complete the hCaptcha verification before sending.";
+      setCaptchaError(message);
+      setContactStatus({
+        type: "error",
+        message,
+      });
+      return;
+    }
+
+    setCaptchaError("");
     setContactSubmitting(true);
     setContactStatus({ type: "", message: "" });
 
     try {
       const formData = new FormData(event.currentTarget);
 
-      formData.append("access_key", WEB3FORMS_ACCESS_KEY);
-      formData.append("project_type", selectedProjectType);
-      formData.append(
+      formData.set("access_key", WEB3FORMS_ACCESS_KEY);
+      formData.set("project_type", selectedProjectType);
+      formData.set(
         "subject",
         `New portfolio inquiry${selectedProjectType ? ` — ${selectedProjectType}` : ""}`,
       );
-      formData.append("from_name", "John Michael Portfolio");
+      formData.set("from_name", "John Michael Portfolio");
+      formData.set("h-captcha-response", captchaToken);
 
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -1542,6 +1562,8 @@ function App() {
             data.message ||
             "Something went wrong while sending your inquiry. Please try again.",
         });
+        setCaptchaToken("");
+        captchaRef.current?.resetCaptcha();
         return;
       }
 
@@ -1560,6 +1582,9 @@ function App() {
       setSelectedProjectType(initialContactForm.projectType);
       setContactTouched({});
       setContactErrors({});
+      setCaptchaToken("");
+      setCaptchaError("");
+      captchaRef.current?.resetCaptcha();
       setContactStatus({
         type: "success",
         message: "Inquiry sent successfully. I will be in touch within 24 hours.",
@@ -1571,6 +1596,8 @@ function App() {
         type: "error",
         message: "Unable to send right now. Please try again in a moment.",
       });
+      setCaptchaToken("");
+      captchaRef.current?.resetCaptcha();
     } finally {
       setContactSubmitting(false);
     }
@@ -1596,6 +1623,8 @@ function App() {
   }
 
   const contactSucceeded = contactStatus.type === "success";
+  const isCaptchaReady = Boolean(captchaToken);
+  const contactSubmitDisabled = contactSubmitting || !isCaptchaReady;
 
   return (
     <main className="portfolio-shell">
@@ -2180,13 +2209,69 @@ function App() {
                     ) : null}
                   </div>
 
+                  <div className="contact-captcha">
+                    <HCaptcha
+                      ref={captchaRef}
+                      sitekey={HCAPTCHA_SITE_KEY}
+                      reCaptchaCompat={false}
+                      theme="dark"
+                      onVerify={(token) => {
+                        setCaptchaToken(token);
+                        setCaptchaError("");
+                        setContactStatus((currentStatus) => {
+                          if (
+                            currentStatus.type === "error" &&
+                            /captcha|hcaptcha/i.test(currentStatus.message)
+                          ) {
+                            return { type: "", message: "" };
+                          }
+
+                          return currentStatus;
+                        });
+                      }}
+                      onExpire={() => {
+                        setCaptchaToken("");
+                        setCaptchaError("Captcha expired. Please verify again.");
+                      }}
+                      onError={() => {
+                        setCaptchaToken("");
+                        setCaptchaError("Captcha failed to load. Please try again.");
+                      }}
+                    />
+
+                    <input
+                      type="hidden"
+                      name="h-captcha-response"
+                      value={captchaToken}
+                      readOnly
+                    />
+
+                    {!isCaptchaReady ? (
+                      <small className="contact-captcha__hint">
+                        Please complete hCaptcha first to unlock the send button.
+                      </small>
+                    ) : null}
+
+                    {captchaError ? (
+                      <small className="contact-captcha__error" role="alert">
+                        {captchaError}
+                      </small>
+                    ) : null}
+                  </div>
+
                   <button
                     className="submit-button"
                     type="submit"
-                    disabled={contactSubmitting}
+                    disabled={contactSubmitDisabled}
+                    aria-disabled={contactSubmitDisabled}
+                    title={!isCaptchaReady ? "Complete hCaptcha to send" : undefined}
                   >
                     <span>
-                      {contactSubmitting ? "Sending..." : "Send fast inquiry"}
+                      {contactSubmitting
+                        ? "Sending..."
+                        : isCaptchaReady
+                          ? "Send fast inquiry"
+                          : "Verify hCaptcha to send"}
                     </span>
                     <Send size={18} aria-hidden="true" />
                   </button>
