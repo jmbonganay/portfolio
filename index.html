@@ -15,6 +15,26 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
 
+    <!-- Critical above-the-fold asset preload -->
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/hero-command-center.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
+
+    <!-- Optional custom font preload: uncomment only after adding the actual font file. -->
+    <!--
+    <link
+      rel="preload"
+      as="font"
+      href="/fonts/main-font.woff2"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    -->
+
     <!-- Open Graph / LinkedIn / Facebook / Discord -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://johnmichael-portfolio.vercel.app/" />

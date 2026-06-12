@@ -24,7 +24,6 @@ import {
   Workflow,
   X,
 } from "lucide-react";
-import heroImage from "./assets/hero-command-center.webp";
 import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import { profile } from "./data/profile";
@@ -56,8 +55,9 @@ const techStackItems = [
   { name: "Zapier", mark: "Za" },
 ];
 const WORK_PAGE_SIZE = 6;
-const WEB3FORMS_ACCESS_KEY = "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
-const HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+const heroImage = "/assets/hero-command-center.webp";
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY;
 
 const ALL_WORK_FILTER = "all";
 
@@ -1501,6 +1501,7 @@ function App() {
     event.preventDefault();
 
     const nextErrors = validateContactForm(contactForm, selectedProjectType);
+    const isContactIntegrationReady = Boolean(WEB3FORMS_ACCESS_KEY && HCAPTCHA_SITE_KEY);
     setContactTouched({
       name: true,
       email: true,
@@ -1508,6 +1509,15 @@ function App() {
       message: true,
     });
     setContactErrors(nextErrors);
+
+    if (!isContactIntegrationReady) {
+      setContactStatus({
+        type: "error",
+        message:
+          "Contact form security keys are not configured. Please add the Vercel environment variables first.",
+      });
+      return;
+    }
 
     if (Object.keys(nextErrors).length > 0) {
       setContactStatus({
@@ -1624,7 +1634,9 @@ function App() {
 
   const contactSucceeded = contactStatus.type === "success";
   const isCaptchaReady = Boolean(captchaToken);
-  const contactSubmitDisabled = contactSubmitting || !isCaptchaReady;
+  const isContactIntegrationReady = Boolean(WEB3FORMS_ACCESS_KEY && HCAPTCHA_SITE_KEY);
+  const contactSubmitDisabled =
+    contactSubmitting || !isCaptchaReady || !isContactIntegrationReady;
 
   return (
     <main className="portfolio-shell">
@@ -2210,34 +2222,40 @@ function App() {
                   </div>
 
                   <div className="contact-captcha">
-                    <HCaptcha
-                      ref={captchaRef}
-                      sitekey={HCAPTCHA_SITE_KEY}
-                      reCaptchaCompat={false}
-                      theme="dark"
-                      onVerify={(token) => {
-                        setCaptchaToken(token);
-                        setCaptchaError("");
-                        setContactStatus((currentStatus) => {
-                          if (
-                            currentStatus.type === "error" &&
-                            /captcha|hcaptcha/i.test(currentStatus.message)
-                          ) {
-                            return { type: "", message: "" };
-                          }
+                    {HCAPTCHA_SITE_KEY ? (
+                      <HCaptcha
+                        ref={captchaRef}
+                        sitekey={HCAPTCHA_SITE_KEY}
+                        reCaptchaCompat={false}
+                        theme="dark"
+                        onVerify={(token) => {
+                          setCaptchaToken(token);
+                          setCaptchaError("");
+                          setContactStatus((currentStatus) => {
+                            if (
+                              currentStatus.type === "error" &&
+                              /captcha|hcaptcha/i.test(currentStatus.message)
+                            ) {
+                              return { type: "", message: "" };
+                            }
 
-                          return currentStatus;
-                        });
-                      }}
-                      onExpire={() => {
-                        setCaptchaToken("");
-                        setCaptchaError("Captcha expired. Please verify again.");
-                      }}
-                      onError={() => {
-                        setCaptchaToken("");
-                        setCaptchaError("Captcha failed to load. Please try again.");
-                      }}
-                    />
+                            return currentStatus;
+                          });
+                        }}
+                        onExpire={() => {
+                          setCaptchaToken("");
+                          setCaptchaError("Captcha expired. Please verify again.");
+                        }}
+                        onError={() => {
+                          setCaptchaToken("");
+                          setCaptchaError("Captcha failed to load. Please try again.");
+                        }}
+                      />
+                    ) : (
+                      <small className="contact-captcha__error" role="alert">
+                        hCaptcha site key is missing. Add VITE_HCAPTCHA_SITE_KEY in Vercel.
+                      </small>
+                    )}
 
                     <input
                       type="hidden"
@@ -2246,7 +2264,7 @@ function App() {
                       readOnly
                     />
 
-                    {!isCaptchaReady ? (
+                    {!isCaptchaReady && HCAPTCHA_SITE_KEY ? (
                       <small className="contact-captcha__hint">
                         Please complete hCaptcha first to unlock the send button.
                       </small>
@@ -2264,14 +2282,22 @@ function App() {
                     type="submit"
                     disabled={contactSubmitDisabled}
                     aria-disabled={contactSubmitDisabled}
-                    title={!isCaptchaReady ? "Complete hCaptcha to send" : undefined}
+                    title={
+                      !isContactIntegrationReady
+                        ? "Add Vercel environment variables first"
+                        : !isCaptchaReady
+                          ? "Complete hCaptcha to send"
+                          : undefined
+                    }
                   >
                     <span>
                       {contactSubmitting
                         ? "Sending..."
-                        : isCaptchaReady
-                          ? "Send fast inquiry"
-                          : "Verify hCaptcha to send"}
+                        : !isContactIntegrationReady
+                          ? "Contact form not configured"
+                          : isCaptchaReady
+                            ? "Send fast inquiry"
+                            : "Verify hCaptcha to send"}
                     </span>
                     <Send size={18} aria-hidden="true" />
                   </button>
