@@ -24,7 +24,8 @@ import {
 } from "lucide-react";
 import heroImage from "./assets/hero-command-center.png";
 import johnMichaelPortrait from "./assets/john-michael.png";
-import Testimonials from "./components/Testimonials";
+import CroSlider from "./components/CroSlider";
+import AboutMetrics from "./components/AboutMetrics";
 import BlurImage from "./components/BlurImage";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
@@ -50,7 +51,7 @@ const workFilters = [
 
 const navLinks = [
   { label: "Work", href: "#work" },
-  { label: "Experience", href: "#experience" },
+  { label: "About", href: "#about" },
   { label: "Capabilities", href: "#capabilities" },
   { label: "Contact", href: "#contact" },
 ];
@@ -190,48 +191,6 @@ const selectedWorkMeta = {
     role: "Long-form sales page, story flow, mobile reading experience",
   },
 };
-const experienceHighlights = [
-  {
-    value: "4+",
-    label: "years building conversion-focused pages",
-  },
-  {
-    value: "3",
-    label: "core platforms: WordPress, Shopify, GoHighLevel",
-  },
-  {
-    value: "CRO",
-    label: "visual hierarchy, offer flow, and QA mindset",
-  },
-];
-const experienceTimeline = [
-  {
-    period: "April 2023 - April 2026",
-    title: "Front-End / WordPress Developer",
-    company: "Cherrington Media",
-    summary:
-      "Built and optimized responsive WordPress landing pages, Shopify product pages, and GoHighLevel funnels for lead generation, ecommerce sales, and campaign launches.",
-    highlights: [
-      "Improved page speed by optimizing plugins, images, videos, fonts, and campaign media.",
-      "Structured Shopify product pages around product visuals, offer clarity, proof, and CTA flow.",
-      "Supported tracking, analytics, payment, email, and logistics integrations across launches.",
-    ],
-    focus: "WordPress / Shopify / GoHighLevel / CRO",
-  },
-  {
-    period: "2022 - 2023",
-    title: "Web Developer / Landing Page Designer",
-    company: "Nest Marketing",
-    summary:
-      "Designed high-fidelity landing pages in Figma and Sketch, then translated approved layouts into responsive WordPress websites with clean structure and campaign-ready presentation.",
-    highlights: [
-      "Converted design direction into accurate responsive builds with consistent visual hierarchy.",
-      "Applied on-page SEO, media optimization, analytics setup, and launch QA to client websites.",
-      "Configured Zapier workflows to reduce repetitive tasks and improve campaign operations.",
-    ],
-    focus: "Figma / WordPress / SEO / Automation",
-  },
-];
 const automationTools = [
   {
     id: "wordpress",
@@ -439,62 +398,6 @@ function validateContactForm(values, selectedProjectType = values.projectType) {
 
 function NoiseOverlay() {
   return <div className="ui-noise" aria-hidden="true" />;
-}
-
-function InitialPreloader({ isExiting }) {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const duration = 1650;
-    const startTime = performance.now();
-    let frameId;
-
-    function updateProgress(currentTime) {
-      const elapsed = currentTime - startTime;
-      const nextProgress = Math.min(
-        100,
-        Math.round((elapsed / duration) * 100),
-      );
-
-      setProgress(nextProgress);
-
-      if (nextProgress < 100) {
-        frameId = requestAnimationFrame(updateProgress);
-      }
-    }
-
-    frameId = requestAnimationFrame(updateProgress);
-
-    return () => cancelAnimationFrame(frameId);
-  }, []);
-
-  return (
-    <div
-      className={isExiting ? "initial-loader is-exiting" : "initial-loader"}
-      role="status"
-      aria-live="polite"
-      aria-label="Loading portfolio"
-    >
-      <div className="initial-loader__glow" aria-hidden="true" />
-
-      <div className="initial-loader__panel">
-        <div className="initial-loader__mark" aria-hidden="true">
-          <span />
-        </div>
-
-        <p>Preparing conversion system</p>
-
-        <strong>
-          {progress}
-          <span>%</span>
-        </strong>
-
-        <div className="initial-loader__progress" aria-hidden="true">
-          <i style={{ width: `${progress}%` }} />
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function MagneticCTA({
@@ -837,183 +740,6 @@ function CaseStudyDrawer({ project, onClose }) {
 }
 
 
-function ExperienceSection() {
-  const experienceSectionRef = useRef(null);
-  const [timelineProgress, setTimelineProgress] = useState(0);
-
-  useEffect(() => {
-    const section = experienceSectionRef.current;
-
-    if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setTimelineProgress(1);
-      return undefined;
-    }
-
-    let frameId = null;
-
-    function updateTimelineProgress() {
-      const rect = section.getBoundingClientRect();
-      const sectionTop = rect.top + window.scrollY;
-      const sectionHeight = section.offsetHeight || 1;
-      const scrollAnchor = window.scrollY + window.innerHeight * 0.45;
-
-      const rawProgress = (scrollAnchor - sectionTop) / sectionHeight;
-      const clampedProgress = Math.min(Math.max(rawProgress, 0), 1);
-
-      setTimelineProgress(clampedProgress);
-    }
-
-    function handleScroll() {
-      if (frameId) {
-        window.cancelAnimationFrame(frameId);
-      }
-
-      frameId = window.requestAnimationFrame(updateTimelineProgress);
-    }
-
-    updateTimelineProgress();
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
-
-    return () => {
-      if (frameId) {
-        window.cancelAnimationFrame(frameId);
-      }
-
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, []);
-
-  return (
-    <section
-      ref={experienceSectionRef}
-      className="experience-section"
-      id="experience"
-      aria-labelledby="experience-title"
-    >
-      <div className="experience-shell">
-        <div className="experience-heading">
-          <p className="section-kicker">Experience & Impact</p>
-
-          <div>
-            <h2 id="experience-title">
-              Four years turning page ideas into cleaner launches and stronger
-              conversion paths.
-            </h2>
-
-            <p>
-              My background sits where design execution, front-end
-              implementation, CRO, and workflow automation meet: clear page
-              hierarchy, responsive builds, fast handoff, and practical systems
-              that keep campaign work moving.
-            </p>
-          </div>
-        </div>
-
-        <div
-          className="experience-about experience-glass-card"
-          aria-label="About John Michael's working style"
-        >
-          <div className="experience-about__copy">
-            <span>About me</span>
-
-            <h3>
-              Landing Page Developer / Designer focused on conversion-first page
-              systems.
-            </h3>
-
-            <p>
-              I build pages with a direct eye for the conversion path: headline
-              clarity, visual hierarchy, benefit sequencing, mobile behavior,
-              tracking readiness, and automation support for repetitive campaign
-              work.
-            </p>
-          </div>
-
-          <div className="experience-stats" aria-label="Experience highlights">
-            {experienceHighlights.map((highlight) => (
-              <div key={highlight.label}>
-                <strong>{highlight.value}</strong>
-                <span>{highlight.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div
-          className="timeline"
-          aria-label="Professional experience timeline"
-          style={{
-            "--timeline-progress": `${Math.round(timelineProgress * 100)}%`,
-          }}
-        >
-          <span className="timeline-line" aria-hidden="true">
-            <span className="timeline-line__fill" />
-          </span>
-
-          {experienceTimeline.map((item, index) => {
-            const nodeThreshold =
-              experienceTimeline.length <= 1
-                ? 0
-                : index / (experienceTimeline.length - 1);
-
-            const isNodeActive = timelineProgress >= nodeThreshold - 0.06;
-
-            return (
-              <article
-                className={
-                  isNodeActive
-                    ? "timeline-card experience-glass-card is-node-active"
-                    : "timeline-card experience-glass-card"
-                }
-                key={`${item.company}-${item.period}`}
-              >
-                <div className="timeline-node" aria-hidden="true">
-                  <BriefcaseBusiness
-                    className="timeline-node__icon"
-                    size={18}
-                    strokeWidth={2.35}
-                  />
-                </div>
-
-                <div className="timeline-card__content">
-                  <div className="timeline-card__meta">
-                    <span>{item.period}</span>
-                    <strong>{item.focus}</strong>
-                  </div>
-
-                  <h3>{item.title}</h3>
-
-                  <p className="timeline-company">{item.company}</p>
-
-                  <p className="timeline-summary">{item.summary}</p>
-
-                  <ul className="timeline-achievements">
-                    {item.highlights.map((highlight) => (
-                      <li className="timeline-achievement" key={highlight}>
-                        <CheckCircle2
-                          className="timeline-achievement__icon"
-                          size={17}
-                          strokeWidth={2.4}
-                          aria-hidden="true"
-                        />
-
-                        <span>{highlight}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function AutomationSection() {
   const [activeFeature, setActiveFeature] = useState(null);
 
@@ -1341,8 +1067,6 @@ function App() {
   const [contactStatus, setContactStatus] = useState({ type: "", message: "" });
   const [emailCopied, setEmailCopied] = useState(false);
   const [selectedCaseStudyId, setSelectedCaseStudyId] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoaderExiting, setIsLoaderExiting] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const workFilterTimers = useRef([]);
   const workSectionRef = useRef(null);
@@ -1407,25 +1131,6 @@ function App() {
   );
 
   useEffect(() => {
-    document.body.classList.add("is-preloading");
-
-    const exitTimer = window.setTimeout(() => {
-      setIsLoaderExiting(true);
-    }, 1750);
-
-    const removeTimer = window.setTimeout(() => {
-      setIsLoading(false);
-      document.body.classList.remove("is-preloading");
-    }, 2350);
-
-    return () => {
-      window.clearTimeout(exitTimer);
-      window.clearTimeout(removeTimer);
-      document.body.classList.remove("is-preloading");
-    };
-  }, []);
-
-  useEffect(() => {
     const originalTitle =
       document.title || "John Michael Bonganay | Landing Page Developer";
 
@@ -1451,7 +1156,7 @@ function App() {
     const sectionWrappers = document.querySelectorAll(
       [
         ".featured-work",
-        ".experience-section",
+        ".about-metrics-section",
         ".automation-section",
         ".capabilities-section",
         ".contact-section",
@@ -1469,6 +1174,7 @@ function App() {
       [
         ".project-card",
         ".capability-card",
+        ".about-metrics-card",
         ".methodology-card",
         ".capability-proof",
         ".contact-card",
@@ -1791,9 +1497,6 @@ function App() {
   return (
     <main className="portfolio-shell">
       <NoiseOverlay />
-      {isLoading ? (
-        <InitialPreloader isExiting={isLoaderExiting} />
-      ) : null}
       <section className="hero" aria-labelledby="hero-title">
         <img
           className="hero__image"
@@ -2096,13 +1799,13 @@ function App() {
         </div>
       </section>
 
-      <ExperienceSection />
-
-      <AutomationSection />
+      <AboutMetrics />
 
       <CapabilitiesSection />
 
-      <Testimonials />
+      <AutomationSection />
+
+      <CroSlider />
 
       <section
         className="contact-section"
