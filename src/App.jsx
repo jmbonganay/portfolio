@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import ReactGA from "react-ga4";
 import {
   ArrowUpRight,
   BarChart3,
@@ -61,45 +62,6 @@ const heroPlatformTags = [
   { label: "Shopify", filterId: "shopify" },
   { label: "GoHighLevel", filterId: "gohighlevel" },
 ];
-
-const heroAvatarStack = ["JM", "AC", "NS", "CM"];
-
-function GoldStar() {
-  return (
-    <svg
-      className="hero-proof__star"
-      viewBox="0 0 20 20"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path d="M10 1.6l2.43 5.02 5.54.8-4 3.9.94 5.52L10 14.24l-4.91 2.6.94-5.52-4-3.9 5.54-.8L10 1.6z" />
-    </svg>
-  );
-}
-
-function HeroSocialProof() {
-  return (
-    <div className="hero-proof" aria-label="Social proof">
-      <div className="hero-proof__avatars" aria-hidden="true">
-        {heroAvatarStack.map((avatar) => (
-          <span className="hero-proof__avatar" key={avatar}>
-            {avatar}
-          </span>
-        ))}
-      </div>
-
-      <div className="hero-proof__content">
-        <div className="hero-proof__stars" aria-label="Five-star trusted rating">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <GoldStar key={index} />
-          ))}
-        </div>
-
-        <span>Trusted by 15+ Agency Partners</span>
-      </div>
-    </div>
-  );
-}
 
 function LocalPhtClock() {
   const [currentTime, setCurrentTime] = useState("");
@@ -1453,6 +1415,17 @@ function App() {
         return;
       }
 
+      ReactGA.event({
+        category: "Form",
+        action: "Submitted Contact Form",
+        label: "Fast Inquiry",
+      });
+
+      ReactGA.event("generate_lead", {
+        form_name: "Fast Inquiry",
+        source: "Portfolio Contact Form",
+      });
+
       setContactForm(initialContactForm);
       setSelectedProjectType(initialContactForm.projectType);
       setContactTouched({});
@@ -1593,6 +1566,13 @@ function App() {
                 className="btn btn--primary hero__primary-cta"
                 href="#contact"
                 strength={12}
+                onClick={() => {
+                  ReactGA.event({
+                    category: "User",
+                    action: "Clicked Hero CTA",
+                    label: "Strategy Call",
+                  });
+                }}
               >
                 <Mail className="hero__primary-cta-icon" size={18} aria-hidden="true" />
                 Book a strategy call
@@ -1604,9 +1584,6 @@ function App() {
               </a>
             </div>
 
-            <div className="hero-animate hero-animate--proof">
-              <HeroSocialProof />
-            </div>
 
             <div
               className="hero__meta hero-animate hero-animate--meta"

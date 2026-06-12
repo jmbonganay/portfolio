@@ -205,33 +205,101 @@ export default function CroSlider() {
                 <div className="cro-mockup-header cro-mockup-header--before">
                   <div>
                     <span>Before</span>
-                    <h3>Messy Before Design</h3>
+                    <h3>CRO Audit Teardown</h3>
                   </div>
 
                   <em>Low clarity</em>
                 </div>
 
-                <div className="cro-wireframe cro-wireframe--before">
-                  <div className="cro-wireframe-main">
-                    <span className="cro-skeleton cro-skeleton--title" />
+                <div className="cro-wireframe cro-wireframe--before cro-audit-wireframe">
+                  <div className="cro-wireframe-main cro-audit-main">
+                    <div className="cro-audit-nav" aria-label="Cluttered navigation example">
+                      <span className="cro-audit-nav__logo" aria-hidden="true" />
 
-                    <div className="cro-skeleton-lines">
-                      <span />
-                      <span />
-                      <span />
+                      <div className="cro-audit-nav__links" aria-hidden="true">
+                        {Array.from({ length: 6 }).map((_, index) => (
+                          <span key={index} />
+                        ))}
+                      </div>
                     </div>
 
-                    <div className="cro-card-grid cro-card-grid--messy">
-                      {Array.from({ length: 6 }).map((_, index) => (
-                        <span key={index} />
+                    <span className="cro-audit-badge cro-audit-badge--hierarchy">
+                      ⚠️ No visual hierarchy
+                    </span>
+
+                    <div className="cro-audit-hero">
+                      <span className="cro-skeleton cro-skeleton--title cro-audit-title" />
+
+                      <div className="cro-audit-wall">
+                        <span className="cro-audit-badge cro-audit-badge--wall">
+                          ⚠️ Wall of text
+                        </span>
+
+                        <span />
+                        <span />
+                        <span />
+                        <span />
+                        <span />
+                      </div>
+
+                      <div className="cro-audit-ctas">
+                        <span className="cro-audit-badge cro-audit-badge--friction">
+                          ❌ Friction point
+                        </span>
+
+                        <div aria-hidden="true">
+                          <span />
+                          <span />
+                          <span />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="cro-card-grid cro-card-grid--messy cro-audit-card-grid">
+                      {Array.from({ length: 4 }).map((_, index) => (
+                        <div className="cro-audit-card" key={index}>
+                          <span />
+                          <i />
+                          <i />
+                          <i />
+                        </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="cro-wireframe-side">
-                    <span />
-                    <span />
-                    <span />
+                  <div className="cro-wireframe-side cro-audit-side">
+                    <div className="cro-audit-side-card cro-audit-side-card--warning">
+                      <span className="cro-audit-badge cro-audit-badge--distracting">
+                        ⚠️ Distracting
+                      </span>
+                      <strong />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+
+                    <div className="cro-audit-side-card">
+                      <strong />
+                      <span />
+                      <span />
+                      <span />
+                    </div>
+
+                    <div className="cro-audit-notes">
+                      <em>Audit Notes</em>
+                      <div>
+                        <span />
+                        <i />
+                      </div>
+                      <div>
+                        <span />
+                        <i />
+                      </div>
+                      <div>
+                        <span />
+                        <i />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
