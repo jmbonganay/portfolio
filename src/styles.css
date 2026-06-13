@@ -10892,3 +10892,1128 @@ body.is-preloading {
     transition: opacity 120ms ease !important;
   }
 }
+
+/* Dedicated portfolio card for backend automation architecture projects */
+.automation-work-grid {
+  display: grid;
+  gap: 24px;
+  margin-top: 38px;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.automation-work-grid.is-leaving,
+.automation-work-grid.is-entering {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+}
+
+.work-grid .automation-architecture-card {
+  grid-column: 1 / -1;
+}
+
+.automation-architecture-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid rgba(22, 214, 200, 0.22);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 14% 16%, rgba(22, 214, 200, 0.16), transparent 34%),
+    radial-gradient(circle at 92% 12%, rgba(255, 184, 107, 0.12), transparent 32%),
+    linear-gradient(135deg, rgba(7, 18, 18, 0.98), rgba(3, 8, 8, 0.96));
+  box-shadow:
+    0 34px 100px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(22, 214, 200, 0.06) inset;
+  color: #f8f3e8;
+}
+
+.automation-architecture-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(22, 214, 200, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(22, 214, 200, 0.05) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(135deg, rgba(0, 0, 0, 0.5), transparent 72%);
+}
+
+.automation-architecture-card__media,
+.automation-architecture-card__content {
+  position: relative;
+  z-index: 1;
+}
+
+.automation-architecture-card__media {
+  display: grid;
+  align-content: start;
+  padding: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.025);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.automation-architecture-card__browser {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px 18px 0 0;
+  background: rgba(0, 0, 0, 0.34);
+  color: rgba(248, 243, 232, 0.62);
+}
+
+.automation-architecture-card__browser span {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(22, 214, 200, 0.42);
+}
+
+.automation-architecture-card__browser p {
+  margin-left: 6px;
+  overflow: hidden;
+  color: rgba(248, 243, 232, 0.68);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.automation-architecture-card__image-shell {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 0;
+  border-radius: 0 0 22px 22px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.28);
+}
+
+.automation-architecture-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.automation-architecture-card__content {
+  display: grid;
+  gap: 22px;
+  padding: 30px;
+}
+
+.automation-architecture-card__eyebrow {
+  width: fit-content;
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 11px;
+  border: 1px solid rgba(22, 214, 200, 0.28);
+  border-radius: 999px;
+  background: rgba(22, 214, 200, 0.1);
+  color: #bffef5;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.automation-architecture-card__headline h3 {
+  max-width: 780px;
+  margin: 0;
+  color: #fffaf0;
+  font-size: clamp(1.9rem, 4vw, 3.35rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.automation-architecture-card__headline p {
+  max-width: 660px;
+  margin: 14px 0 0;
+  color: rgba(248, 243, 232, 0.72);
+  font-size: 1rem;
+  font-weight: 750;
+  line-height: 1.6;
+}
+
+.automation-architecture-card__stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.automation-architecture-card__stack span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.055);
+  color: rgba(248, 243, 232, 0.82);
+  font-size: 0.78rem;
+  font-weight: 820;
+}
+
+.automation-architecture-card__details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.automation-architecture-card__details article {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.automation-architecture-card__detail-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: rgba(22, 214, 200, 0.12);
+  color: #bffef5;
+}
+
+.automation-architecture-card__details h4 {
+  margin: 0 0 7px;
+  color: #fffaf0;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.automation-architecture-card__details p {
+  margin: 0;
+  color: rgba(248, 243, 232, 0.66);
+  font-size: 0.82rem;
+  line-height: 1.58;
+}
+
+.automation-architecture-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.automation-architecture-card__cta,
+.automation-architecture-card__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.automation-architecture-card__cta {
+  border: 1px solid rgba(22, 214, 200, 0.58);
+  background: linear-gradient(135deg, #16d6c8, #a7fff4);
+  color: #061312;
+  box-shadow: 0 18px 46px rgba(22, 214, 200, 0.24);
+}
+
+.automation-architecture-card__secondary {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.055);
+  color: #f8f3e8;
+}
+
+.automation-architecture-card__cta:hover,
+.automation-architecture-card__cta:focus-visible,
+.automation-architecture-card__secondary:hover,
+.automation-architecture-card__secondary:focus-visible {
+  transform: translateY(-2px);
+}
+
+.automation-architecture-card__cta:hover,
+.automation-architecture-card__cta:focus-visible {
+  box-shadow: 0 22px 56px rgba(22, 214, 200, 0.34);
+}
+
+.automation-architecture-card__secondary:hover,
+.automation-architecture-card__secondary:focus-visible {
+  border-color: rgba(22, 214, 200, 0.32);
+  background: rgba(22, 214, 200, 0.08);
+}
+
+@media (max-width: 1180px) {
+  .automation-architecture-card {
+    grid-template-columns: 1fr;
+  }
+
+  .automation-architecture-card__media {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (max-width: 760px) {
+  .automation-architecture-card,
+  .automation-work-grid {
+    border-radius: 22px;
+  }
+
+  .automation-architecture-card__media,
+  .automation-architecture-card__content {
+    padding: 18px;
+  }
+
+  .automation-architecture-card__details {
+    grid-template-columns: 1fr;
+  }
+
+  .automation-architecture-card__actions,
+  .automation-architecture-card__cta,
+  .automation-architecture-card__secondary {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   AUTOMATION CASE STUDY DRAWER — BACKEND SYSTEM PREVIEW
+   ========================================================= */
+
+.automation-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  justify-content: flex-end;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(22, 214, 200, 0.14), transparent 34%),
+    rgba(2, 7, 7, 0.78);
+  color: var(--ink);
+}
+
+.automation-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(18px);
+  cursor: pointer;
+}
+
+.automation-modal__panel {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  width: min(560px, 100%);
+  height: 100svh;
+  overflow-y: auto;
+  border-left: 1px solid rgba(22, 214, 200, 0.24);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(22, 214, 200, 0.18), transparent 34%),
+    radial-gradient(circle at 100% 22%, rgba(255, 184, 107, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(248, 243, 232, 0.08), rgba(248, 243, 232, 0.035)),
+    #071110;
+  box-shadow:
+    -34px 0 90px rgba(0, 0, 0, 0.44),
+    inset 1px 0 0 rgba(255, 255, 255, 0.06);
+  animation: drawerSlideIn 420ms cubic-bezier(0.2, 0.85, 0.2, 1) both;
+}
+
+.automation-modal__topbar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 76px;
+  padding: 18px 22px;
+  border-bottom: 1px solid rgba(248, 243, 232, 0.1);
+  background: rgba(7, 17, 16, 0.84);
+  backdrop-filter: blur(18px);
+}
+
+.automation-modal__label,
+.automation-modal__eyebrow {
+  display: block;
+  color: var(--amber);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.automation-modal__topbar strong {
+  display: block;
+  margin-top: 4px;
+  color: #ffffff;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.automation-modal__close {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(248, 243, 232, 0.14);
+  border-radius: 999px;
+  background: rgba(248, 243, 232, 0.07);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.automation-modal__close:hover,
+.automation-modal__close:focus-visible {
+  transform: rotate(8deg) scale(1.04);
+  border-color: rgba(22, 214, 200, 0.46);
+  background: rgba(22, 214, 200, 0.1);
+  outline: none;
+}
+
+.automation-modal__browser {
+  margin: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(22, 214, 200, 0.2);
+  border-radius: 12px;
+  background: rgba(2, 7, 7, 0.68);
+  box-shadow: 0 22px 58px rgba(0, 0, 0, 0.28);
+}
+
+.automation-modal__browser-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(248, 243, 232, 0.1);
+  background: rgba(1, 9, 10, 0.86);
+}
+
+.automation-modal__browser-header span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+}
+
+.automation-modal__browser-header span:nth-child(1) {
+  background: #fb7185;
+}
+
+.automation-modal__browser-header span:nth-child(2) {
+  background: #fbbf24;
+}
+
+.automation-modal__browser-header span:nth-child(3) {
+  background: #34d399;
+}
+
+.automation-modal__browser-header p {
+  margin: 0 0 0 8px;
+  overflow: hidden;
+  color: rgba(248, 243, 232, 0.64);
+  font-size: 0.72rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.automation-modal__media {
+  aspect-ratio: 16 / 9;
+  background: rgba(248, 243, 232, 0.92);
+}
+
+.automation-modal__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.automation-modal__content {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  padding: 24px 22px 32px;
+}
+
+.automation-modal__title {
+  margin: 2px 0 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.automation-modal__role {
+  margin: 0;
+  color: #c9fff7;
+  font-size: 0.92rem;
+  font-weight: 850;
+}
+
+.automation-modal__description {
+  margin: 0;
+  color: rgba(248, 243, 232, 0.74);
+  font-size: 0.95rem;
+  line-height: 1.72;
+}
+
+.automation-modal__breakdown {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.automation-modal__metric {
+  min-height: 82px;
+  padding: 14px;
+  border: 1px solid rgba(248, 243, 232, 0.11);
+  border-radius: 10px;
+  background:
+    linear-gradient(145deg, rgba(248, 243, 232, 0.08), rgba(248, 243, 232, 0.035)),
+    rgba(2, 7, 7, 0.36);
+}
+
+.automation-modal__metric strong {
+  display: block;
+  color: #c9fff7;
+  font-size: 1.06rem;
+  line-height: 1.1;
+}
+
+.automation-modal__metric span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(248, 243, 232, 0.58);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.automation-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.automation-modal__cta,
+.automation-modal__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.automation-modal__cta {
+  border: 1px solid rgba(22, 214, 200, 0.58);
+  background: linear-gradient(135deg, #16d6c8, #a7fff4);
+  color: #061312;
+  box-shadow: 0 18px 46px rgba(22, 214, 200, 0.24);
+}
+
+.automation-modal__secondary {
+  border: 1px solid rgba(248, 243, 232, 0.15);
+  background: rgba(248, 243, 232, 0.07);
+  color: var(--ink);
+}
+
+.automation-modal__cta:hover,
+.automation-modal__cta:focus-visible,
+.automation-modal__secondary:hover,
+.automation-modal__secondary:focus-visible {
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.automation-modal__cta:hover,
+.automation-modal__cta:focus-visible {
+  box-shadow: 0 22px 56px rgba(22, 214, 200, 0.34);
+}
+
+.automation-modal__secondary:hover,
+.automation-modal__secondary:focus-visible {
+  border-color: rgba(22, 214, 200, 0.32);
+  background: rgba(22, 214, 200, 0.08);
+}
+
+button.automation-architecture-card__secondary {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+@media (max-width: 640px) {
+  .automation-modal {
+    justify-content: center;
+  }
+
+  .automation-modal__panel {
+    width: 100%;
+    border-left: 0;
+  }
+
+  .automation-modal__browser {
+    margin: 18px;
+  }
+
+  .automation-modal__breakdown,
+  .automation-modal__actions,
+  .automation-modal__cta,
+  .automation-modal__secondary {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   AUTOMATIONS CARD — COMPACT NETLIFY-STYLE REFACTOR
+   ========================================================= */
+
+.automation-work-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.work-grid .automation-architecture-card {
+  grid-column: auto;
+}
+
+.automation-architecture-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(16, 32, 31, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 24px 64px rgba(16, 32, 31, 0.1);
+  color: #0b1715;
+  transform-origin: center;
+  animation: workCardIn 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--card-delay, 0ms);
+}
+
+.automation-architecture-card::before {
+  content: none;
+}
+
+.automation-architecture-card.reveal-item {
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  animation: none;
+  will-change: opacity, transform;
+}
+
+.automation-architecture-card.reveal-item.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.automation-architecture-card.reveal-item.is-visible:hover,
+.automation-architecture-card.reveal-item.is-visible:focus-within {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.automation-architecture-card__media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 292px;
+  padding: 44px 16px 18px;
+  overflow: hidden;
+  border-right: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(135deg, rgba(7, 94, 88, 0.12), rgba(255, 184, 107, 0.08)),
+    #eef4ee;
+}
+
+.automation-architecture-card__browser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  background: rgba(6, 9, 8, 0.84);
+  color: rgba(248, 243, 232, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.automation-architecture-card__browser span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+}
+
+.automation-architecture-card__browser span:nth-child(1) {
+  background: #ff6b6b;
+}
+
+.automation-architecture-card__browser span:nth-child(2) {
+  background: #ffbe55;
+}
+
+.automation-architecture-card__browser span:nth-child(3) {
+  background: #16d6c8;
+}
+
+.automation-architecture-card__browser p {
+  margin: 0 0 0 6px;
+  overflow: hidden;
+  color: rgba(248, 243, 232, 0.68);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.automation-architecture-card__image-shell {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(7, 94, 88, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 38px rgba(16, 32, 31, 0.12);
+}
+
+.automation-architecture-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.automation-architecture-card:hover .automation-architecture-card__image.blur-image.is-loaded,
+.automation-architecture-card:focus-within .automation-architecture-card__image.blur-image.is-loaded {
+  transform: scale(1.045);
+}
+
+.automation-architecture-card__content {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding: 20px;
+}
+
+.automation-architecture-card__eyebrow {
+  width: fit-content;
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(7, 94, 88, 0.82);
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.automation-architecture-card__headline h3 {
+  max-width: none;
+  margin: 0;
+  color: #0b1715;
+  font-size: clamp(1.45rem, 2.6vw, 1.9rem);
+  line-height: 1.03;
+  letter-spacing: -0.055em;
+}
+
+.automation-architecture-card__headline p {
+  max-width: none;
+  margin: 10px 0 0;
+  color: rgba(11, 23, 21, 0.68);
+  font-size: 0.88rem;
+  font-weight: 820;
+  line-height: 1.48;
+}
+
+.automation-architecture-card__summary {
+  margin: 0;
+  color: rgba(11, 23, 21, 0.68);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.68;
+}
+
+.automation-architecture-card__matrix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(7, 94, 88, 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(7, 94, 88, 0.045), rgba(22, 214, 200, 0.035)),
+    rgba(255, 255, 255, 0.48);
+}
+
+.automation-architecture-card__matrix div {
+  min-height: 78px;
+  padding: 14px;
+  border-right: 1px solid rgba(7, 94, 88, 0.1);
+  border-bottom: 1px solid rgba(7, 94, 88, 0.1);
+}
+
+.automation-architecture-card__matrix div:nth-child(2n) {
+  border-right: 0;
+}
+
+.automation-architecture-card__matrix div:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.automation-architecture-card__matrix strong {
+  display: block;
+  color: #075e58;
+  font-size: 0.92rem;
+  font-weight: 950;
+  line-height: 1.15;
+}
+
+.automation-architecture-card__matrix span {
+  display: block;
+  margin-top: 7px;
+  color: rgba(11, 23, 21, 0.52);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.automation-architecture-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.automation-architecture-card__tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 7px 10px;
+  border: 1px solid rgba(7, 94, 88, 0.14);
+  border-radius: 999px;
+  background: rgba(7, 94, 88, 0.06);
+  color: #075e58;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.automation-architecture-card__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.automation-architecture-card__cta,
+.automation-architecture-card__secondary,
+button.automation-architecture-card__secondary {
+  width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 950;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.automation-architecture-card__cta {
+  border: 1px solid rgba(7, 94, 88, 0.34);
+  background: #0b1715;
+  color: #f8f3e8;
+  box-shadow: none;
+}
+
+.automation-architecture-card__secondary,
+button.automation-architecture-card__secondary {
+  border: 1px solid rgba(7, 94, 88, 0.24);
+  background:
+    linear-gradient(135deg, rgba(7, 94, 88, 0.05), rgba(22, 214, 200, 0.04)),
+    rgba(255, 255, 255, 0.5);
+  color: #0b1715;
+}
+
+.automation-architecture-card__cta:hover,
+.automation-architecture-card__cta:focus-visible,
+.automation-architecture-card__secondary:hover,
+.automation-architecture-card__secondary:focus-visible {
+  transform: translateY(-2px);
+  outline: none;
+}
+
+.automation-architecture-card__secondary:hover,
+.automation-architecture-card__secondary:focus-visible {
+  border-color: rgba(7, 94, 88, 0.46);
+  background:
+    linear-gradient(135deg, rgba(7, 94, 88, 0.1), rgba(22, 214, 200, 0.08)),
+    rgba(255, 255, 255, 0.78);
+  box-shadow: 0 0 0 4px rgba(22, 214, 200, 0.08);
+}
+
+.automation-architecture-card__cta:hover,
+.automation-architecture-card__cta:focus-visible {
+  border-color: rgba(22, 214, 200, 0.58);
+  box-shadow: 0 16px 38px rgba(7, 94, 88, 0.15);
+}
+
+/* Full technical details now live inside the automation drawer, not the card */
+.automation-modal__feature-list {
+  display: grid;
+  gap: 10px;
+}
+
+.automation-modal__feature {
+  padding: 15px;
+  border: 1px solid rgba(248, 243, 232, 0.11);
+  border-radius: 10px;
+  background:
+    linear-gradient(145deg, rgba(248, 243, 232, 0.08), rgba(248, 243, 232, 0.035)),
+    rgba(2, 7, 7, 0.36);
+}
+
+.automation-modal__feature h3 {
+  margin: 0 0 8px;
+  color: #c9fff7;
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.automation-modal__feature p {
+  margin: 0;
+  color: rgba(248, 243, 232, 0.68);
+  font-size: 0.86rem;
+  line-height: 1.62;
+}
+
+@media (max-width: 1180px) {
+  .automation-work-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .automation-work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .automation-architecture-card__media {
+    height: 260px;
+    padding: 42px 14px 16px;
+  }
+
+  .automation-architecture-card__content {
+    padding: 18px;
+  }
+
+  .automation-architecture-card__actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   AI PROPOSAL ENGINE — AUTOMATION DRAWER INTAKE TERMINAL
+   ========================================================= */
+
+.ai-proposal-engine {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid rgba(22, 214, 200, 0.18);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(22, 214, 200, 0.14), transparent 32%),
+    linear-gradient(145deg, rgba(248, 243, 232, 0.08), rgba(248, 243, 232, 0.035)),
+    rgba(2, 7, 7, 0.42);
+  box-shadow: inset 0 1px 0 rgba(248, 243, 232, 0.06);
+}
+
+.ai-proposal-engine__header {
+  margin-bottom: 18px;
+}
+
+.ai-proposal-engine__eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--amber);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ai-proposal-engine__header h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.35rem;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.ai-proposal-engine__header p {
+  margin: 10px 0 0;
+  color: rgba(248, 243, 232, 0.66);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.ai-proposal-engine__form {
+  display: grid;
+  gap: 14px;
+}
+
+.ai-proposal-engine__field {
+  display: grid;
+  gap: 7px;
+}
+
+.ai-proposal-engine__field span {
+  color: rgba(201, 255, 247, 0.88);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.035em;
+}
+
+.ai-proposal-engine__field input,
+.ai-proposal-engine__field textarea {
+  width: 100%;
+  border: 1px solid rgba(22, 214, 200, 0.22);
+  border-radius: 12px;
+  background: rgba(2, 7, 7, 0.66);
+  color: #ffffff;
+  padding: 13px 14px;
+  font: inherit;
+  outline: none;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.ai-proposal-engine__field textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.ai-proposal-engine__field input:focus,
+.ai-proposal-engine__field textarea:focus {
+  border-color: rgba(167, 255, 244, 0.72);
+  background: rgba(5, 18, 17, 0.9);
+  box-shadow: 0 0 0 4px rgba(22, 214, 200, 0.1);
+}
+
+.ai-proposal-engine__field input::placeholder,
+.ai-proposal-engine__field textarea::placeholder {
+  color: rgba(248, 243, 232, 0.38);
+}
+
+.ai-proposal-engine__success,
+.ai-proposal-engine__error {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.86rem;
+  font-weight: 850;
+  line-height: 1.5;
+}
+
+.ai-proposal-engine__success {
+  border: 1px solid rgba(22, 214, 200, 0.3);
+  background: rgba(22, 214, 200, 0.1);
+  color: #c9fff7;
+}
+
+.ai-proposal-engine__error {
+  border: 1px solid rgba(248, 113, 113, 0.32);
+  background: rgba(248, 113, 113, 0.1);
+  color: #ffd2d2;
+}
+
+.ai-proposal-engine__submit {
+  min-height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #16d6c8, #a7fff4);
+  color: #061312;
+  font-family: inherit;
+  font-weight: 950;
+  cursor: pointer;
+  box-shadow: 0 18px 42px rgba(22, 214, 200, 0.22);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+}
+
+.ai-proposal-engine__submit:hover:not(:disabled),
+.ai-proposal-engine__submit:focus-visible:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 54px rgba(22, 214, 200, 0.34);
+  outline: none;
+}
+
+.ai-proposal-engine__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+}

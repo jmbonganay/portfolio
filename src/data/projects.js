@@ -3,7 +3,8 @@ export const projectCategories = [
   "Shopify",
   "WordPress",
   "GoHighLevel",
-  "Netlify"
+  "Netlify",
+  "Automations"
 ];
 
 export const projects = [
@@ -1148,5 +1149,101 @@ export const projects = [
       { value: "Trust", label: "Authority angle" },
       { value: "CTA", label: "Offer bridge" }
     ]
+  },
+  {
+    id: "automation-inbound-triage-crm",
+    number: "40",
+    category: "Automations",
+    caseStudyData: true,
+    type: "Backend Automation System",
+    title: "Autonomous Lead Triage, CRM Enrichment & AI Proposal Engine",
+    summary:
+      "An asynchronous, multi-branching backend automation system that captures inbound portfolio payloads via cloud webhooks, enriches lead context through REST API firmographic lookups, and routes qualified project ideas into a Gemini-powered proposal engine that dynamically compiles Google Doc templates into locked PDF scopes and dispatches them through email.",
+    role: "Backend Systems Architect & AI Workflow Engineer",
+    focus:
+      "Low-latency webhook ingestion, firmographic enrichment, LLM-powered scope generation, dynamic Google Doc/PDF compilation, CRM ledger sync, and autonomous Gmail dispatch.",
+    image: "/work/automation-inbound-triage-pipeline.webp",
+    imageAlt:
+      "Make.com automation scenario screenshot showing webhook ingestion, text parser, HTTP request, router, Google Sheets, sleep tools, and Gmail delivery branches",
+    link: "https://us2.make.com/public/shared-scenario/8ERguQKtCVM/free-keyword-triage-engine-fixed",
+    calendlyUrl: "https://calendly.com/johnmichaelbonganay1231/30min",
+    metrics: [
+      { value: "Make.com / Webhooks", label: "Orchestration" },
+      { value: "Gemini 2.5 Flash", label: "LLM Scoping" },
+      { value: "Google Docs → PDF", label: "Dynamic Proposal" },
+      { value: "Sheets + Gmail", label: "CRM + Dispatch" }
+    ],
+    stack: [
+      "React",
+      "Cloud Webhooks",
+      "Node.js/Make",
+      "Regex",
+      "Abstract B2B Enrichment REST API",
+      "Google Sheets API",
+      "Calendly URL Injection Engine"
+    ],
+    architectureDetails: [
+      {
+        title: "Frontend Trigger Integration",
+        copy:
+          "Configured an asynchronous native JavaScript fetch() handler inside the portfolio contact flow to transmit structured form state to the automation layer without adding visible UI latency."
+      },
+      {
+        title: "Webhook Gateway",
+        copy:
+          "Implemented a low-latency Make.com webhook gateway as a micro-backend ingestion layer for names, emails, project categories, and freeform project intent payloads."
+      },
+      {
+        title: "Firmographic Enrichment",
+        copy:
+          "Parsed incoming email domains with Regex and routed business-domain leads through Abstract API to enrich records with corporate identifiers, company metadata, and operational context."
+      },
+      {
+        title: "Data Cleaning & Fallback Safety",
+        copy:
+          "Added conditional sanitization rules for personal email endpoints and incomplete payloads, ensuring the CRM receives clean fallback values instead of broken or null data frames."
+      },
+      {
+        title: "LLM Integration & Prompt Engineering",
+        copy:
+          "Isolated AI-scoping payloads through a dedicated submissionType signature and routed project ideas into Google Gemini 2.5 Flash using structured system instructions, allowing the workflow to generate concise, client-ready proposal content from raw intake data."
+      },
+      {
+        title: "Dynamic Document Compilation",
+        copy:
+          "Injected Gemini-generated scope content into a master Google Doc template through merge tags, compiled the document into a locked PDF deliverable, and autonomously dispatched the proposal back to the user through a Gmail module."
+      }
+    ],
+    caseStudy: {
+      headline:
+        "A backend automation pipeline that turns one contact form submission into enriched CRM data, AI-generated proposal content, and a conversion-ready PDF follow-up.",
+      overview:
+        "This Make.com workflow captures lead data from the portfolio form, parses the email domain, enriches company context, routes qualified project ideas into Gemini 2.5 Flash, injects the generated proposal into a Google Doc template, exports a locked PDF, and emails the deliverable back to the user.",
+      challenge:
+        "Manual lead qualification and proposal drafting slow down response time. The system needed to classify incoming messages, enrich useful company context, generate structured scope content, and deliver a polished proposal without slowing down the user-facing contact form.",
+      approach:
+        "I used an async webhook handoff, Regex-based parsing, REST API enrichment, conditional fallback safety, LLM prompt orchestration, Google Docs merge tags, PDF compilation, Google Sheets CRM mapping, and Gmail dispatch to automate the backend workflow end-to-end.",
+      outcome:
+        "The final workflow creates a lightweight CRM enrichment and AI proposal layer behind the portfolio form while keeping the visitor experience fast, simple, and conversion-focused.",
+      techStack: [
+        "React",
+        "Cloud Webhooks",
+        "Node.js/Make",
+        "Regex",
+        "Abstract B2B Enrichment REST API",
+        "Google Sheets API",
+        "Calendly URL Injection Engine",
+        "Google Gemini 2.5 Flash",
+        "Google Docs API",
+        "Gmail Dispatch"
+      ],
+      highlights: [
+        "Connected the React contact form to a Make.com webhook",
+        "Parsed and enriched lead data in the background",
+        "Synced qualified lead records into a Google Sheets CRM ledger",
+        "Generated AI-scoped proposal content through Gemini 2.5 Flash",
+        "Compiled Google Doc templates into PDF deliverables and dispatched them by email"
+      ]
+    }
   }
-];
+ ];

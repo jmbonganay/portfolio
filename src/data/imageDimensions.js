@@ -8,6 +8,7 @@ export const imageDimensions = {
   "/work/aqua-groove-mini.webp": { width: 1200, height: 582 },
   "/work/aquablast-wordpress.webp": { width: 1400, height: 566 },
   "/work/bark-a-boop.webp": { width: 1400, height: 689 },
+  "/work/automation-inbound-triage-pipeline.webp": { width: 1835, height: 879 },
   "/work/barkchester-united.webp": { width: 1440, height: 722 },
   "/work/bee-hive-comfort-nest.webp": { width: 1400, height: 679 },
   "/work/brite-buff.webp": { width: 1200, height: 576 },

@@ -27,6 +27,7 @@ import {
 import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import ScrollToTop from "./components/ScrollToTop";
+import AutomationModal from "./components/AutomationModal";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
 import { imageDimensions } from "./data/imageDimensions";
@@ -69,10 +70,11 @@ const WEB3FORMS_ACCESS_KEY =
   import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || DEFAULT_WEB3FORMS_ACCESS_KEY;
 const HCAPTCHA_SITE_KEY =
   import.meta.env.VITE_HCAPTCHA_SITE_KEY || DEFAULT_HCAPTCHA_SITE_KEY;
+const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/9m9aa72udl79axpeb8qkonm8l8i4dkps";
 
 const ALL_WORK_FILTER = "All";
 
-const workFilters = ["All", "Shopify", "WordPress", "GoHighLevel", "Netlify"];
+const workFilters = ["All", "Shopify", "WordPress", "GoHighLevel", "Netlify", "Automations"];
 
 function getProjectBadges(project) {
   return [project.category, project.type].filter(Boolean).slice(0, 3);
@@ -585,6 +587,117 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
   );
 }
 
+
+function AutomationArchitectureCard({ project, onOpenModal, index = 0 }) {
+  const automationMetrics = project.metrics?.length
+    ? project.metrics
+    : [
+        { value: "Make.com / Webhooks", label: "Orchestration" },
+        { value: "Gemini 2.5 Flash", label: "LLM Scoping" },
+        { value: "Google Docs → PDF", label: "Dynamic Proposal" },
+        { value: "Sheets + Gmail", label: "CRM + Dispatch" },
+      ];
+
+  function handleCalendlyClick(event) {
+    if (project.calendlyUrl === "#contact") {
+      event.preventDefault();
+      document.getElementById("contact")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }
+
+  function handleCaseStudyClick() {
+    onOpenModal?.(project.id);
+  }
+
+  return (
+    <article
+      className="automation-architecture-card reveal-item is-visible"
+      style={{
+        "--card-delay": `${Math.min(index, 8) * 45}ms`,
+        "--reveal-delay": `${Math.min(index % WORK_PAGE_SIZE, 5) * 70}ms`,
+      }}
+    >
+      <div className="automation-architecture-card__media">
+        <div className="automation-architecture-card__browser" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <p>make.com/scenarios/1023...</p>
+        </div>
+
+        <BlurImage
+          className="automation-architecture-card__image"
+          wrapperClassName="automation-architecture-card__image-shell"
+          src={project.image}
+          alt={project.imageAlt}
+          width={getImageDimensions(project.image, { width: 1835, height: 879 }).width}
+          height={getImageDimensions(project.image, { width: 1835, height: 879 }).height}
+          sizes="(max-width: 720px) 92vw, (max-width: 1120px) 46vw, 420px"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div className="automation-architecture-card__content">
+        <span className="automation-architecture-card__eyebrow">
+          Backend Automation System
+        </span>
+
+        <div className="automation-architecture-card__headline">
+          <h3>{project.title}</h3>
+          <p>{project.role}</p>
+        </div>
+
+        <p className="automation-architecture-card__summary">
+          {project.summary}
+        </p>
+
+        <div
+          className="automation-architecture-card__matrix"
+          aria-label={`${project.title} backend automation metadata`}
+        >
+          {automationMetrics.map((metric) => (
+            <div key={`${project.id}-${metric.label}`}>
+              <strong>{metric.value}</strong>
+              <span>{metric.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="automation-architecture-card__tags" aria-label="Automation project tags">
+          <span>Backend</span>
+          <span>AI Automation System</span>
+        </div>
+
+        <div className="automation-architecture-card__actions">
+          <a
+            className="automation-architecture-card__cta"
+            href={project.calendlyUrl ?? "#contact"}
+            target={project.calendlyUrl?.startsWith("http") ? "_blank" : undefined}
+            rel={project.calendlyUrl?.startsWith("http") ? "noreferrer" : undefined}
+            onClick={handleCalendlyClick}
+          >
+            Test live engine
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+
+          <button
+            className="automation-architecture-card__secondary"
+            type="button"
+            onClick={handleCaseStudyClick}
+          >
+            Case study
+            <FileText size={16} aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
+
 function CaseStudyDrawer({ project, onClose }) {
   if (!project?.caseStudy && !project?.caseStudyData) {
     return null;
@@ -1083,6 +1196,7 @@ function App() {
   const [captchaError, setCaptchaError] = useState("");
   const [emailCopied, setEmailCopied] = useState(false);
   const [selectedCaseStudyId, setSelectedCaseStudyId] = useState(null);
+  const [selectedAutomationModalId, setSelectedAutomationModalId] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const workFilterTimers = useRef([]);
   const workSectionRef = useRef(null);
@@ -1128,11 +1242,18 @@ function App() {
     visibleWorkCount,
     selectedWorkProjects.length,
   );
+  const isAutomationWorkFilter = renderedWorkFilter === "Automations";
 
   const selectedCaseStudyProject = useMemo(
     () =>
       projects.find((project) => project.id === selectedCaseStudyId) ?? null,
     [selectedCaseStudyId],
+  );
+
+  const selectedAutomationModalProject = useMemo(
+    () =>
+      projects.find((project) => project.id === selectedAutomationModalId) ?? null,
+    [selectedAutomationModalId],
   );
 
   useEffect(() => {
@@ -1481,6 +1602,20 @@ function App() {
         return;
       }
 
+      void fetch(MAKE_WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: contactForm.name,
+          email: contactForm.email,
+          message: contactForm.message,
+        }),
+      }).catch((makeError) => {
+        console.warn("Make.com webhook failed:", makeError);
+      });
+
       ReactGA.event({
         category: "Form",
         action: "Submitted Contact Form",
@@ -1787,9 +1922,10 @@ function App() {
               </h2>
               <p>
                 A curated scan of Shopify product pages, WordPress landing
-                pages, funnel revenue proof, agency website work, and
-                direct-response advertorials from the same practical stack I use
-                across design, build, QA, and launch.
+                pages, funnel revenue proof, agency website work,
+                direct-response advertorials, and backend automation systems
+                from the same practical stack I use across design, build, QA,
+                and launch.
               </p>
             </div>
           </div>
@@ -1815,20 +1951,46 @@ function App() {
             </div>
           </div>
 
-          <div
-            className={`work-grid ${workGridPhase}`}
-            id="selected-work-grid"
-            aria-live="polite"
-          >
-            {visibleWorkProjects.map((project, index) => (
-              <ProjectCard
-                project={project}
-                key={`${renderedWorkFilter}-${project.id}`}
-                index={index}
-                onOpenCaseStudy={setSelectedCaseStudyId}
-              />
-            ))}
-          </div>
+          {isAutomationWorkFilter ? (
+            <div
+              className={`automation-work-grid ${workGridPhase}`}
+              id="selected-work-grid"
+              aria-live="polite"
+            >
+              {visibleWorkProjects.map((project, index) => (
+                <AutomationArchitectureCard
+                  project={project}
+                  key={`${renderedWorkFilter}-${project.id}`}
+                  index={index}
+                  onOpenModal={setSelectedAutomationModalId}
+                />
+              ))}
+            </div>
+          ) : (
+            <div
+              className={`work-grid ${workGridPhase}`}
+              id="selected-work-grid"
+              aria-live="polite"
+            >
+              {visibleWorkProjects.map((project, index) => (
+                project.category === "Automations" ? (
+                  <AutomationArchitectureCard
+                    project={project}
+                    key={`${renderedWorkFilter}-${project.id}`}
+                    index={index}
+                    onOpenModal={setSelectedAutomationModalId}
+                  />
+                ) : (
+                  <ProjectCard
+                    project={project}
+                    key={`${renderedWorkFilter}-${project.id}`}
+                    index={index}
+                    onOpenCaseStudy={setSelectedCaseStudyId}
+                  />
+                )
+              ))}
+            </div>
+          )}
 
           {canToggleWorkCount ? (
             <div className="work-more" aria-label="Selected works pagination">
@@ -2242,6 +2404,12 @@ function App() {
       </footer>
 
       <ScrollToTop />
+
+      <AutomationModal
+        project={selectedAutomationModalProject}
+        isOpen={Boolean(selectedAutomationModalProject)}
+        onClose={() => setSelectedAutomationModalId(null)}
+      />
 
       <CaseStudyDrawer
         project={selectedCaseStudyProject}
