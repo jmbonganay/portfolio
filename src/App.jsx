@@ -611,11 +611,16 @@ function CaseStudyDrawer({ project, onClose }) {
       ? new URL(project.link).hostname.replace("www.", "")
       : "Case study preview";
 
-  const inquiryHref = `mailto:${profile.email}?subject=${encodeURIComponent(
-    `Project inquiry: ${project.title}`,
-  )}&body=${encodeURIComponent(
-    `Hi John Michael,\n\nI saw your ${project.title} case study and want to discuss a similar build.\n\nProject details:\n`,
-  )}`;
+  function handleStartBuildClick() {
+    onClose?.();
+
+    window.setTimeout(() => {
+      document.getElementById("contact")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 180);
+  }
 
   return (
     <div
@@ -731,7 +736,13 @@ function CaseStudyDrawer({ project, onClose }) {
               </span>
             )}
 
-            <MagneticCTA className="btn btn--primary" href={inquiryHref} strength={7}>
+            <MagneticCTA
+              as="button"
+              className="btn btn--primary"
+              type="button"
+              onClick={handleStartBuildClick}
+              strength={7}
+            >
               Start similar build
               <Send size={16} aria-hidden="true" />
             </MagneticCTA>
