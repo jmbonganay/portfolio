@@ -10868,3 +10868,27 @@ body.is-preloading {
   line-height: 1.35;
 }
 
+
+.scroll-to-top {
+  font: inherit;
+}
+
+.scroll-to-top:focus-visible {
+  outline: 2px solid rgba(125, 255, 245, 0.9);
+  outline-offset: 4px;
+}
+
+@media (max-width: 640px) {
+  .scroll-to-top {
+    width: 48px !important;
+    height: 48px !important;
+    right: 18px !important;
+    bottom: 18px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-to-top {
+    transition: opacity 120ms ease !important;
+  }
+}

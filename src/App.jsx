@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
+import ScrollToTop from "./components/ScrollToTop";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
 import { imageDimensions } from "./data/imageDimensions";
@@ -2228,6 +2229,8 @@ function App() {
           </p>
         </div>
       </footer>
+
+      <ScrollToTop />
 
       <CaseStudyDrawer
         project={selectedCaseStudyProject}
