@@ -53,6 +53,10 @@ const techStackItems = [
   { name: "GoHighLevel", mark: "GH" },
   { name: "HTML/CSS", mark: "</>" },
   { name: "Zapier", mark: "Za" },
+  { name: "JavaScript", mark: "JS" },
+  { name: "Figma", mark: "Fg" },
+  { name: "API Integrations", mark: "API" },
+  { name: "n8n", mark: "n8n" },
 ];
 const WORK_PAGE_SIZE = 6;
 const heroImage = "/assets/hero-command-center.webp";
@@ -65,90 +69,12 @@ const WEB3FORMS_ACCESS_KEY =
 const HCAPTCHA_SITE_KEY =
   import.meta.env.VITE_HCAPTCHA_SITE_KEY || DEFAULT_HCAPTCHA_SITE_KEY;
 
-const ALL_WORK_FILTER = "all";
+const ALL_WORK_FILTER = "All";
 
-const preferredWorkFilterOrder = [
-  "shopify",
-  "wordpress",
-  "gohighlevel",
-  "netlify",
-  "cro-audits",
-  "automations",
-  "ui-figma",
-];
+const workFilters = ["All", "Shopify", "WordPress", "GoHighLevel", "Netlify"];
 
-const workFilterLabels = {
-  all: "All",
-  shopify: "Shopify",
-  wordpress: "WordPress",
-  gohighlevel: "GoHighLevel",
-  netlify: "Netlify",
-  "cro-audits": "CRO Audits",
-  automations: "Automations",
-  "ui-figma": "UI/Figma",
-};
-
-const platformFilterMap = {
-  shopify: "shopify",
-  wordpress: "wordpress",
-  gohighlevel: "gohighlevel",
-  netlify: "netlify",
-};
-
-function normalizeProjectText(project) {
-  return [
-    project.id,
-    project.type,
-    project.title,
-    project.summary,
-    project.role,
-    project.focus,
-    ...(project.tags ?? []),
-  ]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-}
-
-function getProjectFilterTags(project) {
-  const filterTags = new Set();
-  const platforms = project.platforms?.length ? project.platforms : [project.category];
-
-  platforms.forEach((platform) => {
-    const platformFilter = platformFilterMap[platform];
-
-    if (platformFilter) {
-      filterTags.add(platformFilter);
-    }
-  });
-
-  const projectText = normalizeProjectText(project);
-
-  if (
-    /cro|conversion|offer|cta|checkout|funnel|sales|product page|landing page|direct response|proof|upsell|bundle|purchase flow|lead generation/.test(
-      projectText,
-    )
-  ) {
-    filterTags.add("cro-audits");
-  }
-
-  if (
-    /automation|workflow|zapier|make|integromat|gohighlevel|lead flow|crm|forms|web3forms|tracking|ga4|analytics|conversion tracking/.test(
-      projectText,
-    )
-  ) {
-    filterTags.add("automations");
-  }
-
-  if (
-    /figma|ui|design|designer|visual|brand website|collection|collections|responsive design|front-end|homepage|agency website|interface|layout/.test(
-      projectText,
-    )
-  ) {
-    filterTags.add("ui-figma");
-  }
-
-  return Array.from(filterTags);
+function getProjectBadges(project) {
+  return [project.category, project.type].filter(Boolean).slice(0, 3);
 }
 
 const navLinks = [
@@ -159,9 +85,9 @@ const navLinks = [
 ];
 
 const heroPlatformTags = [
-  { label: "WordPress", filterId: "wordpress" },
-  { label: "Shopify", filterId: "shopify" },
-  { label: "GoHighLevel", filterId: "gohighlevel" },
+  { label: "WordPress", filterId: "WordPress" },
+  { label: "Shopify", filterId: "Shopify" },
+  { label: "GoHighLevel", filterId: "GoHighLevel" },
 ];
 
 function LocalPhtClock() {
@@ -620,8 +546,8 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
         ) : null}
 
         <div className="project-tags">
-          {project.tags.map((tag) => (
-            <span key={`${project.id}-${tag}`}>{tag}</span>
+          {getProjectBadges(project).map((badge) => (
+            <span key={`${project.id}-${badge}`}>{badge}</span>
           ))}
         </div>
 
@@ -671,16 +597,12 @@ function CaseStudyDrawer({ project, onClose }) {
       "The page needed a clear conversion path, stronger visual hierarchy, platform-specific execution, and enough proof to build trust before the visitor reaches the CTA.",
     solution:
       "Structured the layout around the offer, audience intent, responsive scanning behavior, proof placement, CTA timing, and launch-ready front-end execution.",
-    techStack: project.platforms?.length
-      ? project.platforms
-      : project.category
-        ? [project.category]
-        : project.tags?.slice(0, 4) ?? [],
+    techStack: [project.category, project.type].filter(Boolean),
   };
 
   const techStackItems = caseStudy.techStack?.length
     ? caseStudy.techStack
-    : project.tags?.slice(0, 5) ?? [];
+    : [project.category, project.type].filter(Boolean);
 
   const projectHost = project.nda
     ? "NDA-safe case study"
@@ -1161,59 +1083,27 @@ function App() {
         .sort(
           (a, b) =>
             Number.parseInt(a.number, 10) - Number.parseInt(b.number, 10),
-        )
-        .map((project) => ({
-          id: project.id,
-          project,
-          filterTags: getProjectFilterTags(project),
-        })),
+        ),
     [],
   );
 
-  const workFilters = useMemo(() => {
-    const filterCounts = selectedWorkEntries.reduce((counts, entry) => {
-      entry.filterTags.forEach((tag) => {
-        counts[tag] = (counts[tag] ?? 0) + 1;
-      });
+  function getWorkFilterCount(filterName) {
+    if (filterName === ALL_WORK_FILTER) {
+      return selectedWorkEntries.length;
+    }
 
-      return counts;
-    }, {});
-
-    const availableFilters = Object.keys(filterCounts);
-    const orderedFilters = [
-      ...preferredWorkFilterOrder.filter((filterId) =>
-        availableFilters.includes(filterId),
-      ),
-      ...availableFilters
-        .filter((filterId) => !preferredWorkFilterOrder.includes(filterId))
-        .sort((a, b) =>
-          (workFilterLabels[a] ?? a).localeCompare(workFilterLabels[b] ?? b),
-        ),
-    ];
-
-    return [
-      {
-        id: ALL_WORK_FILTER,
-        label: workFilterLabels[ALL_WORK_FILTER],
-        count: selectedWorkEntries.length,
-      },
-      ...orderedFilters.map((filterId) => ({
-        id: filterId,
-        label: workFilterLabels[filterId] ?? filterId,
-        count: filterCounts[filterId] ?? 0,
-      })),
-    ];
-  }, [selectedWorkEntries]);
+    return selectedWorkEntries.filter(
+      (project) => project.category === filterName,
+    ).length;
+  }
 
   const selectedWorkProjects = useMemo(
     () =>
-      selectedWorkEntries
-        .filter(
-          (entry) =>
-            renderedWorkFilter === ALL_WORK_FILTER ||
-            entry.filterTags.includes(renderedWorkFilter),
-        )
-        .map((entry) => entry.project),
+      renderedWorkFilter === ALL_WORK_FILTER
+        ? selectedWorkEntries
+        : selectedWorkEntries.filter(
+            (project) => project.category === renderedWorkFilter,
+          ),
     [renderedWorkFilter, selectedWorkEntries],
   );
   const visibleWorkProjects = useMemo(
@@ -1534,12 +1424,8 @@ function App() {
     }
 
     if (!captchaToken) {
-      const message = "Please complete the hCaptcha verification before sending.";
-      setCaptchaError(message);
-      setContactStatus({
-        type: "error",
-        message,
-      });
+      setCaptchaError("Please complete the captcha before sending.");
+      setContactStatus({ type: "", message: "" });
       return;
     }
 
@@ -1641,8 +1527,7 @@ function App() {
   const contactSucceeded = contactStatus.type === "success";
   const isCaptchaReady = Boolean(captchaToken);
   const isContactIntegrationReady = Boolean(WEB3FORMS_ACCESS_KEY && HCAPTCHA_SITE_KEY);
-  const contactSubmitDisabled =
-    contactSubmitting || !isCaptchaReady || !isContactIntegrationReady;
+  const contactSubmitDisabled = contactSubmitting || !isContactIntegrationReady;
 
   return (
     <main className="portfolio-shell">
@@ -1900,19 +1785,18 @@ function App() {
           <div className="work-controls-shell work-controls-shell--fade">
             <div className="work-controls" aria-label="Filter selected works by platform or skill category">
               {workFilters.map((filter) => {
-                const isActive = activeWorkFilter === filter.id;
-                const count = filter.count ?? 0;
+                const isActive = activeWorkFilter === filter;
 
                 return (
                   <button
                     className={isActive ? "work-filter is-active" : "work-filter"}
                     type="button"
-                    key={filter.id}
-                    onClick={() => handleWorkFilterChange(filter.id)}
+                    key={filter}
+                    onClick={() => handleWorkFilterChange(filter)}
                     aria-pressed={isActive}
                   >
-                    <span>{filter.label}</span>
-                    <strong>{count}</strong>
+                    <span>{filter}</span>
+                    <strong>{getWorkFilterCount(filter)}</strong>
                   </button>
                 );
               })}
@@ -2270,12 +2154,6 @@ function App() {
                       readOnly
                     />
 
-                    {!isCaptchaReady && HCAPTCHA_SITE_KEY ? (
-                      <small className="contact-captcha__hint">
-                        Please complete hCaptcha first to unlock the send button.
-                      </small>
-                    ) : null}
-
                     {captchaError ? (
                       <small className="contact-captcha__error" role="alert">
                         {captchaError}
@@ -2291,9 +2169,7 @@ function App() {
                     title={
                       !isContactIntegrationReady
                         ? "Add Vercel environment variables first"
-                        : !isCaptchaReady
-                          ? "Complete hCaptcha to send"
-                          : undefined
+                        : undefined
                     }
                   >
                     <span>
@@ -2301,9 +2177,7 @@ function App() {
                         ? "Sending..."
                         : !isContactIntegrationReady
                           ? "Contact form not configured"
-                          : isCaptchaReady
-                            ? "Send fast inquiry"
-                            : "Verify hCaptcha to send"}
+                          : "Send fast inquiry"}
                     </span>
                     <Send size={18} aria-hidden="true" />
                   </button>

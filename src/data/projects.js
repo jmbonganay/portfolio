@@ -1,17 +1,16 @@
 export const projectCategories = [
-  { id: "all", label: "All" },
-  { id: "wordpress", label: "WordPress" },
-  { id: "shopify", label: "Shopify" },
-  { id: "gohighlevel", label: "GoHighLevel" },
-  { id: "netlify", label: "Netlify" }
+  "All",
+  "Shopify",
+  "WordPress",
+  "GoHighLevel",
+  "Netlify"
 ];
 
 export const projects = [
   {
     id: "barkchester-united",
     number: "01",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Top Sales Performer",
     title: "Barkchester United Smart Ball",
@@ -24,7 +23,6 @@ export const projects = [
     proofImage: "/work/performance-barkchester.webp",
     proofNote: "Cropped Shopify dashboard screenshot; sensitive customer and order details are excluded.",
     link: "https://barkchester.com/products/discount",
-    tags: ["Shopify", "Pet Care", "Landing Page", "CRO Layout", "Responsive Design"],
     metrics: [
       { value: "$52.9K", label: "Total sales" },
       { value: "1,229", label: "Orders" },
@@ -52,8 +50,7 @@ export const projects = [
   {
     id: "vista-veil",
     number: "02",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Beauty Tech Page",
     title: "VistaVeil Eye Rejuvenation Product Page",
@@ -65,7 +62,6 @@ export const projects = [
     proofImage: "/work/performance-vista-veil.webp",
     proofNote: "Cropped Shopify dashboard screenshot; sensitive customer and order details are excluded.",
     link: "https://tryvistaveil.com/products/vistaveil-anti-aging",
-    tags: ["Shopify", "Beauty Tech", "Offer Design", "Responsive"],
     metrics: [
       { value: "$28.7K", label: "Total sales" },
       { value: "323", label: "Orders" },
@@ -93,8 +89,7 @@ export const projects = [
   {
     id: "robo-mouse",
     number: "03",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Sales-Backed Shopify Page",
     title: "Robo Mouse Smart Cat Toy",
@@ -105,7 +100,6 @@ export const projects = [
     image: "/work/robo-mouse.webp",
     imageAlt: "Robo Mouse smart cat toy Shopify product page screenshot",
     link: "https://robomousetoy.com/products/discounts",
-    tags: ["Shopify", "Pet Product", "Cat Toy", "CRO Layout", "Responsive"],
     metrics: [
       { value: "$11.2K", label: "Total sales" },
       { value: "264", label: "Orders" },
@@ -134,8 +128,7 @@ export const projects = [
   {
     id: "skin-spectra",
     number: "04",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Beauty DTC Page",
     title: "Skin Spectra Anti-Aging Product Page",
@@ -147,7 +140,6 @@ export const projects = [
     proofImage: "/work/performance-skin-spectra.webp",
     proofNote: "Cropped Shopify dashboard screenshot; sensitive customer and order details are excluded.",
     link: "https://skinspectra.store/products/skin-spectra-anti-aging",
-    tags: ["Shopify", "Beauty", "DTC", "Product UX"],
     metrics: [
       { value: "$11.1K", label: "Total sales" },
       { value: "61", label: "Orders" },
@@ -175,8 +167,7 @@ export const projects = [
   {
     id: "grippit-strength",
     number: "05",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Health Product Page",
     title: "GrippIt Hand Strength Product Page",
@@ -188,7 +179,6 @@ export const projects = [
     proofImage: "/work/performance-grippit.webp",
     proofNote: "Cropped Shopify dashboard screenshot; sensitive customer and order details are excluded.",
     link: "https://trygrippit.com/products/grippit-strength",
-    tags: ["Shopify", "Health Product", "CRO Layout", "Responsive"],
     metrics: [
       { value: "$7,992", label: "Total sales" },
       { value: "222", label: "Orders" },
@@ -215,8 +205,7 @@ export const projects = [
   {
     id: "furbulous-spa-brush",
     number: "06",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Sales-Backed Shopify Page",
     title: "Fur-bulous Spa-Brush Product Page",
@@ -227,7 +216,6 @@ export const projects = [
     image: "/work/furbulous-spa-brush.webp",
     imageAlt: "Fur-bulous Spa-Brush Shopify product page screenshot",
     link: "https://furbulouspetbrush.com/products/the-spa-brush-that-ends-grooming-battles-forever",
-    tags: ["Shopify", "Pet Care", "Grooming", "Product Page", "CRO Layout"],
     metrics: [
       { value: "$7,066", label: "Total sales" },
       { value: "172", label: "Orders" },
@@ -256,8 +244,7 @@ export const projects = [
   {
     id: "skeeter-strike",
     number: "07",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Product Page",
     title: "Skeeter Strike Mosquito Zapper Lantern",
@@ -269,7 +256,6 @@ export const projects = [
     proofImage: "/work/performance-skeeter-strike.webp",
     proofNote: "Cropped Shopify dashboard screenshot; sensitive customer and order details are excluded.",
     link: "https://skeeterstrike.store/products/skeeter-strike",
-    tags: ["Shopify", "HTML/CSS", "CRO Layout", "Responsive Design"],
     metrics: [
       { value: "$5,261", label: "Total sales" },
       { value: "50", label: "Orders" },
@@ -296,8 +282,7 @@ export const projects = [
   {
     id: "purely-nutrient",
     number: "08",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Supplement Product Page",
     title: "Purely Nutrient Black Seed Oil Page",
@@ -308,7 +293,6 @@ export const projects = [
     image: "/work/purely-nutrient.webp",
     imageAlt: "Purely Nutrient Ethiopian Black Seed Oil Shopify product page screenshot",
     link: "https://purelynutrient.com/pages/ethiopian-black-seed-oil",
-    tags: ["Shopify", "Supplement", "Health Product", "Product Page", "CRO Layout"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Supplement", label: "Category" },
@@ -335,8 +319,7 @@ export const projects = [
   {
     id: "pimax-shopify",
     number: "09",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Brand Website",
     title: "Pimax VR Ecommerce Website",
@@ -347,7 +330,6 @@ export const projects = [
     image: "/work/pimax-shopify.webp",
     imageAlt: "Pimax Shopify ecommerce website homepage screenshot",
     link: "https://pimax.com/",
-    tags: ["Shopify", "Ecommerce Website", "VR Tech", "Brand Website", "Responsive"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "VR Tech", label: "Category" },
@@ -374,8 +356,7 @@ export const projects = [
   {
     id: "sister-jane-shopify",
     number: "10",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Fashion Collections",
     title: "Sister Jane Fashion Collections",
@@ -386,7 +367,6 @@ export const projects = [
     image: "/work/sister-jane-shopify.webp",
     imageAlt: "Sister Jane Shopify fashion collection page screenshot",
     link: "https://sisterjane.com/",
-    tags: ["Shopify", "Fashion", "Collections", "Ecommerce", "Responsive"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Fashion", label: "Category" },
@@ -413,8 +393,7 @@ export const projects = [
   {
     id: "heat-haven-relief",
     number: "11",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Health Product Page",
     title: "Heat Haven Relief Therapy Blanket",
@@ -425,7 +404,6 @@ export const projects = [
     image: "/work/heat-haven-relief.webp",
     imageAlt: "Heat Haven heat therapy blanket Shopify product page screenshot",
     link: "https://heathavensauna.com/products/heat-haven-relief",
-    tags: ["Shopify", "Health Product", "Pain Relief", "CRO Layout", "Product Page"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Health", label: "Category" },
@@ -452,8 +430,7 @@ export const projects = [
   {
     id: "relive-massager",
     number: "12",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Wellness Product Page",
     title: "Relive 8D Shiatsu Massager",
@@ -464,7 +441,6 @@ export const projects = [
     image: "/work/relive-massager.webp",
     imageAlt: "Relive 8D Shiatsu massager Shopify product page screenshot",
     link: "https://relivemassager.com/products/relive",
-    tags: ["Shopify", "Wellness", "Massage Product", "Landing Page", "CRO"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Wellness", label: "Category" },
@@ -491,8 +467,7 @@ export const projects = [
   {
     id: "soothe-steps",
     number: "13",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Wellness Product Page",
     title: "Soothe Steps Acupressure Mat",
@@ -503,7 +478,6 @@ export const projects = [
     image: "/work/soothe-steps.webp",
     imageAlt: "Soothe Steps acupressure mat Shopify product page screenshot",
     link: "https://trysoothesteps.com/products/soothe-steps",
-    tags: ["Shopify", "Wellness", "Acupressure", "Product Page", "Responsive"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Wellness", label: "Category" },
@@ -530,8 +504,7 @@ export const projects = [
   {
     id: "slumber-seal",
     number: "14",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Sleep Product Page",
     title: "Slumber Seal Sleep Headband",
@@ -542,7 +515,6 @@ export const projects = [
     image: "/work/slumber-seal.webp",
     imageAlt: "Slumber Seal sleep headband Shopify product page screenshot",
     link: "https://slumberseal.com/products/discount",
-    tags: ["Shopify", "Sleep Product", "Wellness", "Product Page", "CRO"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Sleep", label: "Category" },
@@ -569,8 +541,7 @@ export const projects = [
   {
     id: "palm-pamper",
     number: "15",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Health Product Page",
     title: "Palm Pamper Heated Hand Massager",
@@ -581,7 +552,6 @@ export const projects = [
     image: "/work/palm-pamper.webp",
     imageAlt: "Palm Pamper heated hand massager Shopify product page screenshot",
     link: "https://palmpamper.com/products/palm-pamper",
-    tags: ["Shopify", "Health Product", "Pain Relief", "Product Page", "Responsive"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Health", label: "Category" },
@@ -608,8 +578,7 @@ export const projects = [
   {
     id: "calm-core",
     number: "16",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Sleep Wellness Page",
     title: "Calm Core Therapeutic Sleep System",
@@ -620,7 +589,6 @@ export const projects = [
     image: "/work/calm-core.webp",
     imageAlt: "Calm Core therapeutic sleep system Shopify product page screenshot",
     link: "https://relaxwithcalmcore.com/products/sleep",
-    tags: ["Shopify", "Sleep", "Wellness", "Product Page", "CRO Layout"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Sleep", label: "Category" },
@@ -647,8 +615,7 @@ export const projects = [
   {
     id: "eye-ease",
     number: "17",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Health Product Page",
     title: "Eye Ease 5-in-1 Eye Relief System",
@@ -659,7 +626,6 @@ export const projects = [
     image: "/work/eye-ease.webp",
     imageAlt: "Eye Ease eye relief Shopify product page screenshot",
     link: "https://relaxwitheyeease.com/products/discount",
-    tags: ["Shopify", "Health Tech", "Eye Relief", "Product Page", "CRO"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Health", label: "Category" },
@@ -686,8 +652,7 @@ export const projects = [
   {
     id: "zoomie-zoom",
     number: "18",
-    category: "shopify",
-    platforms: ["shopify"],
+    category: "Shopify",
     caseStudyData: true,
     type: "Shopify Pet Product Page",
     title: "Zoomie Zoom Laser Cat Collar",
@@ -698,7 +663,6 @@ export const projects = [
     image: "/work/zoomie-zoom.webp",
     imageAlt: "Zoomie Zoom laser cat collar Shopify product page screenshot",
     link: "https://tryzoomiezoom.com/products/discount",
-    tags: ["Shopify", "Pet Product", "Cat Toy", "Product Page", "Responsive"],
     metrics: [
       { value: "Shopify", label: "Platform" },
       { value: "Pet", label: "Category" },
@@ -725,8 +689,7 @@ export const projects = [
   {
     id: "wordpress-woocommerce-30m",
     number: "19",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "NDA WordPress Performance",
     title: "WordPress / WooCommerce Sales Dashboard",
@@ -735,7 +698,6 @@ export const projects = [
     role: "WordPress Build Support, WooCommerce/Funnel Flow, Tracking-Aware Launch Execution",
     image: "/work/performance-wordpress-woocommerce-30m.webp",
     imageAlt: "Cropped WordPress WooCommerce analytics screenshot showing total sales, orders, and products sold",
-    tags: ["WordPress", "WooCommerce", "Analytics", "NDA Protected"],
     nda: true,
     metrics: [
       { value: "$30.0M", label: "Total sales" },
@@ -764,8 +726,7 @@ export const projects = [
   {
     id: "wordpress-funnelkit-2m",
     number: "20",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "NDA Funnel Performance",
     title: "Marketing Funnel Revenue Snapshot",
@@ -774,7 +735,6 @@ export const projects = [
     role: "WordPress Funnel Build Support, Checkout Flow, Upsell/Order Bump Structure",
     image: "/work/performance-wordpress-funnelkit-2m.webp",
     imageAlt: "Cropped FunnelKit analytics screenshot showing revenue, visitors, contacts, orders, and upsell revenue",
-    tags: ["WordPress", "FunnelKit", "Upsells", "NDA Protected"],
     nda: true,
     metrics: [
       { value: "$2.35M", label: "Revenue" },
@@ -802,8 +762,7 @@ export const projects = [
   {
     id: "wordpress-campaign-2m",
     number: "21",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "NDA WordPress Sales Proof",
     title: "WooCommerce Campaign Sales Proof",
@@ -812,7 +771,6 @@ export const projects = [
     role: "WordPress Campaign Page Support, Checkout Flow, Responsive QA",
     image: "/work/performance-wordpress-woocommerce-2m.webp",
     imageAlt: "Cropped WooCommerce analytics screenshot showing total sales, orders, and products sold",
-    tags: ["WordPress", "WooCommerce", "Sales Proof", "NDA Protected"],
     nda: true,
     metrics: [
       { value: "$2.32M", label: "Total sales" },
@@ -824,8 +782,7 @@ export const projects = [
   {
     id: "wordpress-checkout-153k",
     number: "22",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "NDA Checkout Performance",
     title: "Checkout Flow Performance Snapshot",
@@ -834,7 +791,6 @@ export const projects = [
     role: "WordPress Checkout Support, Funnel QA, Payment/Order Flow Awareness",
     image: "/work/performance-wordpress-checkout-153k.webp",
     imageAlt: "Cropped WordPress checkout performance screenshot showing total sales, net sales, orders, and products sold",
-    tags: ["WordPress", "Checkout", "Orders", "NDA Protected"],
     nda: true,
     metrics: [
       { value: "$153.7K", label: "Total sales" },
@@ -846,8 +802,7 @@ export const projects = [
   {
     id: "aquablast",
     number: "23",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Landing Page",
     title: "AquaBlast Outdoor Play Landing Page",
@@ -857,7 +812,6 @@ export const projects = [
     image: "/work/aquablast-wordpress.webp",
     imageAlt: "AquaBlast WordPress landing page screenshot",
     link: "https://secure.trytechnohub.com/aquablast/",
-    tags: ["WordPress", "Landing Page", "Family Product", "CTA Layout"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Hero", label: "CTA focus" },
@@ -869,8 +823,7 @@ export const projects = [
   {
     id: "bee-hive-comfort-nest",
     number: "24",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Product Page",
     title: "Bee Hive Comfort Nest Landing Page",
@@ -880,7 +833,6 @@ export const projects = [
     image: "/work/bee-hive-comfort-nest.webp",
     imageAlt: "Bee Hive Comfort Nest WordPress landing page screenshot",
     link: "https://secure.thepurrparadise.com/bee-hive-comfort-nest/",
-    tags: ["WordPress", "Pet Product", "Direct Response", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Pet", label: "Category" },
@@ -891,8 +843,7 @@ export const projects = [
   {
     id: "bark-a-boop",
     number: "25",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Sales Page",
     title: "Bark-A-Boop Dog Toy Landing Page",
@@ -902,7 +853,6 @@ export const projects = [
     image: "/work/bark-a-boop.webp",
     imageAlt: "Bark-A-Boop WordPress landing page screenshot",
     link: "https://secure.wagwonderland.com/bark-a-boop/",
-    tags: ["WordPress", "Sales Page", "Pet Product", "Offer Structure"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Sales", label: "Page type" },
@@ -913,8 +863,7 @@ export const projects = [
   {
     id: "nest-marketing",
     number: "26",
-    category: "netlify",
-    platforms: ["netlify"],
+    category: "Netlify",
     caseStudyData: true,
     type: "Netlify Agency Website",
     title: "Nest Marketing Agency Website",
@@ -925,7 +874,6 @@ export const projects = [
     image: "/work/nest-marketing-netlify.webp",
     imageAlt: "Nest Marketing Netlify agency website screenshot",
     link: "https://www.nestmarketing.co/",
-    tags: ["Netlify", "Agency Website", "Responsive Design", "Lead Generation", "Brand Website"],
     metrics: [
       { value: "Netlify", label: "Platform" },
       { value: "Agency", label: "Website" },
@@ -937,8 +885,7 @@ export const projects = [
   {
     id: "aqua-groove-mini",
     number: "27",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Product Landing Page",
     title: "Aqua Groove Mini Speaker Landing Page",
@@ -949,7 +896,6 @@ export const projects = [
     image: "/work/aqua-groove-mini.webp",
     imageAlt: "Aqua Groove Mini WordPress product landing page screenshot",
     link: "https://aquagroovemini.com/",
-    tags: ["WordPress", "Product Page", "Electronics", "CTA Layout", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Product", label: "Page" },
@@ -960,8 +906,7 @@ export const projects = [
   {
     id: "brite-buff",
     number: "28",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Beauty Landing Page",
     title: "BriteBuff Skincare Device Landing Page",
@@ -972,7 +917,6 @@ export const projects = [
     image: "/work/brite-buff.webp",
     imageAlt: "BriteBuff WordPress skincare product landing page screenshot",
     link: "https://britebuff.com/",
-    tags: ["WordPress", "Beauty", "Skincare", "Product Page", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Beauty", label: "Category" },
@@ -983,8 +927,7 @@ export const projects = [
   {
     id: "flexi-lantern",
     number: "29",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Product Sales Page",
     title: "Flexi Lantern Product Sales Page",
@@ -995,7 +938,6 @@ export const projects = [
     image: "/work/flexi-lantern.webp",
     imageAlt: "Flexi Lantern WordPress product sales page screenshot",
     link: "https://flexilantern.com/",
-    tags: ["WordPress", "Sales Page", "Utility Product", "Offer Layout", "CRO"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Offer", label: "Sales page" },
@@ -1006,8 +948,7 @@ export const projects = [
   {
     id: "medtraker-pro",
     number: "30",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Health Product Page",
     title: "MedTraker Pro Pill Organizer Landing Page",
@@ -1018,7 +959,6 @@ export const projects = [
     image: "/work/medtraker-pro.webp",
     imageAlt: "MedTraker Pro WordPress health product landing page screenshot",
     link: "https://medtrakerpro.com/",
-    tags: ["WordPress", "Health Product", "Landing Page", "Product Education", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Health", label: "Category" },
@@ -1029,8 +969,7 @@ export const projects = [
   {
     id: "night-sky-dreamer",
     number: "31",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Lifestyle Sales Page",
     title: "Night Sky Dreamer Landing Page",
@@ -1041,7 +980,6 @@ export const projects = [
     image: "/work/night-sky-dreamer.webp",
     imageAlt: "Night Sky Dreamer WordPress lifestyle product landing page screenshot",
     link: "https://nightskydreamer.com/",
-    tags: ["WordPress", "Lifestyle Product", "Dark UI", "Sales Page", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Lifestyle", label: "Category" },
@@ -1052,8 +990,7 @@ export const projects = [
   {
     id: "drippy",
     number: "32",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress Home Product Page",
     title: "Drippy Air Humidifier Landing Page",
@@ -1064,7 +1001,6 @@ export const projects = [
     image: "/work/drippy.webp",
     imageAlt: "Drippy WordPress air humidifier product landing page screenshot",
     link: "https://trydrippy.com/",
-    tags: ["WordPress", "Home Product", "Sales Page", "CTA Layout", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Home", label: "Product" },
@@ -1075,8 +1011,7 @@ export const projects = [
   {
     id: "ziptite-pro",
     number: "33",
-    category: "wordpress",
-    platforms: ["wordpress"],
+    category: "WordPress",
     caseStudyData: true,
     type: "WordPress eCommerce Landing Page",
     title: "ZipTite Pro Food Sealer Landing Page",
@@ -1087,7 +1022,6 @@ export const projects = [
     image: "/work/ziptite-pro.webp",
     imageAlt: "ZipTite Pro WordPress food sealer product landing page screenshot",
     link: "https://ziptitepro.com/",
-    tags: ["WordPress", "eCommerce", "Product Page", "Review Proof", "Responsive"],
     metrics: [
       { value: "WP", label: "Platform" },
       { value: "Reviews", label: "Proof" },
@@ -1098,8 +1032,7 @@ export const projects = [
   {
     id: "skeeter-strike-update",
     number: "34",
-    category: "gohighlevel",
-    platforms: ["gohighlevel"],
+    category: "GoHighLevel",
     caseStudyData: true,
     type: "GoHighLevel Advertorial Page",
     title: "Skeeter Strike Local Update Advertorial",
@@ -1109,7 +1042,6 @@ export const projects = [
     image: "/work/advertorial-skeeter-strike-update.webp",
     imageAlt: "Skeeter Strike advertorial page screenshot with mosquito-zapper headline and local update banner",
     link: "https://apiv2.getflexy.app/preview/6LFYWuaCjk0aERYmLQt5",
-    tags: ["GoHighLevel", "Advertorial", "Direct Response", "Lead-in Page", "Conversion Flow"],
     metrics: [
       { value: "GHL", label: "Platform" },
       { value: "Story", label: "Sales angle" },
@@ -1120,8 +1052,7 @@ export const projects = [
   {
     id: "skeeter-strike-teacher",
     number: "35",
-    category: "advertorial",
-    platforms: ["wordpress"],
+    category: "GoHighLevel",
     caseStudyData: true,
     type: "Advertorial Story Page",
     title: "Skeeter Strike Teacher Story Advertorial",
@@ -1131,7 +1062,6 @@ export const projects = [
     image: "/work/advertorial-skeeter-strike-teacher.webp",
     imageAlt: "Skeeter Strike advertorial screenshot with teacher story headline",
     link: "https://apiv2.getflexy.app/preview/StbFO7lPt7cM6T9mTEnL",
-    tags: ["Advertorial", "Story Selling", "News Layout", "Mobile UX"],
     metrics: [
       { value: "ADV", label: "Page type" },
       { value: "News", label: "Layout style" },
@@ -1142,8 +1072,7 @@ export const projects = [
   {
     id: "vistaveil-executives",
     number: "36",
-    category: "gohighlevel",
-    platforms: ["gohighlevel"],
+    category: "GoHighLevel",
     caseStudyData: true,
     type: "Beauty Advertorial",
     title: "VistaVeil Executive Eye Lift Advertorial",
@@ -1153,7 +1082,6 @@ export const projects = [
     image: "/work/advertorial-vistaveil-executives.webp",
     imageAlt: "VistaVeil anti-aging advertorial screenshot with executive eye lift headline",
     link: "https://apiv2.getflexy.app/preview/4BywKx28seNA5bWF26WM",
-    tags: ["Advertorial", "Beauty Tech", "Editorial UX", "Offer Bridge"],
     metrics: [
       { value: "ADV", label: "Page type" },
       { value: "Beauty", label: "Category" },
@@ -1164,8 +1092,7 @@ export const projects = [
   {
     id: "grippit-nurse",
     number: "37",
-    category: "gohighlevel",
-    platforms: ["gohighlevel"],
+    category: "GoHighLevel",
     caseStudyData: true,
     type: "Health Advertorial",
     title: "GrippIt Grip Strength Advertorial",
@@ -1175,7 +1102,6 @@ export const projects = [
     image: "/work/advertorial-grippit-nurse.webp",
     imageAlt: "GrippIt advertorial screenshot with nurse grip strength discovery headline",
     link: "https://apiv2.getflexy.app/preview/M7dqv9MWL2OCL0iBsojh",
-    tags: ["Advertorial", "Health Product", "Problem-Solution", "Sales Story"],
     metrics: [
       { value: "ADV", label: "Page type" },
       { value: "Health", label: "Category" },
@@ -1186,8 +1112,7 @@ export const projects = [
   {
     id: "eye-strain-investigation",
     number: "38",
-    category: "gohighlevel",
-    platforms: ["gohighlevel"],
+    category: "GoHighLevel",
     caseStudyData: true,
     type: "Health Education Advertorial",
     title: "Digital Eye Strain Investigation Advertorial",
@@ -1197,7 +1122,6 @@ export const projects = [
     image: "/work/advertorial-eye-strain-investigation.webp",
     imageAlt: "Digital eye strain advertorial screenshot with investigation headline",
     link: "https://apiv2.getflexy.app/preview/YWAXq8u32gEspyFMbm4e",
-    tags: ["Advertorial", "Education Angle", "Health Tech", "Reading Flow"],
     metrics: [
       { value: "ADV", label: "Page type" },
       { value: "Edu", label: "Angle" },
@@ -1208,8 +1132,7 @@ export const projects = [
   {
     id: "skin-spectra-study",
     number: "39",
-    category: "gohighlevel",
-    platforms: ["gohighlevel"],
+    category: "GoHighLevel",
     caseStudyData: true,
     type: "Clinical-Style Advertorial",
     title: "Skin Spectra Clinical Study Advertorial",
@@ -1219,7 +1142,6 @@ export const projects = [
     image: "/work/advertorial-skin-spectra-study.webp",
     imageAlt: "Skin Spectra advertorial screenshot with clinical study anti-aging headline",
     link: "https://apiv2.getflexy.app/preview/VO4FaG8b6xDNi2QgCJT2",
-    tags: ["Advertorial", "Beauty", "Authority Angle", "Direct Response"],
     metrics: [
       { value: "ADV", label: "Page type" },
       { value: "Beauty", label: "Category" },
