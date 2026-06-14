@@ -1165,6 +1165,7 @@ export const projects = [
     image: "/work/automation-inbound-triage-pipeline.webp",
     imageAlt:
       "Make.com automation scenario screenshot showing webhook ingestion, text parser, HTTP request, router, Google Sheets, sleep tools, and Gmail delivery branches",
+    modalAddress: "make.com/scenarios/1023...",
     link: "https://us2.make.com/public/shared-scenario/8ERguQKtCVM/free-keyword-triage-engine-fixed",
     calendlyUrl: "https://calendly.com/johnmichaelbonganay1231/30min",
     metrics: [
@@ -1182,6 +1183,7 @@ export const projects = [
       "Google Sheets API",
       "Calendly URL Injection Engine"
     ],
+    badges: ["Backend", "AI Automation System"],
     architectureDetails: [
       {
         title: "Frontend Trigger Integration",
@@ -1243,6 +1245,73 @@ export const projects = [
         "Synced qualified lead records into a Google Sheets CRM ledger",
         "Generated AI-scoped proposal content through Gemini 2.5 Flash",
         "Compiled Google Doc templates into PDF deliverables and dispatched them by email"
+      ]
+    }
+  }
+  ,
+  {
+    id: "ghl-production-automations",
+    number: "41",
+    category: "Automations",
+    caseStudyData: true,
+    type: "Enterprise CRM Automation",
+    title: "High-Converting GoHighLevel Lead Nurture & LTO Pipelines",
+    summary:
+      "A multi-trigger production pipeline handling automatic CRM contact tagging, 15-minute operational wait nodes for optimized psychological engagement, and automated email follow-up sequences achieving 99.3%+ deliverability for 689+ live leads.",
+    role: "Automation Strategist & Developer (Agency Deployment)",
+    focus:
+      "Client-deployment CRM orchestration, multi-trigger routing, wait-node sequencing, email deliverability monitoring, and NDA-safe performance reporting.",
+    image: "/work/ghl-production-automations.webp",
+    imageAlt: "GoHighLevel workflow builder screenshot showing multi-trigger lead nurture automation",
+    modalAddress: "gohighlevel.com/workflows",
+    drawerDescription:
+      "A client-deployment GoHighLevel automation system built during professional agency work to route production campaign traffic, apply CRM tags, preserve data integrity, delay nurture delivery intentionally, and execute high-deliverability follow-up sequences at scale.",
+    metrics: [
+      { value: "GoHighLevel", label: "CRM Orchestration" },
+      { value: "Advanced Routing", label: "Multi-Trigger Logic" },
+      { value: "Wait Nodes", label: "Psychological Delays" },
+      { value: "99.3%+ Delivery", label: "Email Dispatch" }
+    ],
+    badges: ["GoHighLevel", "Client Deployment", "Deliverability"],
+    architectureDetails: [
+      {
+        title: "Multi-Trigger Campaign Capture",
+        copy:
+          "Configured production form triggers to capture active campaign traffic across multiple offer paths and route each submission into the correct CRM workflow branch."
+      },
+      {
+        title: "CRM Segment Tagging",
+        copy:
+          "Mapped contact records into structured GoHighLevel segments using automated tagging and custom field logic to keep lead data clean for follow-up operations."
+      },
+      {
+        title: "Timed Nurture Sequencing",
+        copy:
+          "Inserted operational 15-minute wait nodes to delay outbound messages intentionally, improving the perceived timing and cadence of automated follow-up."
+      },
+      {
+        title: "Deliverability-Focused Follow-Up",
+        copy:
+          "Deployed automated email nurture sequences with near-perfect delivery performance while keeping campaign data NDA-safe and client-sensitive details excluded."
+      }
+    ],
+    caseStudy: {
+      headline:
+        "A production GoHighLevel automation system for lead routing, CRM tagging, and high-deliverability nurture workflows.",
+      overview:
+        "This client-deployment workflow was engineered during agency employment to support high-traffic campaign intake, automated lead classification, timed nurture delays, and campaign follow-up performance tracking.",
+      challenge:
+        "The campaign required reliable lead capture, clean CRM organization, and automated follow-up without exposing sensitive contact data or requiring manual operational routing.",
+      approach:
+        "I configured multi-trigger form capture, automated tagging, CRM field mapping, timed wait nodes, and email follow-up sequences inside GoHighLevel to support scalable operations.",
+      outcome:
+        "The workflow routed 689+ production leads with 99.3%+ delivery performance and measurable open/click engagement across the tracked campaign variants.",
+      techStack: ["GoHighLevel", "CRM Automation", "Workflow Routing", "Email Nurture", "Deliverability"],
+      highlights: [
+        "Routed 689+ production leads",
+        "Maintained 99.3%+ delivery performance",
+        "Used timed wait nodes for follow-up cadence",
+        "Kept campaign proof NDA-safe and client data excluded"
       ]
     }
   }

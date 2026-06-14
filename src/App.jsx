@@ -28,6 +28,7 @@ import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import ScrollToTop from "./components/ScrollToTop";
 import AutomationModal from "./components/AutomationModal";
+import GHLAutomationCard from "./components/GHLAutomationCard";
 import StatusWidget from "./components/StatusWidget";
 import { HoverCard, StaggeredGrid, StaggeredGridItem } from "./components/MotionWrappers";
 import { profile } from "./data/profile";
@@ -35,7 +36,7 @@ import { projects } from "./data/projects";
 import { imageDimensions } from "./data/imageDimensions";
 
 
-const CroSlider = lazy(() => import("./components/CroSlider"));
+const TechMatrix = lazy(() => import("./components/TechMatrix"));
 const ROICalculator = lazy(() => import("./components/ROICalculator"));
 const ClientPortalMockup = lazy(() => import("./components/ClientPortalMockup"));
 const EngagementModels = lazy(() => import("./components/EngagementModels"));
@@ -87,7 +88,7 @@ function getProjectBadges(project) {
 
 const navLinks = [
   { label: "Work", href: "#work" },
-  { label: "Visual Proof", href: "#cro-slider" },
+  { label: "Stack", href: "#stack" },
   { label: "Systems", href: "#automation" },
   { label: "Contact", href: "#contact" },
 ];
@@ -1968,10 +1969,9 @@ function App() {
               {visibleWorkProjects.map((project, index) => (
                 <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
                   <HoverCard className="motion-work-hover">
-                    <AutomationArchitectureCard
+                    <GHLAutomationCard
                       project={project}
-                      index={index}
-                      onOpenModal={setSelectedAutomationModalId}
+                      onViewMetrics={setSelectedAutomationModalId}
                     />
                   </HoverCard>
                 </StaggeredGridItem>
@@ -1988,10 +1988,9 @@ function App() {
                 <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
                   <HoverCard className="motion-work-hover">
                     {project.category === "Automations" ? (
-                      <AutomationArchitectureCard
+                      <GHLAutomationCard
                         project={project}
-                        index={index}
-                        onOpenModal={setSelectedAutomationModalId}
+                        onViewMetrics={setSelectedAutomationModalId}
                       />
                     ) : (
                       <ProjectCard
@@ -2033,7 +2032,7 @@ function App() {
       </section>
 
       <Suspense fallback={<SectionFallback />}>
-        <CroSlider />
+        <TechMatrix />
       </Suspense>
 
       <AutomationSection />

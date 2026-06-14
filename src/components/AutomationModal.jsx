@@ -256,7 +256,7 @@ export default function AutomationModal({ project, isOpen, onClose }) {
             <span />
             <span />
             <span />
-            <p>make.com/scenarios/1023...</p>
+            <p>{project.modalAddress || "make.com/scenarios/1023..."}</p>
           </div>
 
           <div className="automation-modal__media">
@@ -283,7 +283,7 @@ export default function AutomationModal({ project, isOpen, onClose }) {
           </p>
 
           <p className="automation-modal__description">
-            {automationDescription}
+            {project.drawerDescription || automationDescription}
           </p>
 
           <div className="automation-modal__feature-list" aria-label="Automation technical feature breakdown">

@@ -17,6 +17,7 @@ export const imageDimensions = {
   "/work/eye-ease.webp": { width: 1500, height: 701 },
   "/work/flexi-lantern.webp": { width: 1200, height: 582 },
   "/work/furbulous-spa-brush.webp": { width: 1500, height: 753 },
+  "/work/ghl-production-automations.webp": { width: 1400, height: 935 },
   "/work/grippit-strength.webp": { width: 1600, height: 800 },
   "/work/heat-haven-relief.webp": { width: 1500, height: 752 },
   "/work/medtraker-pro.webp": { width: 1200, height: 585 },
