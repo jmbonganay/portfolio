@@ -36,7 +36,6 @@ import { imageDimensions } from "./data/imageDimensions";
 
 
 const CroSlider = lazy(() => import("./components/CroSlider"));
-const PipelineArchitecture = lazy(() => import("./components/PipelineArchitecture"));
 const ROICalculator = lazy(() => import("./components/ROICalculator"));
 const ClientPortalMockup = lazy(() => import("./components/ClientPortalMockup"));
 const EngagementModels = lazy(() => import("./components/EngagementModels"));
@@ -2039,9 +2038,6 @@ function App() {
 
       <AutomationSection />
 
-      <Suspense fallback={<SectionFallback />}>
-        <PipelineArchitecture />
-      </Suspense>
 
       <Suspense fallback={<SectionFallback />}>
         <ROICalculator />
