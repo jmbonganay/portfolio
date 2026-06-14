@@ -1,0 +1,287 @@
+.engagement-section,
+.handoff-section {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 96px 24px;
+  box-sizing: border-box;
+}
+
+.engagement-section__header,
+.handoff-section__header {
+  max-width: 760px;
+  margin-bottom: 34px;
+}
+
+.engagement-eyebrow {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: #7dfff5;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.engagement-section__header h2,
+.handoff-section__header h2 {
+  margin: 0;
+  color: #fffaf0;
+  font-size: clamp(2.35rem, 5vw, 4.6rem);
+  line-height: 0.94;
+  letter-spacing: -0.07em;
+}
+
+.engagement-section__header p,
+.handoff-section__header p {
+  margin: 18px 0 0;
+  max-width: 680px;
+  color: rgba(229, 255, 249, 0.68);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.engagement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.engagement-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 24px;
+  border-radius: 28px;
+  border: 1px solid rgba(125, 255, 245, 0.14);
+  background:
+    radial-gradient(circle at top left, rgba(45, 212, 191, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)),
+    rgba(5, 14, 13, 0.9);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.32);
+  overflow: hidden;
+}
+
+.engagement-card--featured {
+  border-color: rgba(125, 255, 245, 0.42);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.16),
+    0 0 54px rgba(45, 212, 191, 0.12),
+    0 30px 90px rgba(0, 0, 0, 0.42);
+  transform: translateY(-10px);
+}
+
+.engagement-card__badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  color: #04110f;
+  background: linear-gradient(135deg, #20d6cb, #a7fff4);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.engagement-card__icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  color: #a7fff4;
+  background: rgba(45, 212, 191, 0.11);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  box-shadow: 0 0 28px rgba(45, 212, 191, 0.12);
+  margin-bottom: 20px;
+}
+
+.engagement-card__eyebrow {
+  display: block;
+  color: rgba(125, 255, 245, 0.62);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.engagement-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.45rem;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.engagement-card__description {
+  margin: 14px 0 0;
+  color: rgba(229, 255, 249, 0.64);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.engagement-card__list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 22px 0 26px;
+  list-style: none;
+}
+
+.engagement-card__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: rgba(229, 255, 249, 0.76);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.engagement-card__list svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: #7dfff5;
+}
+
+.engagement-card__button {
+  margin-top: auto;
+  min-height: 50px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #04110f;
+  background: linear-gradient(135deg, #20d6cb, #a7fff4);
+  font-weight: 950;
+  text-decoration: none;
+  box-shadow: 0 18px 42px rgba(45, 212, 191, 0.2);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.engagement-card__button:hover,
+.engagement-card__button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 54px rgba(45, 212, 191, 0.34);
+}
+
+.handoff-faq {
+  display: grid;
+  gap: 14px;
+}
+
+.handoff-faq__item {
+  border-radius: 22px;
+  border: 1px solid rgba(125, 255, 245, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)),
+    rgba(5, 14, 13, 0.88);
+  overflow: hidden;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.26);
+}
+
+.handoff-faq__item--open {
+  border-color: rgba(125, 255, 245, 0.34);
+  box-shadow:
+    0 0 0 1px rgba(45, 212, 191, 0.1),
+    0 26px 80px rgba(0, 0, 0, 0.32);
+}
+
+.handoff-faq__question {
+  width: 100%;
+  min-height: 76px;
+  border: 0;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  text-align: left;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.handoff-faq__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  color: #7dfff5;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+}
+
+.handoff-faq__chevron {
+  color: rgba(229, 255, 249, 0.54);
+  transition: transform 220ms ease;
+}
+
+.handoff-faq__item--open .handoff-faq__chevron {
+  transform: rotate(180deg);
+}
+
+.handoff-faq__answer-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 260ms ease;
+}
+
+.handoff-faq__item--open .handoff-faq__answer-wrap {
+  grid-template-rows: 1fr;
+}
+
+.handoff-faq__answer {
+  overflow: hidden;
+  margin: 0;
+  padding: 0 20px;
+  color: rgba(229, 255, 249, 0.68);
+  line-height: 1.75;
+  font-size: 0.96rem;
+}
+
+.handoff-faq__item--open .handoff-faq__answer {
+  padding-bottom: 22px;
+}
+
+@media (max-width: 960px) {
+  .engagement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .engagement-card--featured {
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .engagement-section,
+  .handoff-section {
+    max-width: 100%;
+    padding: 70px 16px;
+  }
+
+  .engagement-section__header h2,
+  .handoff-section__header h2 {
+    font-size: 2.55rem;
+  }
+
+  .handoff-faq__question {
+    grid-template-columns: auto 1fr;
+  }
+
+  .handoff-faq__chevron {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

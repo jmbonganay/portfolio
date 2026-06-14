@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { ExternalLink, X } from "lucide-react";
+import TerminalLoader from "./TerminalLoader";
 
 const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/9m9aa72udl79axpeb8qkonm8l8i4dkps";
 
@@ -171,6 +172,8 @@ function AiProposalEngineForm() {
         >
           {isLoading ? "Analyzing Concept..." : "Trigger AI Proposal Engine"}
         </button>
+
+        <TerminalLoader isLoading={isLoading} />
       </form>
     </section>
   );

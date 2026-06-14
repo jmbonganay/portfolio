@@ -1,0 +1,537 @@
+.business-section {
+  width: 100%;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 96px 24px;
+  box-sizing: border-box;
+}
+
+.pipeline-card,
+.roi-card,
+.portal-window {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.business-section__header {
+  max-width: 760px;
+  margin-bottom: 34px;
+}
+
+.business-eyebrow {
+  display: inline-flex;
+  margin-bottom: 14px;
+  color: #7dfff5;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.business-section__header h2 {
+  margin: 0;
+  color: #fffaf0;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.94;
+  letter-spacing: -0.07em;
+}
+
+.business-section__header p {
+  margin: 18px 0 0;
+  max-width: 680px;
+  color: rgba(229, 255, 249, 0.68);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.roi-card {
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at top left, rgba(16, 185, 129, 0.14), transparent 35%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)),
+    rgba(5, 14, 13, 0.92);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.roi-card__top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.roi-card__icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  color: #a7fff4;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.24);
+  box-shadow: 0 0 30px rgba(45, 212, 191, 0.16);
+  flex: 0 0 auto;
+}
+
+.roi-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.35rem;
+}
+
+.roi-card__top p {
+  margin: 6px 0 0;
+  color: rgba(229, 255, 249, 0.58);
+}
+
+.roi-controls {
+  display: grid;
+  gap: 22px;
+}
+
+.roi-control {
+  display: grid;
+  gap: 12px;
+}
+
+.roi-control__label {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  color: rgba(229, 255, 249, 0.82);
+  font-weight: 800;
+}
+
+.roi-control__label span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roi-control__label strong {
+  color: #7dfff5;
+  white-space: nowrap;
+}
+
+.roi-control input[type="range"] {
+  width: 100%;
+  accent-color: #2dd4bf;
+  cursor: pointer;
+}
+
+.roi-control input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.85), rgba(125, 255, 245, 0.85));
+}
+
+.roi-control input[type="range"]::-webkit-slider-thumb {
+  margin-top: -6px;
+}
+
+.roi-output {
+  margin-top: 30px;
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid rgba(125, 255, 245, 0.18);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.roi-output p {
+  margin: 0;
+  color: rgba(255, 250, 240, 0.88);
+  font-size: clamp(1.45rem, 3vw, 2.6rem);
+  line-height: 1.18;
+  letter-spacing: -0.04em;
+  font-weight: 900;
+}
+
+.roi-output strong {
+  color: #7dfff5;
+  text-shadow: 0 0 28px rgba(45, 212, 191, 0.34);
+}
+
+.pipeline-card {
+  height: 420px;
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  background:
+    radial-gradient(circle at 30% 20%, rgba(45, 212, 191, 0.12), transparent 35%),
+    rgba(3, 9, 9, 0.95);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+}
+
+.pipeline-card .react-flow__pane {
+  cursor: grab;
+}
+
+.pipeline-card .react-flow__attribution {
+  display: none;
+}
+
+.pipeline-node {
+  position: relative;
+  min-width: 190px;
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(125, 255, 245, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.03)),
+    rgba(8, 22, 21, 0.96);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.pipeline-node .react-flow__handle {
+  width: 9px;
+  height: 9px;
+  border: 2px solid rgba(125, 255, 245, 0.75);
+  background: #071312;
+}
+
+.pipeline-node__icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  color: #7dfff5;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.22);
+  flex: 0 0 auto;
+}
+
+.pipeline-node strong,
+.pipeline-node span {
+  display: block;
+}
+
+.pipeline-node strong {
+  font-size: 0.92rem;
+}
+
+.pipeline-node span {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: rgba(229, 255, 249, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pipeline-node__tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  width: 250px;
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+  padding: 12px 14px;
+  border-radius: 14px;
+  color: rgba(229, 255, 249, 0.86);
+  background: rgba(2, 8, 8, 0.98);
+  border: 1px solid rgba(45, 212, 191, 0.18);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  transition: 180ms ease;
+}
+
+.pipeline-node:hover .pipeline-node__tooltip,
+.pipeline-node:focus-within .pipeline-node__tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.portal-window {
+  overflow: hidden;
+  border-radius: 30px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 8, 12, 0.92);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.48);
+}
+
+.portal-window__bar {
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.74);
+}
+
+.portal-window__dots {
+  display: inline-flex;
+  gap: 7px;
+}
+
+.portal-window__dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.portal-window__dots span:nth-child(1) {
+  background: #fb7185;
+}
+
+.portal-window__dots span:nth-child(2) {
+  background: #fbbf24;
+}
+
+.portal-window__dots span:nth-child(3) {
+  background: #34d399;
+}
+
+.portal-window__bar p {
+  margin: 0;
+  color: rgba(229, 255, 249, 0.42);
+  font-size: 0.82rem;
+}
+
+.portal-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 520px;
+}
+
+.portal-sidebar {
+  padding: 22px;
+  border-right: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.34);
+}
+
+.portal-sidebar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-weight: 900;
+  margin-bottom: 30px;
+}
+
+.portal-nav {
+  display: grid;
+  gap: 10px;
+}
+
+.portal-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 13px;
+  border-radius: 14px;
+  color: rgba(229, 255, 249, 0.64);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid transparent;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.portal-nav a:first-child {
+  color: #7dfff5;
+  border-color: rgba(45, 212, 191, 0.18);
+  background: rgba(45, 212, 191, 0.09);
+}
+
+.portal-main {
+  padding: 26px;
+}
+
+.portal-main__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.portal-main__header span,
+.portal-card span {
+  display: block;
+  color: rgba(125, 255, 245, 0.58);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.portal-main__header h3 {
+  margin: 8px 0 0;
+  color: #ffffff;
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+}
+
+.portal-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 13px;
+  border-radius: 999px;
+  color: #d1fae5;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  font-size: 0.8rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.portal-status-pill span {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #34d399;
+  box-shadow: 0 0 18px rgba(52, 211, 153, 0.85);
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 16px;
+}
+
+.portal-card {
+  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)),
+    rgba(15, 23, 42, 0.48);
+  padding: 20px;
+}
+
+.portal-card--table {
+  grid-column: 1 / -1;
+}
+
+.portal-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.portal-card h4 {
+  margin: 8px 0 0;
+  color: #ffffff;
+  font-size: 1.18rem;
+}
+
+.portal-card p {
+  margin: 14px 0 0;
+  color: rgba(229, 255, 249, 0.56);
+  line-height: 1.65;
+}
+
+.portal-card__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: #7dfff5;
+  background: rgba(45, 212, 191, 0.1);
+  margin-bottom: 18px;
+}
+
+.portal-progress {
+  margin-top: 22px;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.12);
+}
+
+.portal-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #14b8a6, #7dfff5);
+  box-shadow: 0 0 26px rgba(45, 212, 191, 0.45);
+}
+
+.portal-table {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.portal-table__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(2, 8, 12, 0.42);
+  color: rgba(229, 255, 249, 0.68);
+  font-size: 0.85rem;
+}
+
+.portal-table__row strong {
+  color: #7dfff5;
+}
+
+.portal-table__row em {
+  color: rgba(229, 255, 249, 0.38);
+  font-style: normal;
+}
+
+@media (max-width: 900px) {
+  .portal-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  }
+
+  .portal-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .business-section {
+    max-width: 100%;
+    padding: 70px 16px;
+  }
+
+  .roi-control__label {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .pipeline-card {
+    height: 480px;
+  }
+
+  .portal-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .portal-main__header {
+    flex-direction: column;
+  }
+
+  .portal-table__row {
+    grid-template-columns: 1fr;
+  }
+}

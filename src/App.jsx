@@ -28,13 +28,19 @@ import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import ScrollToTop from "./components/ScrollToTop";
 import AutomationModal from "./components/AutomationModal";
+import StatusWidget from "./components/StatusWidget";
+import { HoverCard, StaggeredGrid, StaggeredGridItem } from "./components/MotionWrappers";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
 import { imageDimensions } from "./data/imageDimensions";
 
 
-const AboutMetrics = lazy(() => import("./components/AboutMetrics"));
 const CroSlider = lazy(() => import("./components/CroSlider"));
+const PipelineArchitecture = lazy(() => import("./components/PipelineArchitecture"));
+const ROICalculator = lazy(() => import("./components/ROICalculator"));
+const ClientPortalMockup = lazy(() => import("./components/ClientPortalMockup"));
+const EngagementModels = lazy(() => import("./components/EngagementModels"));
+const HandoffFAQ = lazy(() => import("./components/HandoffFAQ"));
 
 function SectionFallback() {
   return (
@@ -82,8 +88,8 @@ function getProjectBadges(project) {
 
 const navLinks = [
   { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Capabilities", href: "#capabilities" },
+  { label: "Visual Proof", href: "#cro-slider" },
+  { label: "Systems", href: "#automation" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -890,15 +896,14 @@ function AutomationSection() {
 
           <div>
             <h2 id="automation-title">
-              Beyond the build: workflow automation for cleaner marketing
-              funnels.
+              System Proof: automation infrastructure that handles the lead
+              after the page converts.
             </h2>
 
             <p>
-              I do not just build landing pages. I help connect the page, store,
-              CRM, tracking, and automation layer so lead generation workflows
-              move faster, save manual time, and keep campaign data easier to
-              act on.
+              After the visual conversion layer captures intent, the backend system
+              routes, enriches, stores, and follows up with leads through webhooks,
+              CRM logic, AI scoping, and automation workflows.
             </p>
           </div>
         </div>
@@ -1282,9 +1287,7 @@ function App() {
     const sectionWrappers = document.querySelectorAll(
       [
         ".featured-work",
-        ".about-metrics-section",
         ".automation-section",
-        ".capabilities-section",
         ".contact-section",
         ".site-footer",
       ].join(", "),
@@ -1299,15 +1302,9 @@ function App() {
     const animatedItems = document.querySelectorAll(
       [
         ".project-card",
-        ".capability-card",
-        ".about-metrics-card",
-        ".methodology-card",
-        ".capability-proof",
         ".contact-card",
         ".contact-form",
         ".work-proof-row",
-        ".experience-about",
-        ".timeline-card",
         ".automation-map",
         ".automation-card",
       ].join(", "),
@@ -1611,6 +1608,9 @@ function App() {
           name: contactForm.name,
           email: contactForm.email,
           message: contactForm.message,
+          projectIdea: contactForm.message,
+          projectType: selectedProjectType,
+          submissionType: "ai_scoper",
         }),
       }).catch((makeError) => {
         console.warn("Make.com webhook failed:", makeError);
@@ -1764,12 +1764,20 @@ function App() {
             </p>
 
             <h1 id="hero-title" className="hero-animate hero-animate--title">
-              {profile.name}
+              {profile.headline}
             </h1>
 
             <div className="hero-animate hero-animate--subtext">
-              <p className="hero__headline">{profile.headline}</p>
               <p className="hero__summary">{profile.summary}</p>
+
+              <div className="hero__value-grid" aria-label="Hybrid conversion and backend systems value">
+                {profile.heroBullets.map((bullet) => (
+                  <div className="hero__value-item" key={bullet.label}>
+                    <strong>{bullet.label}</strong>
+                    <span>{bullet.value}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div
@@ -1839,7 +1847,7 @@ function App() {
 
               <div className="hero-portrait__caption">
                 <div>
-                  <span>Front-End / CRO Developer</span>
+                  <span>Conversion + Backend Systems</span>
 
                   <div
                     className="hero-portrait__tags"
@@ -1952,44 +1960,51 @@ function App() {
           </div>
 
           {isAutomationWorkFilter ? (
-            <div
+            <StaggeredGrid
+              key={`automation-grid-${renderedWorkFilter}-${visibleWorkProjects.length}`}
               className={`automation-work-grid ${workGridPhase}`}
               id="selected-work-grid"
               aria-live="polite"
             >
               {visibleWorkProjects.map((project, index) => (
-                <AutomationArchitectureCard
-                  project={project}
-                  key={`${renderedWorkFilter}-${project.id}`}
-                  index={index}
-                  onOpenModal={setSelectedAutomationModalId}
-                />
+                <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
+                  <HoverCard className="motion-work-hover">
+                    <AutomationArchitectureCard
+                      project={project}
+                      index={index}
+                      onOpenModal={setSelectedAutomationModalId}
+                    />
+                  </HoverCard>
+                </StaggeredGridItem>
               ))}
-            </div>
+            </StaggeredGrid>
           ) : (
-            <div
+            <StaggeredGrid
+              key={`work-grid-${renderedWorkFilter}-${visibleWorkProjects.length}`}
               className={`work-grid ${workGridPhase}`}
               id="selected-work-grid"
               aria-live="polite"
             >
               {visibleWorkProjects.map((project, index) => (
-                project.category === "Automations" ? (
-                  <AutomationArchitectureCard
-                    project={project}
-                    key={`${renderedWorkFilter}-${project.id}`}
-                    index={index}
-                    onOpenModal={setSelectedAutomationModalId}
-                  />
-                ) : (
-                  <ProjectCard
-                    project={project}
-                    key={`${renderedWorkFilter}-${project.id}`}
-                    index={index}
-                    onOpenCaseStudy={setSelectedCaseStudyId}
-                  />
-                )
+                <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
+                  <HoverCard className="motion-work-hover">
+                    {project.category === "Automations" ? (
+                      <AutomationArchitectureCard
+                        project={project}
+                        index={index}
+                        onOpenModal={setSelectedAutomationModalId}
+                      />
+                    ) : (
+                      <ProjectCard
+                        project={project}
+                        index={index}
+                        onOpenCaseStudy={setSelectedCaseStudyId}
+                      />
+                    )}
+                  </HoverCard>
+                </StaggeredGridItem>
               ))}
-            </div>
+            </StaggeredGrid>
           )}
 
           {canToggleWorkCount ? (
@@ -2019,15 +2034,29 @@ function App() {
       </section>
 
       <Suspense fallback={<SectionFallback />}>
-        <AboutMetrics />
+        <CroSlider />
       </Suspense>
-
-      <CapabilitiesSection />
 
       <AutomationSection />
 
       <Suspense fallback={<SectionFallback />}>
-        <CroSlider />
+        <PipelineArchitecture />
+      </Suspense>
+
+      <Suspense fallback={<SectionFallback />}>
+        <ROICalculator />
+      </Suspense>
+
+      <Suspense fallback={<SectionFallback />}>
+        <ClientPortalMockup />
+      </Suspense>
+
+      <Suspense fallback={<SectionFallback />}>
+        <EngagementModels />
+      </Suspense>
+
+      <Suspense fallback={<SectionFallback />}>
+        <HandoffFAQ />
       </Suspense>
 
       <section
@@ -2040,12 +2069,12 @@ function App() {
             <div className="contact-cta">
               <p className="section-kicker">Contact / CTA</p>
 
-              <h2 id="contact-title">Let's build something that converts.</h2>
+              <h2 id="contact-title">Trigger the same AI proposal engine I built for this portfolio.</h2>
 
               <p>
-                Tell me what you need to launch, improve, or automate. I will
-                respond with the clearest next step for a landing page, funnel,
-                ecommerce page, or remote role fit.
+                Submit your project idea below, and my autonomous Make.com + Gemini
+                pipeline will architect a 3-phase technical scope, compile it into a
+                branded PDF, and deliver it to your inbox in roughly 15 seconds.
               </p>
 
               <div className="contact-direct" aria-label="Direct contact links">
@@ -2383,6 +2412,7 @@ function App() {
               Landing Page Developer / Designer building responsive pages,
               funnels, and ecommerce flows for clearer conversions.
             </p>
+            <StatusWidget />
           </div>
 
           <div className="footer-actions">
