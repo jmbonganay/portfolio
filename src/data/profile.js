@@ -1,6 +1,6 @@
 export const profile = {
   name: "John Michael Bonganay",
-  role: "Landing Page Developer / Backend Systems Architect",
+  role: "Landing Page Developer / Automation Specialist",
   location: "Tabaco City, Philippines",
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
