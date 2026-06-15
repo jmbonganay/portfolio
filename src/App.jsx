@@ -37,10 +37,6 @@ import { imageDimensions } from "./data/imageDimensions";
 
 
 const TechMatrix = lazy(() => import("./components/TechMatrix"));
-const ROICalculator = lazy(() => import("./components/ROICalculator"));
-const ClientPortalMockup = lazy(() => import("./components/ClientPortalMockup"));
-const EngagementModels = lazy(() => import("./components/EngagementModels"));
-const HandoffFAQ = lazy(() => import("./components/HandoffFAQ"));
 
 function SectionFallback() {
   return (
@@ -90,13 +86,14 @@ const navLinks = [
   { label: "Work", href: "#work" },
   { label: "Stack", href: "#stack" },
   { label: "Systems", href: "#automation" },
+  { label: "Fit", href: "#role-fit" },
   { label: "Contact", href: "#contact" },
 ];
 
 const heroPlatformTags = [
   { label: "WordPress", filterId: "WordPress" },
   { label: "Shopify", filterId: "Shopify" },
-  { label: "GoHighLevel", filterId: "GoHighLevel" },
+  { label: "Automations", filterId: "Automations" },
 ];
 
 function LocalPhtClock() {
@@ -293,17 +290,40 @@ const automationCards = [
     activeNodes: ["zapier", "n8n", "gohighlevel", "analytics"],
   },
 ];
+const roleFitCards = [
+  {
+    icon: Code2,
+    title: "Front-end roles",
+    summary:
+      "Landing page developer, front-end developer, Shopify builder, WordPress developer, and responsive UI implementer.",
+    points: ["React and Vite portfolio build", "HTML, CSS, JavaScript", "Shopify and WordPress pages"],
+  },
+  {
+    icon: Workflow,
+    title: "Automation roles",
+    summary:
+      "Make.com, GoHighLevel, Zapier, n8n, CRM routing, webhook setup, and AI workflow support for marketing operations.",
+    points: ["Make.com and GHL workflows", "CRM tagging and routing", "AI proposal and document flows"],
+  },
+  {
+    icon: BriefcaseBusiness,
+    title: "Work setup",
+    summary:
+      "Open to freelance builds, ongoing support, and full-time remote roles with clear communication and documented handoff.",
+    points: ["Remote-ready setup", "US, UK, and AU overlap", "Client and recruiter friendly"],
+  },
+];
 const contactProjectTypes = [
-  "Landing page build",
-  "Shopify product page",
-  "WordPress campaign page",
-  "Marketing funnel / automation",
+  "Landing page or product page",
+  "WordPress or Shopify build",
+  "Automation or CRM workflow",
   "Full-time remote role",
+  "General project inquiry",
 ];
 const contactTrustSignals = [
-  "Full-time availability",
-  "Flexible across US EST/PST",
-  "UK GMT and AU AEST ready",
+  "Open to freelance projects",
+  "Available for remote roles",
+  "US EST/PST, UK GMT, and AU AEST ready",
   "Remote setup with backup internet and power",
 ];
 const initialContactForm = {
@@ -515,7 +535,10 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
         <div className="project-role">
           <BriefcaseBusiness size={16} aria-hidden="true" />
-          <span>{displayRole}</span>
+          <span>
+            <strong>My contribution</strong>
+            {displayRole}
+          </span>
         </div>
 
         {project.focus ? <p className="project-focus">{project.focus}</p> : null}
@@ -862,13 +885,78 @@ function CaseStudyDrawer({ project, onClose }) {
               onClick={handleStartBuildClick}
               strength={7}
             >
-              Start similar build
+              Discuss similar project
               <Send size={16} aria-hidden="true" />
             </MagneticCTA>
           </div>
         </div>
       </aside>
     </div>
+  );
+}
+
+
+function RoleFitSection() {
+  return (
+    <section
+      className="role-fit-section"
+      id="role-fit"
+      aria-labelledby="role-fit-title"
+    >
+      <div className="role-fit-shell">
+        <div className="role-fit-heading">
+          <p className="section-kicker">Role Fit</p>
+          <h2 id="role-fit-title">Built for teams that need pages and systems.</h2>
+          <p>
+            I fit best where front-end execution, conversion thinking, and
+            workflow automation need to work together instead of being handled
+            in separate silos.
+          </p>
+        </div>
+
+        <div className="role-fit-grid">
+          {roleFitCards.map((card) => {
+            const Icon = card.icon;
+
+            return (
+              <article className="role-fit-card" key={card.title}>
+                <span className="role-fit-card__icon">
+                  <Icon size={20} aria-hidden="true" />
+                </span>
+
+                <h3>{card.title}</h3>
+                <p>{card.summary}</p>
+
+                <ul>
+                  {card.points.map((point) => (
+                    <li key={point}>
+                      <CheckCircle2 size={15} aria-hidden="true" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="role-fit-actions">
+          <a className="btn btn--primary" href="#contact">
+            <Mail size={18} aria-hidden="true" />
+            Contact me
+          </a>
+
+          <a
+            className="btn btn--secondary"
+            href={profile.resumePath}
+            download="JohnMichael_Bonganay_Resume.pdf"
+          >
+            <FileText size={18} aria-hidden="true" />
+            Download resume
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -892,18 +980,16 @@ function AutomationSection() {
     >
       <div className="automation-shell">
         <div className="automation-heading">
-          <p className="section-kicker">Workflow & Automation</p>
+          <p className="section-kicker">Systems Support</p>
 
           <div>
             <h2 id="automation-title">
-              System Proof: automation infrastructure that handles the lead
-              after the page converts.
+              What happens after the page converts.
             </h2>
 
             <p>
-              After the visual conversion layer captures intent, the backend system
-              routes, enriches, stores, and follows up with leads through webhooks,
-              CRM logic, AI scoping, and automation workflows.
+              A concise look at how forms, CRM tools, automation builders, and
+              analytics can connect so leads move cleanly from capture to follow-up.
             </p>
           </div>
         </div>
@@ -1570,7 +1656,7 @@ function App() {
       formData.set("project_type", selectedProjectType);
       formData.set(
         "subject",
-        `New portfolio inquiry${selectedProjectType ? ` — ${selectedProjectType}` : ""}`,
+        `New portfolio inquiry${selectedProjectType ? ` | ${selectedProjectType}` : ""}`,
       );
       formData.set("from_name", "John Michael Portfolio");
       formData.set("h-captcha-response", captchaToken);
@@ -1792,12 +1878,12 @@ function App() {
                   ReactGA.event({
                     category: "User",
                     action: "Clicked Hero CTA",
-                    label: "Strategy Call",
+                    label: "Contact Inquiry",
                   });
                 }}
               >
                 <Mail className="hero__primary-cta-icon" size={18} aria-hidden="true" />
-                Book a strategy call
+                Discuss a role or project
               </MagneticCTA>
 
               <a className="btn btn--secondary" href="#work">
@@ -1818,7 +1904,7 @@ function App() {
 
               <span className="hero__availability">
                 <span className="availability-beacon" aria-hidden="true" />
-                Available for new projects
+                Available for remote roles and projects
               </span>
 
               <LocalPhtClock />
@@ -1836,7 +1922,7 @@ function App() {
               <div className="hero-portrait__image-wrap">
                 <img
                   src={johnMichaelPortrait}
-                  alt="John Michael Bonganay, front-end and CRO developer"
+                  alt="John Michael Bonganay, front-end developer and automation specialist"
                   className="hero-portrait__image"
                   width="900"
                   height="1125"
@@ -1847,7 +1933,7 @@ function App() {
 
               <div className="hero-portrait__caption">
                 <div>
-                  <span>Conversion + Backend Systems</span>
+                  <span>Front-end builds + automation systems</span>
 
                   <div
                     className="hero-portrait__tags"
@@ -1872,7 +1958,7 @@ function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  View OLJ Profile
+                  View resume profile
                   <ArrowUpRight size={16} aria-hidden="true" />
                 </a>
               </div>
@@ -1925,15 +2011,12 @@ function App() {
             <p className="section-kicker">Selected Works</p>
             <div>
               <h2 id="work-title">
-                High-converting pages, funnels, and responsive builds with
-                visual proof.
+                Selected builds that show the front end and the systems behind it.
               </h2>
               <p>
-                A curated scan of Shopify product pages, WordPress landing
-                pages, funnel revenue proof, agency website work,
-                direct-response advertorials, and backend automation systems
-                from the same practical stack I use across design, build, QA,
-                and launch.
+                A focused set of Shopify, WordPress, Netlify, GoHighLevel, and
+                automation projects showing what I designed, built, optimized,
+                routed, or launched.
               </p>
             </div>
           </div>
@@ -2038,21 +2121,7 @@ function App() {
       <AutomationSection />
 
 
-      <Suspense fallback={<SectionFallback />}>
-        <ROICalculator />
-      </Suspense>
-
-      <Suspense fallback={<SectionFallback />}>
-        <ClientPortalMockup />
-      </Suspense>
-
-      <Suspense fallback={<SectionFallback />}>
-        <EngagementModels />
-      </Suspense>
-
-      <Suspense fallback={<SectionFallback />}>
-        <HandoffFAQ />
-      </Suspense>
+      <RoleFitSection />
 
       <section
         className="contact-section"
@@ -2062,14 +2131,14 @@ function App() {
         <div className="contact-shell">
           <div className="contact-card">
             <div className="contact-cta">
-              <p className="section-kicker">Contact / CTA</p>
+              <p className="section-kicker">Contact</p>
 
-              <h2 id="contact-title">Trigger the same AI proposal engine I built for this portfolio.</h2>
+              <h2 id="contact-title">Discuss a role, project, or automation build.</h2>
 
               <p>
-                Submit your project idea below, and my autonomous Make.com + Gemini
-                pipeline will architect a 3-phase technical scope, compile it into a
-                branded PDF, and deliver it to your inbox in roughly 15 seconds.
+                Send a short note about the role or build you have in mind. If it is
+                a project idea, the automation workflow can generate a technical
+                scope while I review your inquiry.
               </p>
 
               <div className="contact-direct" aria-label="Direct contact links">

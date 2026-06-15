@@ -1,40 +1,40 @@
 export const profile = {
   name: "John Michael Bonganay",
-  role: "Landing Page Developer / Backend Systems Architect",
+  role: "Front-End Developer / Automation Specialist",
   location: "Tabaco City, Philippines",
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
   availability: "Remote-ready across US, UK, and AU time zones",
   headline:
-    "I build landing pages that convert and backend systems that keep selling after the click.",
+    "I build conversion-focused websites and the automation systems behind them.",
   summary:
-    "I combine high-converting UX/UI, fast front-end execution, and automation architecture to turn traffic into leads, leads into booked calls, and project ideas into structured client workflows.",
+    "I design and develop landing pages, funnels, product pages, and workflow automations that turn traffic into leads, keep data clean, and support campaigns after the form is submitted.",
   heroBullets: [
     {
-      label: "Conversion-first design",
+      label: "Front-end conversion builds",
       value:
-        "Landing pages, product pages, and funnels built around clear messaging, visual hierarchy, speed, and buyer intent."
+        "Landing pages, Shopify pages, WordPress pages, and responsive UI built around clear offers, fast scanning, and buyer intent."
     },
     {
-      label: "Backend-aware execution",
+      label: "Automation after the click",
       value:
-        "I do not just design the page I understand the systems behind it: webhooks, CRM routing, API handoffs, AI workflows, and automated follow-up."
+        "Forms, webhooks, CRM routes, Make.com flows, GoHighLevel workflows, AI scoping, and follow-up systems planned with the page."
     },
     {
-      label: "Less friction, more revenue",
+      label: "Role and project ready",
       value:
-        "Your visitors get a cleaner experience, your team gets cleaner data, and your funnel keeps working even after the form is submitted."
+        "I can support full-time remote teams, freelance builds, and campaign launches with clear handoff, QA, and practical documentation."
     }
   ],
   stats: [
     {
       value: "4+",
-      label: "years building conversion pages"
+      label: "years building front-end pages"
     },
     {
       value: "2",
-      label: "layers: front-end conversion + backend automation"
+      label: "core layers: UI build and automation logic"
     },
     {
       value: "24h",
@@ -51,8 +51,8 @@ export const profile = {
     "Landing page design",
     "Figma to website builds",
     "Shopify product pages",
-    "GoHighLevel funnels",
-    "Performance optimization",
+    "GoHighLevel workflows",
+    "Make.com automation",
     "Analytics and tracking setup"
   ]
 };

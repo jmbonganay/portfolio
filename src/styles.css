@@ -12336,3 +12336,147 @@ button.automation-architecture-card__secondary {
     max-width: 1020px;
   }
 }
+
+/* Focused portfolio role fit section */
+.role-fit-section {
+  position: relative;
+  padding: 96px clamp(18px, 4vw, 48px);
+  color: var(--cream);
+}
+
+.role-fit-shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.role-fit-heading {
+  display: grid;
+  gap: 16px;
+  max-width: 860px;
+  margin-bottom: 34px;
+}
+
+.role-fit-heading h2 {
+  margin: 0;
+  max-width: 840px;
+  color: #ffffff;
+  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+
+.role-fit-heading p:not(.section-kicker) {
+  margin: 0;
+  max-width: 740px;
+  color: rgba(229, 255, 249, 0.68);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.role-fit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.role-fit-card {
+  display: grid;
+  gap: 14px;
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid rgba(125, 255, 245, 0.14);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(45, 212, 191, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)),
+    rgba(5, 14, 13, 0.86);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.role-fit-card__icon {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  color: #a7fff4;
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+}
+
+.role-fit-card h3 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.18rem;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+}
+
+.role-fit-card p {
+  margin: 0;
+  color: rgba(229, 255, 249, 0.66);
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+.role-fit-card ul {
+  display: grid;
+  gap: 9px;
+  padding: 0;
+  margin: 4px 0 0;
+  list-style: none;
+}
+
+.role-fit-card li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  color: rgba(229, 255, 249, 0.78);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.role-fit-card li svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: #7dfff5;
+}
+
+.role-fit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.project-role span {
+  display: grid;
+  gap: 2px;
+}
+
+.project-role strong {
+  display: block;
+  color: rgba(7, 94, 88, 0.72);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.09em;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+@media (max-width: 960px) {
+  .role-fit-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .role-fit-section {
+    padding: 70px 16px;
+  }
+
+  .role-fit-heading h2 {
+    font-size: 2.55rem;
+  }
+}
