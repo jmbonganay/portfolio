@@ -695,7 +695,7 @@ export const projects = [
     type: "NDA WordPress Performance",
     title: "WordPress / WooCommerce Sales Dashboard",
     summary:
-      "NDA-protected WordPress commerce environment where I contributed build support, WooCommerce/funnel flow work, and tracking-aware launch execution. The cropped dashboard is included as exposure proof, not as a claim of sole ownership of all revenue.",
+      "NDA-protected WordPress commerce project. Page content is intentionally withheld, with only cropped performance metrics shown to prove real sales activity.",
     role: "WordPress Build Support, WooCommerce/Funnel Flow, Tracking-Aware Launch Execution",
     image: "/work/performance-wordpress-woocommerce-30m.webp",
     imageAlt: "Cropped WordPress WooCommerce analytics screenshot showing total sales, orders, and products sold",
@@ -709,11 +709,11 @@ export const projects = [
     caseStudy: {
       headline: "NDA-safe WordPress commerce support connected to large-scale sales activity.",
       overview:
-        "This entry keeps client and page details private while still showing credible exposure to a high-volume WooCommerce environment through cropped analytics proof.",
+        "This entry keeps client and page details private while still showing performance exposure through cropped WooCommerce analytics proof.",
       challenge:
         "The work needed to be presented credibly without exposing private campaign creative, products, or client information.",
       approach:
-        "I framed the project around my contribution: WordPress platform support, commerce-flow awareness, tracking-sensitive launch execution, and NDA-safe proof presentation.",
+        "I framed the project around platform support, commerce flow awareness, tracking-sensitive launch execution, and NDA-safe proof presentation.",
       outcome:
         "The snapshot shows exposure to a high-volume WordPress commerce environment while respecting confidentiality.",
       highlights: [
@@ -732,7 +732,7 @@ export const projects = [
     type: "NDA Funnel Performance",
     title: "Marketing Funnel Revenue Snapshot",
     summary:
-      "NDA-safe WordPress funnel performance snapshot. The revenue, order volume, contacts, and upsell activity are shown to indicate campaign environment exposure while the actual page, client, and private strategy details stay withheld.",
+      "A WordPress funnel performance snapshot showing revenue, order volume, contacts, and upsell activity while keeping the actual page and client details private.",
     role: "WordPress Funnel Build Support, Checkout Flow, Upsell/Order Bump Structure",
     image: "/work/performance-wordpress-funnelkit-2m.webp",
     imageAlt: "Cropped FunnelKit analytics screenshot showing revenue, visitors, contacts, orders, and upsell revenue",
@@ -746,7 +746,7 @@ export const projects = [
     caseStudy: {
       headline: "A WordPress funnel snapshot showing checkout and upsell-flow experience.",
       overview:
-        "This NDA-safe example highlights support experience around FunnelKit-style revenue flows, contacts, orders, visitors, and average order value.",
+        "This NDA-safe example highlights experience with FunnelKit-style revenue flows, contacts, orders, visitors, and average order value.",
       challenge:
         "The public presentation needed to prove funnel experience without showing private page creative or internal campaign information.",
       approach:
@@ -768,7 +768,7 @@ export const projects = [
     type: "NDA WordPress Sales Proof",
     title: "WooCommerce Campaign Sales Proof",
     summary:
-      "NDA-safe sales proof from a WordPress commerce campaign, included to show performance exposure and platform support experience without revealing page creative, offer details, customer data, or client identity.",
+      "NDA-safe sales proof from a WordPress commerce campaign, included to show performance exposure without revealing the page creative, offer, or client identity.",
     role: "WordPress Campaign Page Support, Checkout Flow, Responsive QA",
     image: "/work/performance-wordpress-woocommerce-2m.webp",
     imageAlt: "Cropped WooCommerce analytics screenshot showing total sales, orders, and products sold",
@@ -788,7 +788,7 @@ export const projects = [
     type: "NDA Checkout Performance",
     title: "Checkout Flow Performance Snapshot",
     summary:
-      "A private WordPress checkout performance example showing sales and order activity only. The entry is framed around checkout support, QA, and payment-flow awareness without exposing the client page, product, or campaign details.",
+      "A private WordPress checkout performance example showing sales and order activity only, without exposing the client's page, product, or campaign details.",
     role: "WordPress Checkout Support, Funnel QA, Payment/Order Flow Awareness",
     image: "/work/performance-wordpress-checkout-153k.webp",
     imageAlt: "Cropped WordPress checkout performance screenshot showing total sales, net sales, orders, and products sold",

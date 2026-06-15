@@ -1,4 +1,4 @@
-﻿import { Quote, Star } from "lucide-react";
+import { Quote, Star } from "lucide-react";
 
 const testimonials = [
   {
@@ -72,9 +72,9 @@ function TestimonialCard({ testimonial }) {
 
       <p className="testimonial-card__quote-text">
         <span className="testimonial-card__highlight">
-          "{testimonial.highlightedText}
+          “{testimonial.highlightedText}
         </span>{" "}
-        <span className="testimonial-card__body">{testimonial.bodyText}"</span>
+        <span className="testimonial-card__body">{testimonial.bodyText}”</span>
       </p>
 
       <div className="testimonial-card__footer testimonial-card__footer--avatar">
@@ -140,4 +140,3 @@ export default function Testimonials() {
     </section>
   );
 }
-

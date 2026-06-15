@@ -1,40 +1,36 @@
 export const profile = {
   name: "John Michael Bonganay",
-<<<<<<< HEAD
-  role: "Landing Page Developer / Automation Specialist",
-=======
-  role: "Front-End Landing Page Developer & Automation Specialist",
->>>>>>> edead96 (updates)
+  role: "Landing Page Developer / Backend Systems Architect",
   location: "Tabaco City, Philippines",
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
   availability: "Remote-ready across US, UK, and AU time zones",
   headline:
-    "I build conversion-focused campaign pages and the automation systems behind them.",
+    "I build landing pages that convert and backend systems that keep selling after the click.",
   summary:
-    "I am John Michael Bonganay, a front-end landing page developer and automation specialist with 4+ years of experience building responsive pages, funnels, workflow systems, CRM handoffs, and automation-ready campaign infrastructure.",
+    "I combine high-converting UX/UI, fast front-end execution, and automation architecture to turn traffic into leads, leads into booked calls, and project ideas into structured client workflows.",
   heroBullets: [
     {
-      label: "Front-end conversion builds",
+      label: "Conversion-first design",
       value:
-        "Shopify product pages, WordPress campaign pages, GoHighLevel funnels, and responsive landing pages built around proof, CTA flow, and buyer intent."
+        "Landing pages, product pages, and funnels built around clear messaging, visual hierarchy, speed, and buyer intent."
     },
     {
-      label: "Automation specialist work",
+      label: "Backend-aware execution",
       value:
-        "Make.com, Zapier, n8n, webhook, CRM, AI proposal, and follow-up workflows that move leads and campaign data after the page converts."
+        "I do not just design the page I understand the systems behind it: webhooks, CRM routing, API handoffs, AI workflows, and automated follow-up."
     },
     {
-      label: "Campaign systems thinking",
+      label: "Less friction, more revenue",
       value:
-        "I connect the visible page experience with the operational layer behind it: forms, routing, tracking support, handoff notes, and launch QA."
+        "Your visitors get a cleaner experience, your team gets cleaner data, and your funnel keeps working even after the form is submitted."
     }
   ],
   stats: [
     {
       value: "4+",
-      label: "years building campaign pages"
+      label: "years building conversion pages"
     },
     {
       value: "2",
@@ -42,7 +38,7 @@ export const profile = {
     },
     {
       value: "24h",
-      label: "remote-ready response rhythm for global teams"
+      label: "remote-ready setup for global teams"
     }
   ],
   strengths: [
@@ -56,7 +52,7 @@ export const profile = {
     "Figma to website builds",
     "Shopify product pages",
     "GoHighLevel funnels",
-    "WordPress campaign pages",
+    "Performance optimization",
     "Analytics and tracking setup"
   ]
 };

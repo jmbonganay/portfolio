@@ -5,7 +5,7 @@ const techCategories = [
   {
     title: "Conversion & Frontend Layer",
     description:
-      "Designing and building fast, responsive campaign pages with clear messaging, proof hierarchy, CTA flow, and mobile-first execution.",
+      "Designing and building high-performance, mobile-responsive interfaces optimized for maximum revenue and user flow.",
     icon: Layout,
     tools: [
       "Figma",
@@ -19,7 +19,7 @@ const techCategories = [
   {
     title: "Integration & Automation Core",
     description:
-      "Connecting forms, CRMs, webhooks, and follow-up systems so captured intent does not disappear into manual admin work.",
+      "Connecting decoupled applications, syncing CRMs, and routing webhook data to ruthlessly eliminate manual data entry.",
     icon: Cpu,
     tools: [
       "Make.com",
@@ -32,7 +32,7 @@ const techCategories = [
   {
     title: "Autonomous Intelligence",
     description:
-      "Using AI workflows where they improve speed and structure: intake triage, proposal scoping, data cleanup, and async operations.",
+      "Embedding LLM workflows directly into business ops to generate scopes, clean dirty data, and handle complex async tasks.",
     icon: Sparkles,
     tools: [
       "Gemini API",
@@ -44,7 +44,7 @@ const techCategories = [
   {
     title: "Operations & Growth Tracking",
     description:
-      "Supporting campaign launch details across analytics, tag setup, domains, email delivery, payment paths, and handoff readiness.",
+      "Deploying enterprise analytics, handling domain migrations, and setting up secure server configurations.",
     icon: BarChart3,
     tools: [
       "Google Analytics",
@@ -63,13 +63,12 @@ export default function TechMatrix() {
         <span className="tech-matrix-eyebrow">ENGINEERED STACK</span>
 
         <h2 id="tech-matrix-title">
-          The stack behind the page, the launch, and the follow-up.
+          The toolkits I deploy to build, automate, and scale.
         </h2>
 
         <p>
-          I position myself as more than a visual page builder: I can support
-          the conversion layer, the platform implementation, and the operational
-          details that make a campaign easier to launch and maintain.
+          A battle-tested stack spanning high-converting frontend design, complex
+          backend data-routing, and custom AI-driven business infrastructure.
         </p>
       </div>
 
