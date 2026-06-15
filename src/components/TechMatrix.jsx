@@ -3,55 +3,60 @@ import "./tech-matrix.css";
 
 const techCategories = [
   {
-    title: "Conversion & Frontend Layer",
+    title: "Front End & Conversion",
     description:
-      "Designing and building high-performance, mobile-responsive interfaces optimized for maximum revenue and user flow.",
+      "Build responsive landing pages, product pages, and funnel sections that are clear, fast, and easy to use.",
     icon: Layout,
     tools: [
       "Figma",
       "WordPress",
       "Shopify",
       "GoHighLevel",
-      "HTML5 / CSS3",
-      "Responsive Design",
+      "HTML5",
+      "CSS3",
+      "Responsive QA",
     ],
   },
   {
-    title: "Integration & Automation Core",
+    title: "Automations & Integrations",
     description:
-      "Connecting decoupled applications, syncing CRMs, and routing webhook data to ruthlessly eliminate manual data entry.",
+      "Connect forms, CRMs, email tools, and webhook flows so lead data moves cleanly without manual work.",
     icon: Cpu,
     tools: [
       "Make.com",
       "n8n",
       "Zapier",
-      "Webhook Architecture",
-      "API Integrations",
+      "Webhooks",
+      "REST APIs",
+      "CRM Workflows",
     ],
   },
   {
-    title: "Autonomous Intelligence",
+    title: "AI Workflow Support",
     description:
-      "Embedding LLM workflows directly into business ops to generate scopes, clean dirty data, and handle complex async tasks.",
+      "Use AI tools for proposal drafting, content support, data cleanup, and workflow assistance when it improves the process.",
     icon: Sparkles,
     tools: [
       "Gemini API",
       "ChatGPT",
-      "Prompt Engineering",
-      "AI Pipeline Architecture",
+      "Prompt Writing",
+      "AI Scoping",
+      "Proposal Drafting",
+      "Data Cleanup",
     ],
   },
   {
-    title: "Operations & Growth Tracking",
+    title: "Tracking & Operations",
     description:
-      "Deploying enterprise analytics, handling domain migrations, and setting up secure server configurations.",
+      "Set up analytics, tracking tags, domains, email sending, payments, and launch support for production campaigns.",
     icon: BarChart3,
     tools: [
       "Google Analytics",
       "Google Tag Manager",
       "Cloudflare DNS",
       "SendGrid",
-      "PayMongo / Xendit",
+      "PayMongo",
+      "Xendit",
     ],
   },
 ];
@@ -63,12 +68,11 @@ export default function TechMatrix() {
         <span className="tech-matrix-eyebrow">ENGINEERED STACK</span>
 
         <h2 id="tech-matrix-title">
-          The toolkits I deploy to build, automate, and scale.
+          My working stack across front end, automations, and tracking.
         </h2>
 
         <p>
-          A battle-tested stack spanning high-converting frontend design, complex
-          backend data-routing, and custom AI-driven business infrastructure.
+          These are the tools I use to design and build pages, connect lead flows, support AI assisted workflows, and prepare campaigns for launch.
         </p>
       </div>
 

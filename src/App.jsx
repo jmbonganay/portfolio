@@ -85,14 +85,14 @@ function getProjectBadges(project) {
 const navLinks = [
   { label: "Work", href: "#work" },
   { label: "Stack", href: "#stack" },
-  { label: "Systems", href: "#automation" },
-  { label: "Fit", href: "#role-fit" },
+  { label: "Automation", href: "#automation" },
+  { label: "Role Fit", href: "#role-fit" },
   { label: "Contact", href: "#contact" },
 ];
 
 const heroPlatformTags = [
-  { label: "WordPress", filterId: "WordPress" },
-  { label: "Shopify", filterId: "Shopify" },
+  { label: "WordPress LPs", filterId: "WordPress" },
+  { label: "Shopify pages", filterId: "Shopify" },
   { label: "Automations", filterId: "Automations" },
 ];
 
@@ -131,11 +131,11 @@ function LocalPhtClock() {
 const selectedWorkMeta = {
   "barkchester-united": {
     title: "High-Converting Shopify Product Page",
-    role: "Shopify product UX, CRO layout, responsive ecommerce build",
+    role: "Built Shopify product page, improved offer layout, handled responsive QA.",
   },
   "vista-veil": {
     title: "Beauty-Tech Shopify Product Page",
-    role: "Shopify offer layout, product storytelling, responsive QA",
+    role: "Built Shopify offer page, shaped product story, handled responsive QA.",
   },
   "grippit-strength": {
     title: "Health Product Shopify Sales Page",
@@ -143,90 +143,180 @@ const selectedWorkMeta = {
   },
   "wordpress-funnelkit-2m": {
     title: "Marketing Funnel Revenue Snapshot",
-    role: "WordPress funnel support, checkout flow, upsell structure",
+    role: "Supported WordPress funnel flow, reviewed checkout UX, documented sales proof.",
   },
   "wordpress-campaign-2m": {
     title: "WooCommerce Campaign Sales Proof",
-    role: "WordPress commerce support, tracking-aware campaign flow",
+    role: "Supported WooCommerce campaign flow, prepared NDA-safe performance proof.",
   },
   "wordpress-checkout-153k": {
     title: "Checkout Flow Performance Snapshot",
-    role: "WordPress checkout QA, payment flow awareness, sales proof",
+    role: "Reviewed checkout flow, supported payment path QA, prepared sales proof.",
   },
   aquablast: {
     title: "Responsive WordPress Landing Page",
-    role: "WordPress build, hero layout, mobile-first page structure",
+    role: "Built WordPress landing page, improved hero flow, handled mobile layout.",
   },
   "brite-buff": {
     title: "Beauty Product WordPress Page",
-    role: "WordPress visual build, product benefits, clean CTA path",
+    role: "Built WordPress product page, clarified benefits, improved CTA path.",
   },
   "medtraker-pro": {
     title: "Health Product Landing Page",
-    role: "WordPress product education, problem-solution section flow",
+    role: "Built WordPress landing page, organized product education, improved CTA flow.",
   },
   "ziptite-pro": {
     title: "eCommerce WordPress Product Page",
-    role: "WordPress landing page build, review proof, order CTA layout",
+    role: "Built WordPress product page, added proof flow, improved order CTA layout.",
   },
   "nest-marketing": {
     title: "Lead-Generation Agency Website",
-    role: "Responsive brand site, service positioning, Netlify launch",
+    role: "Built responsive agency site, refined service positioning, supported Netlify launch.",
   },
   "skeeter-strike-update": {
     title: "Direct-Response Advertorial Page",
-    role: "Advertorial layout, story-driven conversion flow, CTA hierarchy",
+    role: "Built advertorial page, shaped story flow, improved CTA hierarchy.",
   },
   "vistaveil-executives": {
     title: "Beauty-Tech Advertorial Page",
-    role: "Editorial UX, problem-aware messaging, offer bridge layout",
+    role: "Built advertorial UX, structured problem-aware messaging, improved offer bridge.",
   },
   "grippit-nurse": {
     title: "Health Product Advertorial",
-    role: "Long-form sales page, story flow, mobile reading experience",
+    role: "Built long-form sales page, refined story flow, improved mobile reading.",
   },
 };
+
+function getCompactProjectSummary(project) {
+  const summary = project.summary || project.description || "";
+
+  const manualSummaries = {
+    "barkchester-united": "Pet-focused Shopify page built around emotional offer messaging, review proof, benefit copy, and a clear purchase path.",
+    "vista-veil": "Beauty-tech Shopify page with benefit-led sections, review proof, pricing contrast, and clean purchase flow.",
+    "robo-mouse": "Playful Shopify product page built around cat-owner pain points, product education, and bundle offers.",
+    "skin-spectra": "Long-form beauty page structured for education, proof, bundle positioning, and mobile purchase confidence.",
+    "grippit-strength": "Direct-response Shopify page with benefit messaging, social proof, pricing contrast, and bundle cards.",
+    "furbulous-spa-brush": "Pet-care Shopify page with playful product visuals, grooming benefits, review proof, and bundle offers.",
+    "nest-marketing": "Responsive agency website with service positioning, clean layout hierarchy, and Netlify deployment support.",
+  };
+
+  const compact = manualSummaries[project.id] || summary;
+
+  if (compact.length <= 185) {
+    return compact;
+  }
+
+  const trimmed = compact.slice(0, 182);
+  return `${trimmed.slice(0, Math.max(0, trimmed.lastIndexOf(" ")))}.`;
+}
+
+function getContributionLine(project, displayRole) {
+  if (displayRole) {
+    return displayRole.endsWith(".") ? displayRole : `${displayRole}.`;
+  }
+
+  const category = project.category || "";
+
+  if (category === "Shopify") {
+    return "Built Shopify page, refined offer layout, handled responsive QA.";
+  }
+
+  if (category === "WordPress") {
+    return "Built WordPress landing page, improved CTA flow, supported launch QA.";
+  }
+
+  if (category === "GoHighLevel") {
+    return "Built GoHighLevel page or workflow, connected CRM flow, supported launch QA.";
+  }
+
+  if (category === "Netlify") {
+    return "Built responsive website, refined service positioning, supported Netlify launch.";
+  }
+
+  return "Handled page structure, responsive execution, and launch-ready QA.";
+}
+
+function getResultMetrics(project) {
+  if (!Array.isArray(project.metrics)) {
+    return [];
+  }
+
+  const preferredLabels = ["Total sales", "Conversion", "Orders", "Sessions"];
+  const picked = [];
+
+  preferredLabels.forEach((label) => {
+    const match = project.metrics.find((metric) => metric.label === label);
+    if (match && !picked.some((item) => item.label === match.label)) {
+      picked.push(match);
+    }
+  });
+
+  project.metrics.forEach((metric) => {
+    if (picked.length < 2 && !picked.some((item) => item.label === metric.label)) {
+      picked.push(metric);
+    }
+  });
+
+  return picked.slice(0, 2);
+}
+
+function getProjectResult(project) {
+  const metrics = getResultMetrics(project);
+
+  if (!metrics.length) {
+    return project.result || "Launch-ready build with clear contribution and platform proof.";
+  }
+
+  const [primary, secondary] = metrics;
+  const first = `${primary.value} ${primary.label.toLowerCase()}`;
+  const second = secondary ? `, ${secondary.value} ${secondary.label.toLowerCase()}` : "";
+  return `${first}${second}.`;
+}
+
+function getCompactProjectBadges(project) {
+  return getProjectBadges(project).slice(0, 2);
+}
 const automationTools = [
   {
     id: "wordpress",
     name: "WordPress",
     mark: "WP",
-    detail: "Landing pages and campaign sites",
+    detail: "Forms and landing pages",
     position: "source-wordpress",
   },
   {
     id: "shopify",
     name: "Shopify",
     mark: "Sh",
-    detail: "Product pages and checkout paths",
+    detail: "Product pages and checkout",
     position: "source-shopify",
   },
   {
     id: "gohighlevel",
     name: "GoHighLevel",
     mark: "GH",
-    detail: "CRM, pipelines, nurture flows",
+    detail: "Pipelines and follow up",
     position: "output-ghl",
   },
   {
     id: "zapier",
     name: "Zapier",
     mark: "Za",
-    detail: "No-code trigger routing",
+    detail: "Quick app handoffs",
     position: "hub-zapier",
   },
   {
     id: "n8n",
     name: "n8n",
     mark: "n8n",
-    detail: "Custom workflow branching",
+    detail: "Custom logic routes",
     position: "hub-n8n",
   },
   {
     id: "analytics",
     name: "Analytics",
     mark: "GA",
-    detail: "Campaign reporting signals",
+    detail: "Tracking and reporting",
     position: "output-analytics",
   },
 ];
@@ -268,63 +358,73 @@ const automationCards = [
   {
     id: "lead-capture",
     icon: Workflow,
-    title: "Lead capture to CRM",
+    title: "Leads reach the right place",
     summary:
-      "Forms, landing pages, and checkout actions can route cleanly into pipeline stages instead of sitting in scattered inboxes.",
+      "Form and checkout data can move into the right pipeline instead of sitting in inboxes or scattered spreadsheets.",
     activeNodes: ["wordpress", "zapier", "gohighlevel"],
   },
   {
     id: "automation-launches",
     icon: Settings,
-    title: "Automation-ready launches",
+    title: "Launches are ready to follow up",
     summary:
-      "Pages are planned with tracking, confirmation paths, handoff notes, and repetitive follow-up tasks in mind.",
+      "Pages can ship with confirmations, tracking, and follow up paths planned before campaign traffic goes live.",
     activeNodes: ["wordpress", "shopify", "zapier", "n8n", "analytics"],
   },
   {
     id: "less-manual-work",
     icon: Bot,
-    title: "Less manual campaign work",
+    title: "Less manual work after launch",
     summary:
-      "Zapier, n8n, and GoHighLevel workflows help reduce duplicate entry, missed leads, and slow response loops.",
+      "Automation helps reduce duplicate entry, missed leads, and slow response loops across the tools a campaign already uses.",
     activeNodes: ["zapier", "n8n", "gohighlevel", "analytics"],
   },
 ];
 const roleFitCards = [
   {
     icon: Code2,
-    title: "Front-end roles",
+    title: "Front end execution",
     summary:
-      "Landing page developer, front-end developer, Shopify builder, WordPress developer, and responsive UI implementer.",
-    points: ["React and Vite portfolio build", "HTML, CSS, JavaScript", "Shopify and WordPress pages"],
+      "A strong fit for teams that need clean page builds, responsive layouts, and conversion-focused implementation without heavy handholding.",
+    points: [
+      "Responsive landing pages and funnel sections",
+      "Shopify and WordPress build support",
+      "Front end QA across desktop and mobile",
+    ],
   },
   {
     icon: Workflow,
-    title: "Automation roles",
+    title: "Automation support",
     summary:
-      "Make.com, GoHighLevel, Zapier, n8n, CRM routing, webhook setup, and AI workflow support for marketing operations.",
-    points: ["Make.com and GHL workflows", "CRM tagging and routing", "AI proposal and document flows"],
+      "I can support the systems around the page, so leads are captured, routed, tagged, and followed up without unnecessary manual work.",
+    points: [
+      "CRM routing and automation workflows",
+      "Make.com, GoHighLevel, Zapier, and n8n support",
+      "Forms, webhooks, notifications, and handoff flows",
+    ],
   },
   {
     icon: BriefcaseBusiness,
-    title: "Work setup",
+    title: "Remote work style",
     summary:
-      "Open to freelance builds, ongoing support, and full-time remote roles with clear communication and documented handoff.",
-    points: ["Remote-ready setup", "US, UK, and AU overlap", "Client and recruiter friendly"],
+      "Practical, reliable, and comfortable working with clients or teams that need clear communication and steady delivery.",
+    points: [
+      "Available for freelance and full time remote roles",
+      "Comfortable with async collaboration",
+      "US, UK, and AU timezone overlap",
+    ],
   },
 ];
 const contactProjectTypes = [
-  "Landing page or product page",
-  "WordPress or Shopify build",
-  "Automation or CRM workflow",
-  "Full-time remote role",
-  "General project inquiry",
+  "Landing page",
+  "Website build",
+  "Automation",
+  "Remote role",
 ];
 const contactTrustSignals = [
-  "Open to freelance projects",
-  "Available for remote roles",
-  "US EST/PST, UK GMT, and AU AEST ready",
-  "Remote setup with backup internet and power",
+  "US, UK, and AU overlap",
+  "Remote-ready setup",
+  "Clear updates and handoff",
 ];
 const initialContactForm = {
   name: "",
@@ -401,10 +501,6 @@ function validateContactForm(values, selectedProjectType = values.projectType) {
 
   if (!emailPattern.test(values.email.trim())) {
     errors.email = "Enter a valid email address.";
-  }
-
-  if (!selectedProjectType) {
-    errors.projectType = "Choose the closest inquiry type.";
   }
 
   if (values.message.trim().length < 20) {
@@ -531,23 +627,29 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
         </div>
 
         <h3>{displayTitle}</h3>
-        <p className="project-summary">{project.summary}</p>
+        <p className="project-summary">{getCompactProjectSummary(project)}</p>
 
         <div className="project-role">
           <BriefcaseBusiness size={16} aria-hidden="true" />
           <span>
             <strong>My contribution</strong>
-            {displayRole}
+            {getContributionLine(project, displayRole)}
           </span>
         </div>
 
-        {project.focus ? <p className="project-focus">{project.focus}</p> : null}
+        <div className="project-result">
+          <BarChart3 size={16} aria-hidden="true" />
+          <span>
+            <strong>Result</strong>
+            {getProjectResult(project)}
+          </span>
+        </div>
 
         <div
-          className="project-metrics"
-          aria-label={`${project.title} metrics`}
+          className="project-metrics project-metrics--compact"
+          aria-label={`${project.title} key metrics`}
         >
-          {project.metrics.map((metric) => (
+          {getResultMetrics(project).map((metric) => (
             <div className="project-metric" key={`${project.id}-${metric.label}`}>
               <strong className="project-metric__value">{metric.value}</strong>
               <span className="project-metric__label">{metric.label}</span>
@@ -556,29 +658,14 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
         </div>
 
         {project.proofImage ? (
-          <div className="project-proof-block">
-            <div className="project-proof">
-              <BarChart3 size={16} aria-hidden="true" />
-              <span>{project.proofNote}</span>
-            </div>
-
-            <BlurImage
-              className="project-proof-shot"
-              wrapperClassName="project-proof-shot-shell"
-              src={project.proofImage}
-              alt=""
-              width={getImageDimensions(project.proofImage, { width: 1200, height: 675 }).width}
-              height={getImageDimensions(project.proofImage, { width: 1200, height: 675 }).height}
-              sizes="(max-width: 720px) 88vw, 320px"
-              loading="lazy"
-              decoding="async"
-              aria-hidden="true"
-            />
+          <div className="project-proof-compact">
+            <BarChart3 size={15} aria-hidden="true" />
+            <span>Dashboard proof available. Sensitive data excluded.</span>
           </div>
         ) : null}
 
         <div className="project-tags">
-          {getProjectBadges(project).map((badge) => (
+          {getCompactProjectBadges(project).map((badge) => (
             <span key={`${project.id}-${badge}`}>{badge}</span>
           ))}
         </div>
@@ -906,11 +993,11 @@ function RoleFitSection() {
       <div className="role-fit-shell">
         <div className="role-fit-heading">
           <p className="section-kicker">Role Fit</p>
-          <h2 id="role-fit-title">Built for teams that need pages and systems.</h2>
+          <h2 id="role-fit-title">I fit teams that need pages built well and leads handled properly.</h2>
           <p>
-            I fit best where front-end execution, conversion thinking, and
-            workflow automation need to work together instead of being handled
-            in separate silos.
+            I bring front end execution, conversion thinking, automation support,
+            and clear handoff into one practical workflow. That makes me useful
+            for freelance builds, campaign support, and remote roles.
           </p>
         </div>
 
@@ -940,20 +1027,26 @@ function RoleFitSection() {
           })}
         </div>
 
-        <div className="role-fit-actions">
-          <a className="btn btn--primary" href="#contact">
-            <Mail size={18} aria-hidden="true" />
-            Contact me
-          </a>
+        <div className="role-fit-actions-wrap">
+          <p className="role-fit-availability">
+            Open to project work, ongoing support, and full time remote opportunities.
+          </p>
 
-          <a
-            className="btn btn--secondary"
-            href={profile.resumePath}
-            download="JohnMichael_Bonganay_Resume.pdf"
-          >
-            <FileText size={18} aria-hidden="true" />
-            Download resume
-          </a>
+          <div className="role-fit-actions">
+            <a className="btn btn--primary" href="#contact">
+              <Mail size={18} aria-hidden="true" />
+              Contact me
+            </a>
+
+            <a
+              className="btn btn--secondary"
+              href={profile.resumePath}
+              download="JohnMichael_Bonganay_Resume.pdf"
+            >
+              <FileText size={18} aria-hidden="true" />
+              Download resume
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -984,12 +1077,11 @@ function AutomationSection() {
 
           <div>
             <h2 id="automation-title">
-              What happens after the page converts.
+              The system behind the conversion.
             </h2>
 
             <p>
-              A concise look at how forms, CRM tools, automation builders, and
-              analytics can connect so leads move cleanly from capture to follow-up.
+              Landing pages work better when capture, routing, tracking, and follow up are planned from the start. I build with the next step in mind, so leads do not stop at the form.
             </p>
           </div>
         </div>
@@ -1004,6 +1096,7 @@ function AutomationSection() {
             aria-label="Marketing workflow integration map"
           >
             <div className="automation-grid" aria-hidden="true" />
+
 
             <svg
               className="automation-connections"
@@ -1032,8 +1125,8 @@ function AutomationSection() {
             </svg>
 
             <div className="automation-core" aria-label="Automation hub">
-              <span>FLOW HUB</span>
-              <strong>Capture, route, follow up</strong>
+              <span>Lead flow</span>
+              <strong>Capture to follow up</strong>
             </div>
 
             {automationTools.map((tool) => {
@@ -1065,6 +1158,10 @@ function AutomationSection() {
           </div>
 
           <div className="automation-panel" aria-label="Automation benefits">
+            <p className="automation-panel__intro">
+              The map shows the handoff. These cards explain what it prevents.
+            </p>
+
             {automationCards.map((card) => {
               const Icon = card.icon;
               const isActive = activeFeature === card.id;
@@ -1349,7 +1446,7 @@ function App() {
 
   useEffect(() => {
     const originalTitle =
-      document.title || "John Michael Bonganay | Landing Page Developer";
+      document.title || "John Michael Bonganay | Conversion Front-End Developer & Workflow Automation Specialist";
 
     function handleVisibilityChange() {
       document.title = document.hidden
@@ -1617,7 +1714,6 @@ function App() {
     setContactTouched({
       name: true,
       email: true,
-      projectType: true,
       message: true,
     });
     setContactErrors(nextErrors);
@@ -1653,7 +1749,7 @@ function App() {
       const formData = new FormData(event.currentTarget);
 
       formData.set("access_key", WEB3FORMS_ACCESS_KEY);
-      formData.set("project_type", selectedProjectType);
+      formData.set("project_type", selectedProjectType || "Not selected");
       formData.set(
         "subject",
         `New portfolio inquiry${selectedProjectType ? ` | ${selectedProjectType}` : ""}`,
@@ -1695,7 +1791,7 @@ function App() {
           email: contactForm.email,
           message: contactForm.message,
           projectIdea: contactForm.message,
-          projectType: selectedProjectType,
+          projectType: selectedProjectType || "Not selected",
           submissionType: "ai_scoper",
         }),
       }).catch((makeError) => {
@@ -1705,11 +1801,11 @@ function App() {
       ReactGA.event({
         category: "Form",
         action: "Submitted Contact Form",
-        label: "Fast Inquiry",
+        label: "Quick Inquiry",
       });
 
       ReactGA.event("generate_lead", {
-        form_name: "Fast Inquiry",
+        form_name: "Quick Inquiry",
         source: "Portfolio Contact Form",
       });
 
@@ -1883,12 +1979,12 @@ function App() {
                 }}
               >
                 <Mail className="hero__primary-cta-icon" size={18} aria-hidden="true" />
-                Discuss a role or project
+                Start a quick inquiry
               </MagneticCTA>
 
               <a className="btn btn--secondary" href="#work">
                 <ArrowUpRight size={18} aria-hidden="true" />
-                View my work
+                Review selected work
               </a>
             </div>
 
@@ -1922,7 +2018,7 @@ function App() {
               <div className="hero-portrait__image-wrap">
                 <img
                   src={johnMichaelPortrait}
-                  alt="John Michael Bonganay, front-end developer and automation specialist"
+                  alt="John Michael Bonganay, landing page developer and automation specialist"
                   className="hero-portrait__image"
                   width="900"
                   height="1125"
@@ -1933,7 +2029,7 @@ function App() {
 
               <div className="hero-portrait__caption">
                 <div>
-                  <span>Front-end builds + automation systems</span>
+                  <span>Landing pages + automation systems</span>
 
                   <div
                     className="hero-portrait__tags"
@@ -2020,6 +2116,8 @@ function App() {
               </p>
             </div>
           </div>
+
+          <p className="work-filter-note">Featured case studies first. Browse by platform.</p>
 
           <div className="work-controls-shell work-controls-shell--fade">
             <div className="work-controls" aria-label="Filter selected works by platform or skill category">
@@ -2136,63 +2234,68 @@ function App() {
               <h2 id="contact-title">Discuss a role, project, or automation build.</h2>
 
               <p>
-                Send a short note about the role or build you have in mind. If it is
-                a project idea, the automation workflow can generate a technical
-                scope while I review your inquiry.
+                Share a brief overview of what you need. I will review it
+                personally and reply with the best next step.
               </p>
 
-              <div className="contact-direct" aria-label="Direct contact links">
-                <button
-                  className={
-                    emailCopied
-                      ? "contact-copy-card is-copied"
-                      : "contact-copy-card"
-                  }
-                  type="button"
-                  onClick={handleCopyEmail}
-                  aria-label={`Copy email address ${profile.email}`}
+              <div className="contact-secondary">
+                <p>Prefer direct contact?</p>
+
+                <div className="contact-direct" aria-label="Direct contact links">
+                  <button
+                    className={
+                      emailCopied
+                        ? "contact-copy-card is-copied"
+                        : "contact-copy-card"
+                    }
+                    type="button"
+                    onClick={handleCopyEmail}
+                    aria-label={`Copy email address ${profile.email}`}
+                  >
+                    {emailCopied ? (
+                      <CheckCircle2 size={18} aria-hidden="true" />
+                    ) : (
+                      <Mail size={18} aria-hidden="true" />
+                    )}
+
+                    <span>
+                      <small>Email</small>
+                      <strong>{profile.email}</strong>
+                    </span>
+
+                    <em>{emailCopied ? "Copied" : "Copy"}</em>
+                  </button>
+
+                  <a href={profile.linkedin} target="_blank" rel="noreferrer">
+                    <ExternalLink size={18} aria-hidden="true" />
+                    <span>
+                      <small>LinkedIn</small>
+                      <strong>Connect on LinkedIn</strong>
+                    </span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="contact-availability">
+                <div className="contact-availability__main">
+                  <CalendarClock size={18} aria-hidden="true" />
+                  <p>
+                    <strong>Available for freelance projects and remote roles.</strong>
+                    <span>Organized, responsive, and ready for async collaboration.</span>
+                  </p>
+                </div>
+
+                <div
+                  className="trust-signal-grid"
+                  aria-label="Availability and remote work signals"
                 >
-                  {emailCopied ? (
-                    <CheckCircle2 size={18} aria-hidden="true" />
-                  ) : (
-                    <Mail size={18} aria-hidden="true" />
-                  )}
-
-                  <span>
-                    <small>Email</small>
-                    <strong>{profile.email}</strong>
-                  </span>
-
-                  <em>{emailCopied ? "Copied!" : "1-click copy"}</em>
-                </button>
-
-                <a href={profile.linkedin} target="_blank" rel="noreferrer">
-                  <ExternalLink size={18} aria-hidden="true" />
-                  <span>
-                    <small>LinkedIn</small>
-                    <strong>John Michael Bonganay</strong>
-                  </span>
-                </a>
-              </div>
-
-              <div className="remote-note">
-                <CalendarClock size={19} aria-hidden="true" />
-                <p>
-                  Full-time available and flexible across US EST/PST, UK GMT,
-                  and AU AEST time zones with a dedicated remote setup.
-                </p>
-              </div>
-
-              <div
-                className="trust-signal-grid"
-                aria-label="Remote readiness trust signals"
-              >
-                {contactTrustSignals.map((signal) => (
-                  <span key={signal}>
-                    <CheckCircle2 size={15} aria-hidden="true" />
-                    {signal}
-                  </span>
-                ))}
+                  {contactTrustSignals.map((signal) => (
+                    <span key={signal}>
+                      <CheckCircle2 size={14} aria-hidden="true" />
+                      {signal}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -2241,8 +2344,13 @@ function App() {
                   />
 
                   <div className="contact-form__top">
-                    <span className="status-dot" aria-hidden="true" />
-                    <p>Fast inquiry</p>
+                    <div className="contact-form__eyebrow">
+                      <span className="status-dot" aria-hidden="true" />
+                      <p>Quick inquiry</p>
+                    </div>
+
+                    <h3>Send the details here</h3>
+                    <small>Use 2 to 3 sentences. I will reply with the next step.</small>
                   </div>
 
                   <div className={`form-field ${getContactFieldState("name")}`}>
@@ -2300,21 +2408,15 @@ function App() {
                   </div>
 
                   <div
-                    className={`project-type-field ${getContactFieldState(
-                      "projectType",
-                    )}`}
-                    role="radiogroup"
+                    className={`project-type-field ${
+                      selectedProjectType ? "is-valid" : ""
+                    }`}
                     aria-labelledby="contact-project-type-label"
-                    aria-invalid={Boolean(
-                      contactErrors.projectType && contactTouched.projectType,
-                    )}
-                    aria-describedby={
-                      contactErrors.projectType && contactTouched.projectType
-                        ? "contact-project-type-error"
-                        : undefined
-                    }
                   >
-                    <span id="contact-project-type-label">Project type</span>
+                    <div className="project-type-label-row">
+                      <span id="contact-project-type-label">Inquiry type</span>
+                      <small>Optional</small>
+                    </div>
 
                     <div className="project-type-grid">
                       {contactProjectTypes.map((type) => {
@@ -2328,8 +2430,7 @@ function App() {
                                 : "project-type-option"
                             }
                             type="button"
-                            role="radio"
-                            aria-checked={isSelected}
+                            aria-pressed={isSelected}
                             key={type}
                             onClick={() => handleProjectTypeSelect(type)}
                           >
@@ -2338,12 +2439,6 @@ function App() {
                         );
                       })}
                     </div>
-
-                    {contactErrors.projectType && contactTouched.projectType ? (
-                      <small id="contact-project-type-error">
-                        {contactErrors.projectType}
-                      </small>
-                    ) : null}
                   </div>
 
                   <div
@@ -2369,7 +2464,7 @@ function App() {
                       }
                       required
                     />
-                    <label htmlFor="contact-message">Project goal or message</label>
+                    <label htmlFor="contact-message">What do you need help with?</label>
 
                     {contactErrors.message && contactTouched.message ? (
                       <small id="contact-message-error">
@@ -2444,7 +2539,7 @@ function App() {
                         ? "Sending..."
                         : !isContactIntegrationReady
                           ? "Contact form not configured"
-                          : "Send fast inquiry"}
+                          : "Send inquiry"}
                     </span>
                     <Send size={18} aria-hidden="true" />
                   </button>
@@ -2473,26 +2568,29 @@ function App() {
               <strong>Bonganay</strong>
             </a>
             <p>
-              Landing Page Developer / Designer building responsive pages,
-              funnels, and ecommerce flows for clearer conversions.
+              Conversion-focused front-end work with clean handoffs and practical
+              automation systems that keep campaigns moving.
             </p>
             <StatusWidget />
           </div>
 
-          <div className="footer-actions">
-            <a href={`mailto:${profile.email}`}>
-              Email
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </a>
-            <a href={profile.linkedin} target="_blank" rel="noreferrer">
-              LinkedIn
-              <ArrowUpRight size={15} aria-hidden="true" />
-            </a>
+          <div className="footer-action-panel" aria-label="Quick contact links">
+            <p>Available for freelance projects and remote roles.</p>
+            <div className="footer-actions">
+              <a href={`mailto:${profile.email}`}>
+                Email me
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
+              <a href={profile.linkedin} target="_blank" rel="noreferrer">
+                LinkedIn
+                <ArrowUpRight size={15} aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
           <p className="footer-copy">
-            © {new Date().getFullYear()} John Michael Bonganay. Built for
-            responsive pages, funnels, and conversion-focused launches.
+            © {new Date().getFullYear()} John Michael Bonganay. Designed and built
+            with React.
           </p>
         </div>
       </footer>

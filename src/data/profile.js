@@ -1,44 +1,44 @@
 export const profile = {
   name: "John Michael Bonganay",
-  role: "Front-End Developer / Automation Specialist",
+  role: "Landing Page Developer / Automation Specialist",
   location: "Tabaco City, Philippines",
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
   availability: "Remote-ready across US, UK, and AU time zones",
   headline:
-    "I build conversion-focused websites and the automation systems behind them.",
+    "Landing pages, funnels, and automations built for campaigns that need to convert.",
   summary:
-    "I design and develop landing pages, funnels, product pages, and workflow automations that turn traffic into leads, keep data clean, and support campaigns after the form is submitted.",
+    "I design and build landing pages, product pages, funnels, and workflow systems that help teams capture leads, route inquiries, support sales, and launch campaigns with less manual follow-up.",
   heroBullets: [
     {
-      label: "Front-end conversion builds",
+      label: "Pages built for action",
       value:
-        "Landing pages, Shopify pages, WordPress pages, and responsive UI built around clear offers, fast scanning, and buyer intent."
+        "Landing pages, Shopify pages, WordPress pages, and funnels with clear offers, fast scanning, and focused CTA paths."
     },
     {
-      label: "Automation after the click",
+      label: "Systems after the form",
       value:
-        "Forms, webhooks, CRM routes, Make.com flows, GoHighLevel workflows, AI scoping, and follow-up systems planned with the page."
+        "Web3Forms, Make.com, GoHighLevel, CRM routes, AI scoping flows, and follow-up logic planned around the page."
     },
     {
-      label: "Role and project ready",
+      label: "Launch-ready support",
       value:
-        "I can support full-time remote teams, freelance builds, and campaign launches with clear handoff, QA, and practical documentation."
+        "Responsive QA, tracking checks, clean handoff, and remote-ready communication for freelance builds or full-time teams."
     }
   ],
   stats: [
     {
       value: "4+",
-      label: "years building front-end pages"
+      label: "years building landing pages and campaign assets"
     },
     {
-      value: "2",
-      label: "core layers: UI build and automation logic"
+      value: "Shopify / WP / GHL",
+      label: "platform experience for pages, funnels, and workflows"
     },
     {
-      value: "24h",
-      label: "remote-ready setup for global teams"
+      value: "Launch support",
+      label: "build, QA, tracking, handoff, and automation setup"
     }
   ],
   strengths: [
