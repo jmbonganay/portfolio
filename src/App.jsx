@@ -415,6 +415,77 @@ const roleFitCards = [
     ],
   },
 ];
+const hireConfidencePillars = [
+  {
+    icon: TrendingUp,
+    title: "Conversion comes before decoration",
+    summary:
+      "I plan the page around the offer, CTA path, proof, and mobile scanning behavior, not just the visual layout.",
+  },
+  {
+    icon: Workflow,
+    title: "The page and workflow connect",
+    summary:
+      "I can support forms, routing, notifications, and CRM handoff so the lead path does not stop after submission.",
+  },
+  {
+    icon: Gauge,
+    title: "Launch details are checked",
+    summary:
+      "I look at responsive behavior, links, forms, tracking support, and basic QA before a page is sent traffic.",
+  },
+  {
+    icon: BriefcaseBusiness,
+    title: "Easy to work with remotely",
+    summary:
+      "You get clear updates, practical handoff notes, and steady execution across freelance projects or team support.",
+  },
+  {
+    icon: Code2,
+    title: "Flexible across campaign platforms",
+    summary:
+      "I can work across Shopify, WordPress, GoHighLevel, funnels, product pages, and campaign landing pages.",
+  },
+];
+
+
+const faqItems = [
+  {
+    question: "Do you handle both design and development?",
+    answer:
+      "Yes. I can plan the layout, design the page, build the front end, and check the responsive behavior before launch.",
+  },
+  {
+    question: "Do you also support automations and tracking setup?",
+    answer:
+      "Yes. I can help connect forms, webhooks, CRM routing, notifications, and basic tracking support so the page has a clear handoff after someone submits.",
+  },
+  {
+    question: "Which platforms do you work with?",
+    answer:
+      "My strongest fit is Shopify, WordPress, GoHighLevel, Responsive front-end development, Make.com, Zapier, n8n, and campaign landing page workflows.",
+  },
+  {
+    question: "Can you improve an existing landing page?",
+    answer:
+      "Yes. I can review an existing page, tighten the hierarchy, improve the CTA path, clean up mobile issues, and support the rebuild or refinement.",
+  },
+  {
+    question: "What kind of projects are you the best fit for?",
+    answer:
+      "I am a strong fit for landing pages, funnels, product pages, lead capture flows, campaign pages, and automation-supported launch work.",
+  },
+  {
+    question: "Do you work with remote teams and freelance clients?",
+    answer:
+      "Yes. I work well with async teams, agencies, founders, and recruiters who need clear updates, reliable handoff, and steady execution.",
+  },
+];
+const hireConfidenceSignals = [
+  "4+ years across landing pages and campaign assets",
+  "Front-end build, QA, tracking, and automation support",
+  "Remote-ready for freelance builds and team roles",
+];
 const contactProjectTypes = [
   "Landing page",
   "Website build",
@@ -983,6 +1054,116 @@ function CaseStudyDrawer({ project, onClose }) {
 }
 
 
+function HireConfidenceSection() {
+  return (
+    <section
+      className="hire-confidence-section"
+      aria-labelledby="hire-confidence-title"
+    >
+      <div className="hire-confidence-shell">
+        <div className="hire-confidence-heading">
+          <p className="section-kicker">Why clients hire me</p>
+          <h2 id="hire-confidence-title">
+            A lower-risk hire for landing pages, funnels, and the systems behind them.
+          </h2>
+          <p>
+            I do not treat a page as a standalone design file. I think through the offer,
+            CTA path, mobile behavior, form handoff, and launch details so the work is
+            easier to trust before traffic goes live.
+          </p>
+        </div>
+
+        <div className="hire-confidence-layout">
+          <aside className="hire-confidence-lead-card">
+            <span className="hire-confidence-lead-card__eyebrow">Decision support</span>
+            <h3>Built for clients who need a page to work, not just look finished.</h3>
+            <p>
+              A good fit when you need someone who can design, build, QA, and support
+              the workflow around a campaign without adding extra coordination burden.
+            </p>
+
+            <div className="hire-confidence-signal-list" aria-label="Trust signals">
+              {hireConfidenceSignals.map((signal) => (
+                <span key={signal}>
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  {signal}
+                </span>
+              ))}
+            </div>
+          </aside>
+
+          <div className="hire-confidence-grid">
+            {hireConfidencePillars.map((pillar) => {
+              const Icon = pillar.icon;
+
+              return (
+                <article className="hire-confidence-card" key={pillar.title}>
+                  <span className="hire-confidence-card__icon">
+                    <Icon size={20} aria-hidden="true" />
+                  </span>
+                  <h3>{pillar.title}</h3>
+                  <p>{pillar.summary}</p>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="hire-confidence-footer">
+          <p>
+            Strong fit for conversion-focused builds, launch support, and remote team execution.
+          </p>
+
+          <div className="hire-confidence-actions">
+            <a className="btn btn--primary" href="#contact">
+              <Mail size={18} aria-hidden="true" />
+              Start a quick inquiry
+            </a>
+            <a className="btn btn--secondary" href="#automation">
+              <Workflow size={18} aria-hidden="true" />
+              View automation support
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+function FAQSection() {
+  return (
+    <section className="faq-section" aria-labelledby="faq-title">
+      <div className="faq-shell">
+        <div className="faq-heading">
+          <p className="section-kicker">Common questions</p>
+          <h2 id="faq-title">A few practical answers before you reach out.</h2>
+          <p>
+            Clear scope, smoother handoff, and fewer unknowns before a landing page,
+            funnel, or automation-supported build starts.
+          </p>
+        </div>
+
+        <div className="faq-list">
+          {faqItems.map((item, index) => (
+            <details className="faq-item" key={item.question} open={index === 0}>
+              <summary>
+                <span>{item.question}</span>
+                <span className="faq-item__control" aria-hidden="true">
+                  <span />
+                  <span />
+                </span>
+              </summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 function RoleFitSection() {
   return (
     <section
@@ -1470,6 +1651,8 @@ function App() {
     const sectionWrappers = document.querySelectorAll(
       [
         ".featured-work",
+        ".hire-confidence-section",
+        ".faq-section",
         ".automation-section",
         ".contact-section",
         ".site-footer",
@@ -1488,6 +1671,10 @@ function App() {
         ".contact-card",
         ".contact-form",
         ".work-proof-row",
+        ".hire-confidence-lead-card",
+        ".hire-confidence-card",
+        ".hire-confidence-footer",
+        ".faq-item",
         ".automation-map",
         ".automation-card",
       ].join(", "),
@@ -2212,6 +2399,8 @@ function App() {
         </div>
       </section>
 
+      <HireConfidenceSection />
+
       <Suspense fallback={<SectionFallback />}>
         <TechMatrix />
       </Suspense>
@@ -2220,6 +2409,8 @@ function App() {
 
 
       <RoleFitSection />
+
+      <FAQSection />
 
       <section
         className="contact-section"
