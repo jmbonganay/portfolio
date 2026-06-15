@@ -66,7 +66,7 @@ const techStackItems = [
   { name: "API Integrations", mark: "API" },
   { name: "n8n", mark: "n8n" },
 ];
-const WORK_PAGE_SIZE = 6;
+const WORK_PAGE_SIZE = 5;
 const heroImage = "/assets/hero-command-center.webp";
 // These are public frontend identifiers, not private server secrets.
 // Vercel/Vite environment variables still override these defaults in production.
@@ -88,9 +88,60 @@ function getProjectBadges(project) {
 
 const navLinks = [
   { label: "Work", href: "#work" },
+  { label: "Hire", href: "#recruiter" },
   { label: "Stack", href: "#stack" },
   { label: "Systems", href: "#automation" },
   { label: "Contact", href: "#contact" },
+];
+
+const featuredWorkPriority = new Map(
+  [
+    "barkchester-united",
+    "wordpress-woocommerce-30m",
+    "automation-inbound-triage-crm",
+    "vista-veil",
+    "nest-marketing",
+  ].map((id, index) => [id, index]),
+);
+
+const recruiterHighlights = [
+  {
+    label: "Role fit",
+    title: "Front-end builder and automation specialist for campaign teams",
+    detail:
+      "Strongest fit for Shopify, WordPress, GoHighLevel, CRO-focused page builds, workflow automations, responsive QA, and remote marketing execution roles.",
+  },
+  {
+    label: "Hiring confidence",
+    title: "Can own the page, the form, and the workflow behind it",
+    detail:
+      "I can translate Figma or campaign direction into a live page, then support form logic, tracking support, CRM routes, automations, and launch cleanup.",
+  },
+  {
+    label: "Remote signal",
+    title: "Built for async teams across US, UK, and AU time zones",
+    detail:
+      "Clear updates, organized QA, practical handoff notes, and availability for freelance projects or full-time remote work.",
+  },
+];
+
+const workProofSignals = [
+  {
+    value: "5",
+    label: "featured proof-led case studies first",
+  },
+  {
+    value: "41",
+    label: "selected page, funnel, and automation builds",
+  },
+  {
+    value: "3",
+    label: "core platforms: Shopify, WordPress, GoHighLevel",
+  },
+  {
+    value: "NDA",
+    label: "safe revenue and workflow proof with role context",
+  },
 ];
 
 const heroPlatformTags = [
@@ -462,10 +513,15 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
   const displayTitle = showcase?.title ?? project.title;
   const displayRole = showcase?.role ?? project.role;
   const canOpenCaseStudy = Boolean(project.caseStudy || project.caseStudyData);
+  const isFeaturedCaseStudy = featuredWorkPriority.has(project.id);
 
   return (
     <article
-      className="project-card reveal-item"
+      className={
+        isFeaturedCaseStudy
+          ? "project-card project-card--featured reveal-item"
+          : "project-card reveal-item"
+      }
       style={{
         "--card-delay": `${Math.min(index, 8) * 45}ms`,
         "--reveal-delay": `${Math.min(index % WORK_PAGE_SIZE, 5) * 70}ms`,
@@ -506,7 +562,9 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
       <div className="project-body">
         <div className="project-topline">
-          <span>{project.type}</span>
+          <span>
+            {isFeaturedCaseStudy ? "Featured case study" : project.type}
+          </span>
           <strong>{project.number}</strong>
         </div>
 
@@ -515,7 +573,9 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
         <div className="project-role">
           <BriefcaseBusiness size={16} aria-hidden="true" />
-          <span>{displayRole}</span>
+          <span>
+            <strong>My role:</strong> {displayRole}
+          </span>
         </div>
 
         {project.focus ? <p className="project-focus">{project.focus}</p> : null}
@@ -834,10 +894,20 @@ function CaseStudyDrawer({ project, onClose }) {
             </article>
 
             <article>
-              <span>Conversion Metrics</span>
+              <span>Outcome Signal</span>
               <p>
-                Metrics are displayed as proof signals from the project card and can be expanded
-                into a full CRO breakdown later.
+                {caseStudy.outcome ??
+                  "Metrics are shown as proof signals from the project card and are framed around the contribution, platform, and visible performance context."}
+              </p>
+            </article>
+
+            <article>
+              <span>Proof Context</span>
+              <p>
+                {project.nda
+                  ? "This is an NDA-safe entry. Private client identity, product details, customer data, and page creative are intentionally withheld."
+                  : project.proofNote ??
+                    "Live page and project screenshots are included so visitors can inspect the visual execution, page structure, and platform fit."}
               </p>
             </article>
           </div>
@@ -1184,6 +1254,61 @@ function CapabilitiesSection() {
   );
 }
 
+function RecruiterBrief() {
+  return (
+    <section
+      className="recruiter-brief"
+      id="recruiter"
+      aria-labelledby="recruiter-title"
+    >
+      <div className="recruiter-brief__shell">
+          <div className="recruiter-brief__intro">
+            <p className="section-kicker">Recruiter summary</p>
+
+            <h2 id="recruiter-title">
+            A campaign-ready front-end builder who also handles automation,
+            routing, and workflow systems.
+            </h2>
+
+            <p>
+            I am strongest where conversion-focused front-end execution meets
+            marketing operations. That makes me useful to agencies, ecommerce
+            teams, and remote growth teams that need pages, funnels, and backend
+            workflows shipped cleanly without hand-holding.
+            </p>
+          </div>
+
+        <div className="recruiter-brief__grid">
+          {recruiterHighlights.map((item) => (
+            <article className="recruiter-brief__card" key={item.label}>
+              <span>{item.label}</span>
+              <h3>{item.title}</h3>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="recruiter-brief__actions" aria-label="Recruiter actions">
+          <a className="btn btn--primary" href={profile.resumePath}>
+            <FileText size={18} aria-hidden="true" />
+            Download resume
+          </a>
+
+          <a
+            className="btn btn--secondary"
+            href={profile.linkedin}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <ExternalLink size={18} aria-hidden="true" />
+            View LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const [activeWorkFilter, setActiveWorkFilter] = useState(ALL_WORK_FILTER);
   const [renderedWorkFilter, setRenderedWorkFilter] = useState(ALL_WORK_FILTER);
@@ -1211,10 +1336,20 @@ function App() {
     () =>
       projects
         .slice()
-        .sort(
-          (a, b) =>
-            Number.parseInt(a.number, 10) - Number.parseInt(b.number, 10),
-        ),
+        .sort((a, b) => {
+          const aPriority = featuredWorkPriority.has(a.id)
+            ? featuredWorkPriority.get(a.id)
+            : Number.POSITIVE_INFINITY;
+          const bPriority = featuredWorkPriority.has(b.id)
+            ? featuredWorkPriority.get(b.id)
+            : Number.POSITIVE_INFINITY;
+
+          if (aPriority !== bPriority) {
+            return aPriority - bPriority;
+          }
+
+          return Number.parseInt(a.number, 10) - Number.parseInt(b.number, 10);
+        }),
     [],
   );
 
@@ -1267,7 +1402,7 @@ function App() {
 
     function handleVisibilityChange() {
       document.title = document.hidden
-        ? "👋 Don't lose those conversions!"
+        ? "Don't lose those conversions."
         : originalTitle;
     }
 
@@ -1570,7 +1705,7 @@ function App() {
       formData.set("project_type", selectedProjectType);
       formData.set(
         "subject",
-        `New portfolio inquiry${selectedProjectType ? ` — ${selectedProjectType}` : ""}`,
+        `New portfolio inquiry${selectedProjectType ? ` - ${selectedProjectType}` : ""}`,
       );
       formData.set("from_name", "John Michael Portfolio");
       formData.set("h-captcha-response", captchaToken);
@@ -1797,12 +1932,17 @@ function App() {
                 }}
               >
                 <Mail className="hero__primary-cta-icon" size={18} aria-hidden="true" />
-                Book a strategy call
+                Book a project call
               </MagneticCTA>
 
               <a className="btn btn--secondary" href="#work">
                 <ArrowUpRight size={18} aria-hidden="true" />
-                View my work
+                View case studies
+              </a>
+
+              <a className="btn btn--secondary" href={profile.resumePath}>
+                <FileText size={18} aria-hidden="true" />
+                Download resume
               </a>
             </div>
 
@@ -1914,6 +2054,8 @@ function App() {
         </div>
       </section>
 
+      <RecruiterBrief />
+
       <section
         className="featured-work"
         id="work"
@@ -1925,17 +2067,25 @@ function App() {
             <p className="section-kicker">Selected Works</p>
             <div>
               <h2 id="work-title">
-                High-converting pages, funnels, and responsive builds with
-                visual proof.
+                Proof across front-end builds, funnels, and automation systems.
               </h2>
               <p>
-                A curated scan of Shopify product pages, WordPress landing
-                pages, funnel revenue proof, agency website work,
-                direct-response advertorials, and backend automation systems
-                from the same practical stack I use across design, build, QA,
-                and launch.
+                The first projects are intentionally curated to show both sides
+                of my work: sales-backed Shopify pages, NDA-safe WordPress
+                revenue exposure, backend automation systems, GoHighLevel funnel
+                work, and agency website execution. The archive stays available
+                for range without diluting the strongest proof.
               </p>
             </div>
+          </div>
+
+          <div className="work-proof-row" aria-label="Selected work structure">
+            {workProofSignals.map((signal) => (
+              <div key={signal.label}>
+                <strong>{signal.value}</strong>
+                <span>{signal.label}</span>
+              </div>
+            ))}
           </div>
 
           <div className="work-controls-shell work-controls-shell--fade">
@@ -2023,7 +2173,7 @@ function App() {
                 aria-controls="selected-work-grid"
                 aria-expanded={!hasMoreWork}
               >
-                <span>{hasMoreWork ? "Show more work" : "Show less"}</span>
+                <span>{hasMoreWork ? "Open project archive" : "Collapse archive"}</span>
                 <ArrowUpRight size={17} aria-hidden="true" />
               </button>
             </div>
@@ -2064,12 +2214,13 @@ function App() {
             <div className="contact-cta">
               <p className="section-kicker">Contact / CTA</p>
 
-              <h2 id="contact-title">Trigger the same AI proposal engine I built for this portfolio.</h2>
+              <h2 id="contact-title">Start a project or open a hiring conversation.</h2>
 
               <p>
-                Submit your project idea below, and my autonomous Make.com + Gemini
-                pipeline will architect a 3-phase technical scope, compile it into a
-                branded PDF, and deliver it to your inbox in roughly 15 seconds.
+                Tell me whether you need a conversion page, Shopify product
+                build, WordPress campaign page, GoHighLevel funnel, automation
+                workflow, or a full-time remote contributor. I will reply with
+                the clearest next step within 24 hours.
               </p>
 
               <div className="contact-direct" aria-label="Direct contact links">
@@ -2404,8 +2555,8 @@ function App() {
               <strong>Bonganay</strong>
             </a>
             <p>
-              Landing Page Developer / Designer building responsive pages,
-              funnels, and ecommerce flows for clearer conversions.
+              Front-end landing page developer and automation specialist
+              building campaign pages, funnels, and workflow systems.
             </p>
             <StatusWidget />
           </div>
@@ -2422,7 +2573,7 @@ function App() {
           </div>
 
           <p className="footer-copy">
-            © {new Date().getFullYear()} John Michael Bonganay. Built for
+            Copyright {new Date().getFullYear()} John Michael Bonganay. Built for
             responsive pages, funnels, and conversion-focused launches.
           </p>
         </div>

@@ -3,10 +3,10 @@ import "./business-sales-components.css";
 
 const engagementModels = [
   {
-    title: "The Frontend Sprint",
-    eyebrow: "Conversion Build",
+    title: "Landing Page / Product Page Build",
+    eyebrow: "Client project",
     description:
-      "High-converting landing pages, CRO layout, and fast execution for campaigns that need to launch cleanly.",
+      "For founders, agencies, and ecommerce teams that need a focused campaign page built around offer clarity, proof, CTA flow, and responsive polish.",
     icon: Rocket,
     deliverables: [
       "Landing page or product page build",
@@ -16,10 +16,10 @@ const engagementModels = [
     ],
   },
   {
-    title: "The Architecture Build",
-    eyebrow: "Backend System",
+    title: "Funnel & Automation Build",
+    eyebrow: "Systems project",
     description:
-      "Make.com pipelines, webhook routing, AI integration, and CRM automation for teams ready to remove manual work.",
+      "For teams that need forms, CRM routes, Make.com workflows, GoHighLevel automations, or AI-assisted intake systems behind the front-end.",
     icon: Network,
     featured: true,
     deliverables: [
@@ -30,16 +30,16 @@ const engagementModels = [
     ],
   },
   {
-    title: "The Hybrid Retainer",
-    eyebrow: "Ongoing Partner",
+    title: "Remote Front-End Contributor",
+    eyebrow: "Recruiter path",
     description:
-      "Ongoing technical partnership for monthly optimizations, conversion improvements, and backend infrastructure scaling.",
+      "For hiring managers who need a reliable remote contributor for landing pages, ecommerce pages, campaign support, QA, and ongoing front-end improvements.",
     icon: Layers3,
     deliverables: [
-      "Monthly landing page improvements",
-      "Automation maintenance and iteration",
-      "Analytics-informed CRO updates",
-      "Scaling support for new workflows",
+        "Full-time or long-term contract availability",
+        "Async updates and clean handoff notes",
+        "Campaign page iteration and QA",
+        "Shopify, WordPress, and GHL support",
     ],
   },
 ];
@@ -59,8 +59,8 @@ export default function EngagementModels() {
         <span className="engagement-eyebrow">How to work with me</span>
         <h2>Choose the build model that matches your bottleneck.</h2>
         <p>
-          Whether you need the page that captures demand, the backend that
-          processes it, or a long-term technical partner who can improve both.
+          Clear paths for clients who need a specific build and recruiters who
+          need to understand where I fit on a remote team.
         </p>
       </div>
 
@@ -102,7 +102,7 @@ export default function EngagementModels() {
                 className="engagement-card__button"
                 onClick={handleBookingClick}
               >
-                Book a Scoping Call
+                Start a conversation
                 <ArrowUpRight size={16} aria-hidden="true" />
               </a>
             </article>
