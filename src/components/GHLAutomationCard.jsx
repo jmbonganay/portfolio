@@ -3,7 +3,7 @@ import "./ghl-automation-card.css";
 
 const defaultMatrix = [
   { value: "GoHighLevel", label: "CRM ORCHESTRATION" },
-  { value: "Advanced Routing", label: "MULTI-TRIGGER LOGIC" },
+  { value: "Advanced Routing", label: "MULTI TRIGGER LOGIC" },
   { value: "Wait Nodes", label: "PSYCHOLOGICAL DELAYS" },
   { value: "99.3%+ Delivery", label: "EMAIL DISPATCH" },
 ];
@@ -54,7 +54,7 @@ export default function GHLAutomationCard({ project, onViewMetrics }) {
         </div>
 
         <h3 className="ghl-card__title">
-          {project?.title || "High-Converting GoHighLevel Lead Nurture & LTO Pipelines"}
+          {project?.title || "High converting GoHighLevel Lead Nurture & LTO Pipelines"}
         </h3>
 
         <p className="ghl-card__role">
@@ -63,7 +63,7 @@ export default function GHLAutomationCard({ project, onViewMetrics }) {
 
         <p className="ghl-card__description">
           {project?.summary ||
-            "A multi-trigger production pipeline handling automatic CRM contact tagging, 15-minute operational wait nodes for optimized psychological engagement, and automated email follow-up sequences achieving 99.3%+ deliverability for 689+ live leads."}
+            "A multi trigger production pipeline handling automatic CRM contact tagging, 15 minute operational wait nodes for optimized psychological engagement, and automated email follow up sequences achieving 99.3%+ deliverability for 689+ live leads."}
         </p>
 
         <div className="ghl-card__metric-grid" aria-label={`${project?.title || "GoHighLevel automation"} metadata`}>

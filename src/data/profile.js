@@ -5,11 +5,11 @@ export const profile = {
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
-  availability: "Remote-ready across US, UK, and AU time zones",
+  availability: "Remote ready across US, UK, and AU time zones",
   headline:
     "Landing pages, funnels, and automations built for campaigns that need to convert.",
   summary:
-    "I design and build landing pages, product pages, funnels, and workflow systems that help teams capture leads, route inquiries, support sales, and launch campaigns with less manual follow-up.",
+    "I design and build landing pages, product pages, funnels, and workflow systems that help teams capture leads, route inquiries, support sales, and launch campaigns with less manual follow up.",
   heroBullets: [
     {
       label: "Pages built for action",
@@ -19,12 +19,12 @@ export const profile = {
     {
       label: "Systems after the form",
       value:
-        "Web3Forms, Make.com, GoHighLevel, CRM routes, AI scoping flows, and follow-up logic planned around the page."
+        "Web3Forms, Make.com, GoHighLevel, CRM routes, AI scoping flows, and follow up logic planned around the page."
     },
     {
-      label: "Launch-ready support",
+      label: "Launch ready support",
       value:
-        "Responsive QA, tracking checks, clean handoff, and remote-ready communication for freelance builds or full-time teams."
+        "Responsive QA, tracking checks, clean handoff, and remote ready communication for freelance builds or full time teams."
     }
   ],
   stats: [

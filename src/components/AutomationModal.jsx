@@ -6,7 +6,7 @@ import TerminalLoader from "./TerminalLoader";
 const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/9m9aa72udl79axpeb8qkonm8l8i4dkps";
 
 const automationDescription =
-  "Engineered an asynchronous, multi-branching automation layer that captures portfolio payloads through low-latency webhooks, enriches lead context through REST API firmographic lookups, and routes qualified project ideas into a Gemini-powered proposal engine that dynamically compiles Google Doc templates into locked PDF scopes and dispatches them through email.";
+  "Engineered an asynchronous, multi branching automation layer that captures portfolio payloads through low latency webhooks, enriches lead context through REST API firmographic lookups, and routes qualified project ideas into a Gemini powered proposal engine that dynamically compiles Google Doc templates into locked PDF scopes and dispatches them through email.";
 
 const automationFeatureFallbacks = [
   {
@@ -17,12 +17,12 @@ const automationFeatureFallbacks = [
   {
     title: "Webhook Gateway",
     copy:
-      "Implemented a low-latency Make.com webhook gateway as a micro-backend ingestion layer for names, emails, project categories, and freeform project intent payloads.",
+      "Implemented a low latency Make.com webhook gateway as a micro backend ingestion layer for names, emails, project categories, and freeform project intent payloads.",
   },
   {
     title: "Firmographic Enrichment",
     copy:
-      "Parsed incoming email domains with Regex and routed business-domain leads through Abstract API to enrich records with corporate identifiers, company metadata, and operational context.",
+      "Parsed incoming email domains with Regex and routed business domain leads through Abstract API to enrich records with corporate identifiers, company metadata, and operational context.",
   },
   {
     title: "Data Cleaning & Fallback Safety",
@@ -32,12 +32,12 @@ const automationFeatureFallbacks = [
   {
     title: "LLM Integration & Prompt Engineering",
     copy:
-      "Isolated AI-scoping payloads through a dedicated submissionType signature and routed project ideas into Google Gemini 2.5 Flash using structured system instructions, allowing the workflow to generate concise, client-ready proposal content from raw intake data.",
+      "Isolated AI-scoping payloads through a dedicated submissionType signature and routed project ideas into Google Gemini 2.5 Flash using structured system instructions, allowing the workflow to generate concise, client ready proposal content from raw intake data.",
   },
   {
     title: "Dynamic Document Compilation",
     copy:
-      "Injected Gemini-generated scope content into a master Google Doc template through merge tags, compiled the document into a locked PDF deliverable, and autonomously dispatched the proposal back to the user through a Gmail module.",
+      "Injected Gemini generated scope content into a master Google Doc template through merge tags, compiled the document into a locked PDF deliverable, and autonomously dispatched the proposal back to the user through a Gmail module.",
   },
 ];
 

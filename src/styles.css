@@ -13773,3 +13773,38 @@ button.automation-architecture-card__secondary {
     min-height: auto;
   }
 }
+
+/* =========================================================
+   TYPOGRAPHY BREATHING ROOM PASS
+   ========================================================= */
+.hero__copy h1,
+.hero-animate--title {
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+}
+
+.work-heading h2,
+.automation-heading h2,
+.role-fit-heading h2,
+.hire-confidence-heading h2,
+.faq-heading h2,
+.contact-cta h2,
+.capability-sticky h2 {
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+@media (max-width: 720px) {
+  .hero__copy h1,
+  .hero-animate--title,
+  .work-heading h2,
+  .automation-heading h2,
+  .role-fit-heading h2,
+  .hire-confidence-heading h2,
+  .faq-heading h2,
+  .contact-cta h2,
+  .capability-sticky h2 {
+    line-height: 1.09;
+    letter-spacing: -0.018em;
+  }
+}

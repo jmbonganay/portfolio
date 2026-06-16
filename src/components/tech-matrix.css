@@ -191,3 +191,16 @@
     padding: 22px;
   }
 }
+
+/* Typography breathing room pass */
+.tech-matrix-header h2 {
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+@media (max-width: 720px) {
+  .tech-matrix-header h2 {
+    line-height: 1.09;
+    letter-spacing: -0.018em;
+  }
+}

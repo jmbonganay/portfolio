@@ -7,7 +7,7 @@ export default function StatusWidget() {
       </span>
       <span className="status-widget__content">
         <strong>Systems operational</strong>
-        <em>Remote-ready workflow</em>
+        <em>Remote ready workflow</em>
       </span>
     </div>
   );

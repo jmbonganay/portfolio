@@ -130,11 +130,11 @@ function LocalPhtClock() {
 
 const selectedWorkMeta = {
   "barkchester-united": {
-    title: "High-Converting Shopify Product Page",
+    title: "High converting Shopify Product Page",
     role: "Built Shopify product page, improved offer layout, handled responsive QA.",
   },
   "vista-veil": {
-    title: "Beauty-Tech Shopify Product Page",
+    title: "Beauty tech Shopify Product Page",
     role: "Built Shopify offer page, shaped product story, handled responsive QA.",
   },
   "grippit-strength": {
@@ -147,7 +147,7 @@ const selectedWorkMeta = {
   },
   "wordpress-campaign-2m": {
     title: "WooCommerce Campaign Sales Proof",
-    role: "Supported WooCommerce campaign flow, prepared NDA-safe performance proof.",
+    role: "Supported WooCommerce campaign flow, prepared NDA safe performance proof.",
   },
   "wordpress-checkout-153k": {
     title: "Checkout Flow Performance Snapshot",
@@ -170,20 +170,20 @@ const selectedWorkMeta = {
     role: "Built WordPress product page, added proof flow, improved order CTA layout.",
   },
   "nest-marketing": {
-    title: "Lead-Generation Agency Website",
+    title: "Lead generation Agency Website",
     role: "Built responsive agency site, refined service positioning, supported Netlify launch.",
   },
   "skeeter-strike-update": {
-    title: "Direct-Response Advertorial Page",
+    title: "Direct response Advertorial Page",
     role: "Built advertorial page, shaped story flow, improved CTA hierarchy.",
   },
   "vistaveil-executives": {
-    title: "Beauty-Tech Advertorial Page",
-    role: "Built advertorial UX, structured problem-aware messaging, improved offer bridge.",
+    title: "Beauty tech Advertorial Page",
+    role: "Built advertorial UX, structured problem aware messaging, improved offer bridge.",
   },
   "grippit-nurse": {
     title: "Health Product Advertorial",
-    role: "Built long-form sales page, refined story flow, improved mobile reading.",
+    role: "Built long form sales page, refined story flow, improved mobile reading.",
   },
 };
 
@@ -191,12 +191,12 @@ function getCompactProjectSummary(project) {
   const summary = project.summary || project.description || "";
 
   const manualSummaries = {
-    "barkchester-united": "Pet-focused Shopify page built around emotional offer messaging, review proof, benefit copy, and a clear purchase path.",
-    "vista-veil": "Beauty-tech Shopify page with benefit-led sections, review proof, pricing contrast, and clean purchase flow.",
-    "robo-mouse": "Playful Shopify product page built around cat-owner pain points, product education, and bundle offers.",
-    "skin-spectra": "Long-form beauty page structured for education, proof, bundle positioning, and mobile purchase confidence.",
-    "grippit-strength": "Direct-response Shopify page with benefit messaging, social proof, pricing contrast, and bundle cards.",
-    "furbulous-spa-brush": "Pet-care Shopify page with playful product visuals, grooming benefits, review proof, and bundle offers.",
+    "barkchester-united": "Pet focused Shopify page built around emotional offer messaging, review proof, benefit copy, and a clear purchase path.",
+    "vista-veil": "Beauty tech Shopify page with benefit led sections, review proof, pricing contrast, and clean purchase flow.",
+    "robo-mouse": "Playful Shopify product page built around cat owner pain points, product education, and bundle offers.",
+    "skin-spectra": "Long form beauty page structured for education, proof, bundle positioning, and mobile purchase confidence.",
+    "grippit-strength": "Direct response Shopify page with benefit messaging, social proof, pricing contrast, and bundle cards.",
+    "furbulous-spa-brush": "Pet care Shopify page with playful product visuals, grooming benefits, review proof, and bundle offers.",
     "nest-marketing": "Responsive agency website with service positioning, clean layout hierarchy, and Netlify deployment support.",
   };
 
@@ -233,7 +233,7 @@ function getContributionLine(project, displayRole) {
     return "Built responsive website, refined service positioning, supported Netlify launch.";
   }
 
-  return "Handled page structure, responsive execution, and launch-ready QA.";
+  return "Handled page structure, responsive execution, and launch ready QA.";
 }
 
 function getResultMetrics(project) {
@@ -264,7 +264,7 @@ function getProjectResult(project) {
   const metrics = getResultMetrics(project);
 
   if (!metrics.length) {
-    return project.result || "Launch-ready build with clear contribution and platform proof.";
+    return project.result || "Launch ready build with clear contribution and platform proof.";
   }
 
   const [primary, secondary] = metrics;
@@ -385,7 +385,7 @@ const roleFitCards = [
     icon: Code2,
     title: "Front end execution",
     summary:
-      "A strong fit for teams that need clean page builds, responsive layouts, and conversion-focused implementation without heavy handholding.",
+      "A strong fit for teams that need clean page builds, responsive layouts, and conversion focused implementation without heavy handholding.",
     points: [
       "Responsive landing pages and funnel sections",
       "Shopify and WordPress build support",
@@ -463,7 +463,7 @@ const faqItems = [
   {
     question: "Which platforms do you work with?",
     answer:
-      "My strongest fit is Shopify, WordPress, GoHighLevel, Responsive front-end development, Make.com, Zapier, n8n, and campaign landing page workflows.",
+      "My strongest fit is Shopify, WordPress, GoHighLevel, React front ends, Make.com, Zapier, n8n, and campaign landing page workflows.",
   },
   {
     question: "Can you improve an existing landing page?",
@@ -473,7 +473,7 @@ const faqItems = [
   {
     question: "What kind of projects are you the best fit for?",
     answer:
-      "I am a strong fit for landing pages, funnels, product pages, lead capture flows, campaign pages, and automation-supported launch work.",
+      "I am a strong fit for landing pages, funnels, product pages, lead capture flows, campaign pages, and automation supported launch work.",
   },
   {
     question: "Do you work with remote teams and freelance clients?",
@@ -483,8 +483,8 @@ const faqItems = [
 ];
 const hireConfidenceSignals = [
   "4+ years across landing pages and campaign assets",
-  "Front-end build, QA, tracking, and automation support",
-  "Remote-ready for freelance builds and team roles",
+  "Front end build, QA, tracking, and automation support",
+  "Remote ready for freelance builds and team roles",
 ];
 const contactProjectTypes = [
   "Landing page",
@@ -494,7 +494,7 @@ const contactProjectTypes = [
 ];
 const contactTrustSignals = [
   "US, UK, and AU overlap",
-  "Remote-ready setup",
+  "Remote ready setup",
   "Clear updates and handoff",
 ];
 const initialContactForm = {
@@ -508,7 +508,7 @@ const capabilityCards = [
     title: "Shopify product pages",
     icon: ShoppingCart,
     summary:
-      "Offer-led product pages with gallery flow, bundles, reviews, trust blocks, and mobile purchase clarity.",
+      "Offer led product pages with gallery flow, bundles, reviews, trust blocks, and mobile purchase clarity.",
     chips: ["Product story", "Offer sections", "Checkout path"],
   },
   {
@@ -522,7 +522,7 @@ const capabilityCards = [
     title: "CRO improvements",
     icon: TrendingUp,
     summary:
-      "Sharper page structure, CTA visibility, trust placement, objection handling, and conversion-focused UX cleanup.",
+      "Sharper page structure, CTA visibility, trust placement, objection handling, and conversion focused UX cleanup.",
     chips: ["CTA audit", "Section flow", "Trust proof"],
   },
   {
@@ -546,7 +546,7 @@ const methodologyCards = [
     icon: Code2,
     summary:
       "Design and develop the experience inside the right platform with responsive sections and clean CTA paths.",
-    output: "Live-ready page build",
+    output: "Live ready page build",
   },
   {
     phase: "QA",
@@ -557,9 +557,9 @@ const methodologyCards = [
   },
 ];
 const capabilityProofs = [
-  "Conversion-first layout",
+  "Conversion first layout",
   "Responsive QA",
-  "Automation-ready handoff",
+  "Automation ready handoff",
 ];
 
 function validateContactForm(values, selectedProjectType = values.projectType) {
@@ -665,7 +665,7 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
           <span />
           <p>
             {project.nda
-              ? "NDA-safe proof"
+              ? "NDA safe proof"
               : project.link
                 ? new URL(project.link).hostname.replace("www.", "")
                 : "Case study preview"}
@@ -895,9 +895,9 @@ function CaseStudyDrawer({ project, onClose }) {
     overview:
       "A premium case study page is being prepared. This drawer keeps the project system ready for deeper storytelling, proof notes, conversion decisions, and execution breakdowns.",
     challenge:
-      "The page needed a clear conversion path, stronger visual hierarchy, platform-specific execution, and enough proof to build trust before the visitor reaches the CTA.",
+      "The page needed a clear conversion path, stronger visual hierarchy, platform specific execution, and enough proof to build trust before the visitor reaches the CTA.",
     solution:
-      "Structured the layout around the offer, audience intent, responsive scanning behavior, proof placement, CTA timing, and launch-ready front-end execution.",
+      "Structured the layout around the offer, audience intent, responsive scanning behavior, proof placement, CTA timing, and launch ready front end execution.",
     techStack: [project.category, project.type].filter(Boolean),
   };
 
@@ -906,7 +906,7 @@ function CaseStudyDrawer({ project, onClose }) {
     : [project.category, project.type].filter(Boolean);
 
   const projectHost = project.nda
-    ? "NDA-safe case study"
+    ? "NDA safe case study"
     : project.link
       ? new URL(project.link).hostname.replace("www.", "")
       : "Case study preview";
@@ -1064,7 +1064,7 @@ function HireConfidenceSection() {
         <div className="hire-confidence-heading">
           <p className="section-kicker">Why clients hire me</p>
           <h2 id="hire-confidence-title">
-            A lower-risk hire for landing pages, funnels, and the systems behind them.
+            A lower risk hire for landing pages, funnels, and the systems behind them.
           </h2>
           <p>
             I do not treat a page as a standalone design file. I think through the offer,
@@ -1111,7 +1111,7 @@ function HireConfidenceSection() {
 
         <div className="hire-confidence-footer">
           <p>
-            Strong fit for conversion-focused builds, launch support, and remote team execution.
+            Strong fit for conversion focused builds, launch support, and remote team execution.
           </p>
 
           <div className="hire-confidence-actions">
@@ -1140,7 +1140,7 @@ function FAQSection() {
           <h2 id="faq-title">A few practical answers before you reach out.</h2>
           <p>
             Clear scope, smoother handoff, and fewer unknowns before a landing page,
-            funnel, or automation-supported build starts.
+            funnel, or automation supported build starts.
           </p>
         </div>
 
@@ -1413,7 +1413,7 @@ function CapabilitiesSection() {
               <h2 id="capabilities-title">How I build & what I deliver.</h2>
 
               <p>
-                A tighter delivery system for conversion-focused pages: plan the
+                A tighter delivery system for conversion focused pages: plan the
                 buying path, build the right platform experience, then QA the
                 details that affect trust, speed, and lead flow.
               </p>
@@ -1627,7 +1627,7 @@ function App() {
 
   useEffect(() => {
     const originalTitle =
-      document.title || "John Michael Bonganay | Conversion Front-End Developer & Workflow Automation Specialist";
+      document.title || "John Michael Bonganay | Conversion Front End Developer & Workflow Automation Specialist";
 
     function handleVisibilityChange() {
       document.title = document.hidden
@@ -2261,7 +2261,7 @@ function App() {
 
       <section
         className="tech-marquee"
-        aria-label="Core front-end and marketing tools"
+        aria-label="Core front end and marketing tools"
       >
         <div className="tech-marquee__viewport">
           <div className="tech-marquee__track">
@@ -2759,7 +2759,7 @@ function App() {
               <strong>Bonganay</strong>
             </a>
             <p>
-              Conversion-focused front-end work with clean handoffs and practical
+              Conversion focused front end work with clean handoffs and practical
               automation systems that keep campaigns moving.
             </p>
             <StatusWidget />
