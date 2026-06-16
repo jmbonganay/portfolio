@@ -7,7 +7,7 @@ export const profile = {
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
   availability: "Remote ready across US, UK, and AU time zones",
   headline:
-    "Sales-backed landing pages and automations for campaigns that need leads handled properly.",
+    "Sales backed landing pages and automations for campaigns that need leads handled properly.",
   summary:
     "I design and build product pages, funnels, and workflow systems that turn traffic into clearer offers, cleaner handoffs, and faster follow up after the form.",
   heroBullets: [
@@ -34,7 +34,7 @@ export const profile = {
     },
     {
       value: "1,229",
-      label: "orders shown in NDA-safe dashboard proof"
+      label: "orders shown in NDA safe dashboard proof"
     },
     {
       value: "4.82%",
