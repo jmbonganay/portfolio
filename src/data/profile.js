@@ -7,9 +7,9 @@ export const profile = {
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
   availability: "Remote ready across US, UK, and AU time zones",
   headline:
-    "Landing pages, funnels, and automations built for campaigns that need to convert.",
+    "Sales-backed landing pages and automations for campaigns that need leads handled properly.",
   summary:
-    "I design and build landing pages, product pages, funnels, and workflow systems that help teams capture leads, route inquiries, support sales, and launch campaigns with less manual follow up.",
+    "I design and build product pages, funnels, and workflow systems that turn traffic into clearer offers, cleaner handoffs, and faster follow up after the form.",
   heroBullets: [
     {
       label: "Pages built for action",
@@ -29,16 +29,20 @@ export const profile = {
   ],
   stats: [
     {
-      value: "4+",
-      label: "years building landing pages and campaign assets"
+      value: "$52.9K",
+      label: "top Shopify page sales proof"
     },
     {
-      value: "Shopify / WP / GHL",
-      label: "platform experience for pages, funnels, and workflows"
+      value: "1,229",
+      label: "orders shown in NDA-safe dashboard proof"
     },
     {
-      value: "Launch support",
-      label: "build, QA, tracking, handoff, and automation setup"
+      value: "4.82%",
+      label: "conversion rate on top sales performer"
+    },
+    {
+      value: "689+",
+      label: "production leads routed with 99.3%+ delivery"
     }
   ],
   strengths: [

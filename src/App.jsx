@@ -58,11 +58,12 @@ const techStackItems = [
   { name: "HTML/CSS", mark: "</>" },
   { name: "Zapier", mark: "Za" },
   { name: "JavaScript", mark: "JS" },
-  { name: "Figma", mark: "Fg" },
+  { name: "Analytics", mark: "GA" },
   { name: "API Integrations", mark: "API" },
   { name: "n8n", mark: "n8n" },
 ];
 const WORK_PAGE_SIZE = 6;
+const COMPACT_WORK_PAGE_SIZE = 3;
 const heroImage = "/assets/hero-command-center.webp";
 // These are public frontend identifiers, not private server secrets.
 // Vercel/Vite environment variables still override these defaults in production.
@@ -72,11 +73,18 @@ const WEB3FORMS_ACCESS_KEY =
   import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || DEFAULT_WEB3FORMS_ACCESS_KEY;
 const HCAPTCHA_SITE_KEY =
   import.meta.env.VITE_HCAPTCHA_SITE_KEY || DEFAULT_HCAPTCHA_SITE_KEY;
-const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/9m9aa72udl79axpeb8qkonm8l8i4dkps";
+const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
 
 const ALL_WORK_FILTER = "All";
 
 const workFilters = ["All", "Shopify", "WordPress", "GoHighLevel", "Netlify", "Automations"];
+
+const workProofHighlights = [
+  { value: "$52.9K", label: "top Shopify page sales proof" },
+  { value: "1,229", label: "orders from one campaign build" },
+  { value: "689+", label: "production leads routed in GHL" },
+  { value: "99.3%+", label: "email delivery proof" },
+];
 
 function getProjectBadges(project) {
   return [project.category, project.type].filter(Boolean).slice(0, 3);
@@ -87,6 +95,14 @@ const navLinks = [
   { label: "Stack", href: "#stack" },
   { label: "Automation", href: "#automation" },
   { label: "Role Fit", href: "#role-fit" },
+  { label: "Contact", href: "#contact" },
+];
+
+const footerLinks = [
+  { label: "Work", href: "#work" },
+  { label: "Stack", href: "#stack" },
+  { label: "Automation", href: "#automation" },
+  { label: "Resume", href: profile.resumePath, download: "JohnMichael_Bonganay_Resume.pdf" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -380,80 +396,112 @@ const automationCards = [
     activeNodes: ["zapier", "n8n", "gohighlevel", "analytics"],
   },
 ];
-const roleFitCards = [
+const automationFlowSteps = [
   {
-    icon: Code2,
-    title: "Front end execution",
-    summary:
-      "A strong fit for teams that need clean page builds, responsive layouts, and conversion focused implementation without heavy handholding.",
-    points: [
-      "Responsive landing pages and funnel sections",
-      "Shopify and WordPress build support",
-      "Front end QA across desktop and mobile",
-    ],
+    label: "Capture",
+    detail: "Forms, checkout events, and lead sources are checked before traffic runs.",
   },
   {
-    icon: Workflow,
-    title: "Automation support",
+    label: "Route",
+    detail: "Data moves into the right CRM, sheet, notification, or pipeline.",
+  },
+  {
+    label: "Track",
+    detail: "Key actions are easier to review through tags, events, and proof screenshots.",
+  },
+  {
+    label: "Follow up",
+    detail: "The next response path is planned so leads are not left waiting.",
+  },
+];
+const roleFitPaths = [
+  {
+    icon: ShoppingCart,
+    title: "For project clients",
     summary:
-      "I can support the systems around the page, so leads are captured, routed, tagged, and followed up without unnecessary manual work.",
+      "A practical fit when you need a landing page, product page, or funnel rebuilt with clearer messaging, stronger proof, and cleaner lead handoff.",
     points: [
-      "CRM routing and automation workflows",
-      "Make.com, GoHighLevel, Zapier, and n8n support",
-      "Forms, webhooks, notifications, and handoff flows",
+      "Shopify, WordPress, GoHighLevel, and campaign pages",
+      "Offer hierarchy, CTA flow, proof blocks, and responsive QA",
+      "Form, tracking, notification, and CRM handoff support",
     ],
+    ctaLabel: "Start project inquiry",
+    ctaHref: "#contact",
   },
   {
     icon: BriefcaseBusiness,
-    title: "Remote work style",
+    title: "For remote teams",
     summary:
-      "Practical, reliable, and comfortable working with clients or teams that need clear communication and steady delivery.",
+      "A strong fit for agencies, founders, and hiring teams that need dependable front end execution plus automation awareness.",
     points: [
-      "Available for freelance and full time remote roles",
-      "Comfortable with async collaboration",
-      "US, UK, and AU timezone overlap",
+      "Async updates, practical handoff notes, and steady delivery",
+      "US, UK, and AU timezone overlap from the Philippines",
+      "Available for freelance support and full time remote roles",
     ],
+    ctaLabel: "Download resume",
+    ctaHref: profile.resumePath,
+    download: "JohnMichael_Bonganay_Resume.pdf",
   },
 ];
 const hireConfidencePillars = [
   {
     icon: TrendingUp,
-    title: "Conversion comes before decoration",
+    title: "Proof before polish",
     summary:
-      "I plan the page around the offer, CTA path, proof, and mobile scanning behavior, not just the visual layout.",
-  },
-  {
-    icon: Workflow,
-    title: "The page and workflow connect",
-    summary:
-      "I can support forms, routing, notifications, and CRM handoff so the lead path does not stop after submission.",
+      "The layout is planned around the offer, result proof, CTA path, and mobile scanning behavior before visual details take over.",
   },
   {
     icon: Gauge,
-    title: "Launch details are checked",
+    title: "Launch checks are included",
     summary:
-      "I look at responsive behavior, links, forms, tracking support, and basic QA before a page is sent traffic.",
+      "Responsive behavior, links, forms, basic tracking support, and handoff notes are checked before a page is sent traffic.",
+  },
+  {
+    icon: Workflow,
+    title: "Handoff risk is reduced",
+    summary:
+      "Forms, routing, notifications, and CRM movement can be planned alongside the page so leads do not stop after submission.",
   },
   {
     icon: BriefcaseBusiness,
-    title: "Easy to work with remotely",
+    title: "Communication stays clear",
     summary:
-      "You get clear updates, practical handoff notes, and steady execution across freelance projects or team support.",
+      "You get straightforward updates, practical questions, and handoff notes that make remote work easier to manage.",
   },
   {
     icon: Code2,
-    title: "Flexible across campaign platforms",
+    title: "Platform flexible",
     summary:
-      "I can work across Shopify, WordPress, GoHighLevel, funnels, product pages, and campaign landing pages.",
+      "I can support Shopify, WordPress, GoHighLevel, funnels, product pages, and custom front end campaign builds.",
   },
 ];
 
 
 const faqItems = [
   {
-    question: "Do you handle both design and development?",
+    question: "How long does a landing page or funnel build usually take?",
     answer:
-      "Yes. I can plan the layout, design the page, build the front end, and check the responsive behavior before launch.",
+      "A focused landing page can often move in one to two weeks once copy, assets, and the offer are clear. Larger funnels or automation supported builds need a scoped timeline first.",
+  },
+  {
+    question: "How do you price project work?",
+    answer:
+      "I usually scope based on page count, platform, design complexity, integrations, and QA needs. For remote roles or ongoing support, I can discuss hourly, part time, or full time arrangements.",
+  },
+  {
+    question: "What do you need from me before starting?",
+    answer:
+      "The offer, product or service details, brand assets, page goal, preferred platform, examples you like, and any existing tracking or CRM requirements are enough to start a useful scope conversation.",
+  },
+  {
+    question: "Do you handle revisions?",
+    answer:
+      "Yes. I prefer clear review rounds tied to scope, so feedback can improve clarity, trust, mobile flow, and conversion details without turning the project into guesswork.",
+  },
+  {
+    question: "Can you improve an existing landing page?",
+    answer:
+      "Yes. I can review an existing page, tighten the hierarchy, improve the CTA path, clean up mobile issues, and support the rebuild or refinement.",
   },
   {
     question: "Do you also support automations and tracking setup?",
@@ -464,16 +512,6 @@ const faqItems = [
     question: "Which platforms do you work with?",
     answer:
       "My strongest fit is Shopify, WordPress, GoHighLevel, React front ends, Make.com, Zapier, n8n, and campaign landing page workflows.",
-  },
-  {
-    question: "Can you improve an existing landing page?",
-    answer:
-      "Yes. I can review an existing page, tighten the hierarchy, improve the CTA path, clean up mobile issues, and support the rebuild or refinement.",
-  },
-  {
-    question: "What kind of projects are you the best fit for?",
-    answer:
-      "I am a strong fit for landing pages, funnels, product pages, lead capture flows, campaign pages, and automation supported launch work.",
   },
   {
     question: "Do you work with remote teams and freelance clients?",
@@ -652,7 +690,13 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
   return (
     <article
-      className="project-card reveal-item"
+      className={[
+        "project-card",
+        "reveal-item",
+        index === 0 ? "project-card--featured" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       style={{
         "--card-delay": `${Math.min(index, 8) * 45}ms`,
         "--reveal-delay": `${Math.min(index % WORK_PAGE_SIZE, 5) * 70}ms`,
@@ -1182,12 +1226,12 @@ function RoleFitSection() {
           </p>
         </div>
 
-        <div className="role-fit-grid">
-          {roleFitCards.map((card) => {
+        <div className="role-fit-grid role-fit-grid--paths">
+          {roleFitPaths.map((card) => {
             const Icon = card.icon;
 
             return (
-              <article className="role-fit-card" key={card.title}>
+              <article className="role-fit-card role-fit-card--path" key={card.title}>
                 <span className="role-fit-card__icon">
                   <Icon size={20} aria-hidden="true" />
                 </span>
@@ -1203,6 +1247,15 @@ function RoleFitSection() {
                     </li>
                   ))}
                 </ul>
+
+                <a
+                  className="role-fit-card__cta"
+                  href={card.ctaHref}
+                  download={card.download}
+                >
+                  {card.ctaLabel}
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
               </article>
             );
           })}
@@ -1337,6 +1390,18 @@ function AutomationSection() {
               );
             })}
           </div>
+
+          <ol className="automation-mobile-flow" aria-label="Simplified lead flow">
+            {automationFlowSteps.map((step, index) => (
+              <li key={step.label}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <strong>{step.label}</strong>
+                  <p>{step.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
 
           <div className="automation-panel" aria-label="Automation benefits">
             <p className="automation-panel__intro">
@@ -1567,6 +1632,8 @@ function App() {
   const [selectedCaseStudyId, setSelectedCaseStudyId] = useState(null);
   const [selectedAutomationModalId, setSelectedAutomationModalId] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("#top");
+  const [isCompactWorkViewport, setIsCompactWorkViewport] = useState(false);
   const workFilterTimers = useRef([]);
   const workSectionRef = useRef(null);
   const captchaRef = useRef(null);
@@ -1601,12 +1668,15 @@ function App() {
           ),
     [renderedWorkFilter, selectedWorkEntries],
   );
+  const workPageSize = isCompactWorkViewport
+    ? COMPACT_WORK_PAGE_SIZE
+    : WORK_PAGE_SIZE;
   const visibleWorkProjects = useMemo(
     () => selectedWorkProjects.slice(0, visibleWorkCount),
     [selectedWorkProjects, visibleWorkCount],
   );
   const hasMoreWork = visibleWorkCount < selectedWorkProjects.length;
-  const canToggleWorkCount = selectedWorkProjects.length > WORK_PAGE_SIZE;
+  const canToggleWorkCount = selectedWorkProjects.length > workPageSize;
   const visibleWorkTotal = Math.min(
     visibleWorkCount,
     selectedWorkProjects.length,
@@ -1640,6 +1710,68 @@ function App() {
     return () => {
       document.title = originalTitle;
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const compactWorkQuery = window.matchMedia("(max-width: 640px)");
+
+    function syncCompactWorkViewport() {
+      setIsCompactWorkViewport(compactWorkQuery.matches);
+    }
+
+    syncCompactWorkViewport();
+
+    if (compactWorkQuery.addEventListener) {
+      compactWorkQuery.addEventListener("change", syncCompactWorkViewport);
+
+      return () => {
+        compactWorkQuery.removeEventListener("change", syncCompactWorkViewport);
+      };
+    }
+
+    compactWorkQuery.addListener(syncCompactWorkViewport);
+
+    return () => {
+      compactWorkQuery.removeListener(syncCompactWorkViewport);
+    };
+  }, []);
+
+  useEffect(() => {
+    setVisibleWorkCount((currentCount) =>
+      currentCount === WORK_PAGE_SIZE || currentCount === COMPACT_WORK_PAGE_SIZE
+        ? workPageSize
+        : currentCount,
+    );
+  }, [workPageSize]);
+
+  useEffect(() => {
+    const sectionHrefs = ["#top", ...navLinks.map((link) => link.href)];
+
+    function updateActiveSection() {
+      const marker = window.innerHeight * 0.32;
+      const nextSection = sectionHrefs.reduce((currentHref, href) => {
+        const section = document.querySelector(href);
+
+        if (!section) {
+          return currentHref;
+        }
+
+        return section.getBoundingClientRect().top <= marker
+          ? href
+          : currentHref;
+      }, "#top");
+
+      setActiveSection(nextSection);
+    }
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
     };
   }, []);
   function clearWorkFilterTimers() {
@@ -1769,7 +1901,7 @@ function App() {
 
     clearWorkFilterTimers();
     setActiveWorkFilter(filterId);
-    setVisibleWorkCount(WORK_PAGE_SIZE);
+    setVisibleWorkCount(workPageSize);
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setRenderedWorkFilter(filterId);
@@ -1797,6 +1929,7 @@ function App() {
   function handleNavClick(event, href) {
     event.preventDefault();
     setIsMobileMenuOpen(false);
+    setActiveSection(href);
 
     const targetSection = document.querySelector(href);
 
@@ -1824,13 +1957,13 @@ function App() {
   function handleWorkVisibilityToggle() {
     if (hasMoreWork) {
       setVisibleWorkCount((currentCount) =>
-        Math.min(currentCount + WORK_PAGE_SIZE, selectedWorkProjects.length),
+        Math.min(currentCount + workPageSize, selectedWorkProjects.length),
       );
 
       return;
     }
 
-    setVisibleWorkCount(WORK_PAGE_SIZE);
+    setVisibleWorkCount(workPageSize);
 
     window.requestAnimationFrame(() => {
       workSectionRef.current?.scrollIntoView({
@@ -1968,7 +2101,7 @@ function App() {
         return;
       }
 
-      void fetch(MAKE_WEBHOOK_URL, {
+      void fetch(AUTOMATION_LEAD_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1981,9 +2114,15 @@ function App() {
           projectType: selectedProjectType || "Not selected",
           submissionType: "ai_scoper",
         }),
-      }).catch((makeError) => {
-        console.warn("Make.com webhook failed:", makeError);
-      });
+      })
+        .then((automationResponse) => {
+          if (!automationResponse.ok) {
+            console.warn("Automation endpoint rejected the lead handoff.");
+          }
+        })
+        .catch((makeError) => {
+          console.warn("Automation endpoint failed:", makeError);
+        });
 
       ReactGA.event({
         category: "Form",
@@ -2079,12 +2218,22 @@ function App() {
               <a
                 key={link.href}
                 href={link.href}
+                className={activeSection === link.href ? "is-active" : undefined}
+                aria-current={activeSection === link.href ? "page" : undefined}
                 onClick={(event) => handleNavClick(event, link.href)}
               >
                 {link.label}
               </a>
             ))}
           </nav>
+
+          <a
+            className="site-nav__cta"
+            href="#contact"
+            onClick={(event) => handleNavClick(event, "#contact")}
+          >
+            Start inquiry
+          </a>
 
           <button
             className="site-nav__menu-button"
@@ -2113,11 +2262,31 @@ function App() {
                 <a
                   key={link.href}
                   href={link.href}
+                  className={activeSection === link.href ? "is-active" : undefined}
+                  aria-current={activeSection === link.href ? "page" : undefined}
                   onClick={(event) => handleNavClick(event, link.href)}
                 >
                   {link.label}
                 </a>
               ))}
+
+              <div className="site-nav__mobile-actions">
+                <a
+                  className="site-nav__mobile-primary"
+                  href="#contact"
+                  onClick={(event) => handleNavClick(event, "#contact")}
+                >
+                  Start inquiry
+                </a>
+
+                <a
+                  className="site-nav__mobile-secondary"
+                  href={profile.resumePath}
+                  download="JohnMichael_Bonganay_Resume.pdf"
+                >
+                  Download resume
+                </a>
+              </div>
             </nav>
           ) : null}
         </header>
@@ -2138,15 +2307,6 @@ function App() {
 
             <div className="hero-animate hero-animate--subtext">
               <p className="hero__summary">{profile.summary}</p>
-
-              <div className="hero__value-grid" aria-label="Hybrid conversion and backend systems value">
-                {profile.heroBullets.map((bullet) => (
-                  <div className="hero__value-item" key={bullet.label}>
-                    <strong>{bullet.label}</strong>
-                    <span>{bullet.value}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div
@@ -2175,6 +2335,14 @@ function App() {
               </a>
             </div>
 
+            <div className="hero__value-grid" aria-label="Hybrid conversion and backend systems value">
+              {profile.heroBullets.map((bullet) => (
+                <div className="hero__value-item" key={bullet.label}>
+                  <strong>{bullet.label}</strong>
+                  <span>{bullet.value}</span>
+                </div>
+              ))}
+            </div>
 
             <div
               className="hero__meta hero-animate hero-animate--meta"
@@ -2304,7 +2472,20 @@ function App() {
             </div>
           </div>
 
+          <div className="work-proof-strip" aria-label="Proof-backed selected work highlights">
+            <span>Proof-backed builds</span>
+            {workProofHighlights.map((proof) => (
+              <strong key={proof.label}>
+                {proof.value}
+                <small>{proof.label}</small>
+              </strong>
+            ))}
+          </div>
+
           <p className="work-filter-note">Featured case studies first. Browse by platform.</p>
+          <p className="work-proof-note">
+            Dashboard screenshots are kept NDA-safe, with sensitive data removed when proof appears inside case studies.
+          </p>
 
           <div className="work-controls-shell work-controls-shell--fade">
             <div className="work-controls" aria-label="Filter selected works by platform or skill category">
@@ -2714,6 +2895,11 @@ function App() {
                     ) : null}
                   </div>
 
+                  <p className="contact-reply-note">
+                    <CheckCircle2 size={16} aria-hidden="true" />
+                    Usually replies within 24 hours. Email and LinkedIn stay available if captcha blocks submission.
+                  </p>
+
                   <button
                     className="submit-button"
                     type="submit"
@@ -2754,7 +2940,12 @@ function App() {
       <footer className="site-footer" aria-label="Portfolio footer">
         <div className="footer-shell">
           <div className="footer-brand">
-            <a className="brand" href="#top" aria-label="Back to top">
+            <a
+              className="brand"
+              href="#top"
+              aria-label="Back to top"
+              onClick={(event) => handleNavClick(event, "#top")}
+            >
               <span>JM</span>
               <strong>Bonganay</strong>
             </a>
@@ -2764,6 +2955,23 @@ function App() {
             </p>
             <StatusWidget />
           </div>
+
+          <nav className="footer-links" aria-label="Footer navigation">
+            {footerLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                download={link.download}
+                onClick={
+                  link.href.startsWith("#")
+                    ? (event) => handleNavClick(event, link.href)
+                    : undefined
+                }
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
 
           <div className="footer-action-panel" aria-label="Quick contact links">
             <p>Available for freelance projects and remote roles.</p>

@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { ExternalLink, X } from "lucide-react";
 import TerminalLoader from "./TerminalLoader";
 
-const MAKE_WEBHOOK_URL = "https://hook.us2.make.com/9m9aa72udl79axpeb8qkonm8l8i4dkps";
+const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
 
 const automationDescription =
   "Engineered an asynchronous, multi branching automation layer that captures portfolio payloads through low latency webhooks, enriches lead context through REST API firmographic lookups, and routes qualified project ideas into a Gemini powered proposal engine that dynamically compiles Google Doc templates into locked PDF scopes and dispatches them through email.";
@@ -72,7 +72,7 @@ function AiProposalEngineForm() {
     setFormError("");
 
     try {
-      const response = await fetch(MAKE_WEBHOOK_URL, {
+      const response = await fetch(AUTOMATION_LEAD_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
