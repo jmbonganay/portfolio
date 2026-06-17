@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="JM favicon">
+  <rect width="64" height="64" rx="12" fill="#060908"/>
+  <rect x="8" y="8" width="48" height="48" rx="10" fill="#0b1715" stroke="#16d6c8" stroke-width="2"/>
+  <path d="M17 42V22h7v13c0 6-3 9-9 9h-1v-6h1c1.4 0 2-.8 2-2.6V22h7v20h-7Z" fill="#16d6c8"/>
+  <path d="M29 42V22h7l5 8.4 5-8.4h7v20h-7V32.8l-3.7 6h-2.6l-3.7-6V42h-7Z" fill="#ffb86b"/>
+</svg>
