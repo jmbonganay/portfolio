@@ -222,3 +222,7 @@
     letter-spacing: -0.018em;
   }
 }
+
+.tech-matrix-header h2 {
+  font-size: 48px;
+}

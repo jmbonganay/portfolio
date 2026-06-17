@@ -27,18 +27,20 @@ cp .env.example .env.local
 The `VITE_` prefix is required because this is a Vite frontend app. Values with `VITE_` are still visible in the browser bundle, so do not place private server-only secrets here.
 
 
-## Local development fallback fix
+## Production values
 
-This project includes safe frontend fallback values for Web3Forms, hCaptcha, and GA4 so the contact form will not display “hCaptcha site key is missing” during local testing. These values are public identifiers, not private backend secrets.
+Web3Forms and hCaptcha use public browser identifiers, so the app includes working fallbacks to keep the form available when environment variables are temporarily missing. Production environment variables are still preferred because they allow rotation without a code change. GA4 remains env-only and stays disabled when its variable is missing.
 
-For production, Vercel Environment Variables are still preferred because they let you change keys without editing source code. Add these in Vercel under **Settings > Environment Variables**:
+Add these in Vercel under **Settings > Environment Variables**:
 
 ```env
-VITE_WEB3FORMS_ACCESS_KEY=b07a88a1-7a8b-4307-a080-e13b3c51f57c
-VITE_HCAPTCHA_SITE_KEY=50b2fe65-b00b-4b9e-ad62-3ba471098be2
-VITE_GA4_MEASUREMENT_ID=G-LS3188BW9V
+VITE_WEB3FORMS_ACCESS_KEY=your_actual_web3forms_access_key
+VITE_HCAPTCHA_SITE_KEY=your_actual_hcaptcha_site_key
+VITE_GA4_MEASUREMENT_ID=your_actual_ga4_measurement_id
 MAKE_WEBHOOK_URL=https://hook.us2.make.com/your-webhook-id
 MAKE_WEBHOOK_SECRET=optional-shared-secret-for-make-validation
 ```
 
 After editing environment variables in Vercel, redeploy the project. For local `.env.local` changes, restart `npm run dev`.
+
+The `/api/automation-lead` function also enforces same-origin JSON requests, size limits, basic input validation, simple IP-based throttling, and HTTPS Make.com webhook URLs only. These controls reduce spam and accidental webhook misconfiguration, but they are not a replacement for provider-side abuse controls in Web3Forms, hCaptcha, Make.com, and Vercel.

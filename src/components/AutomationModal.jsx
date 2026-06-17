@@ -4,6 +4,23 @@ import { ExternalLink, X } from "lucide-react";
 import TerminalLoader from "./TerminalLoader";
 
 const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
+const MAX_NAME_LENGTH = 160;
+const MAX_EMAIL_LENGTH = 240;
+const MAX_PROJECT_IDEA_LENGTH = 3000;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function getSafeExternalHref(value) {
+  if (!value) {
+    return "";
+  }
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
 
 const automationDescription =
   "Engineered an asynchronous, multi branching automation layer that captures portfolio payloads through low latency webhooks, enriches lead context through REST API firmographic lookups, and routes qualified project ideas into a Gemini powered proposal engine that dynamically compiles Google Doc templates into locked PDF scopes and dispatches them through email.";
@@ -67,6 +84,32 @@ function AiProposalEngineForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const formData = new FormData(event.currentTarget);
+    if (formData.get("botcheck")) {
+      setFormValues({
+        name: "",
+        email: "",
+        projectIdea: "",
+      });
+      setIsSuccess(true);
+      return;
+    }
+
+    const sanitizedValues = {
+      name: formValues.name.trim().slice(0, MAX_NAME_LENGTH),
+      email: formValues.email.trim().toLowerCase().slice(0, MAX_EMAIL_LENGTH),
+      projectIdea: formValues.projectIdea.trim().slice(0, MAX_PROJECT_IDEA_LENGTH),
+    };
+
+    if (
+      !sanitizedValues.name ||
+      !EMAIL_PATTERN.test(sanitizedValues.email) ||
+      sanitizedValues.projectIdea.length < 20
+    ) {
+      setFormError("Please add a valid name, email, and at least 20 characters for the project idea.");
+      return;
+    }
+
     setIsLoading(true);
     setIsSuccess(false);
     setFormError("");
@@ -78,9 +121,9 @@ function AiProposalEngineForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formValues.name,
-          email: formValues.email,
-          projectIdea: formValues.projectIdea,
+          name: sanitizedValues.name,
+          email: sanitizedValues.email,
+          projectIdea: sanitizedValues.projectIdea,
           submissionType: "ai_scoper",
         }),
       });
@@ -95,8 +138,8 @@ function AiProposalEngineForm() {
         projectIdea: "",
       });
       setIsSuccess(true);
-    } catch (error) {
-      console.error("AI Proposal Engine error:", error);
+    } catch {
+      console.error("AI Proposal Engine request failed.");
       setFormError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
@@ -115,6 +158,15 @@ function AiProposalEngineForm() {
       </div>
 
       <form className="ai-proposal-engine__form" onSubmit={handleSubmit}>
+        <input
+          type="checkbox"
+          name="botcheck"
+          className="hidden"
+          tabIndex="-1"
+          autoComplete="off"
+          aria-hidden="true"
+        />
+
         <label className="ai-proposal-engine__field">
           <span>Name</span>
           <input
@@ -124,6 +176,7 @@ function AiProposalEngineForm() {
             onChange={handleChange}
             placeholder="John Michael"
             autoComplete="name"
+            maxLength={MAX_NAME_LENGTH}
             required
           />
         </label>
@@ -137,6 +190,7 @@ function AiProposalEngineForm() {
             onChange={handleChange}
             placeholder="you@example.com"
             autoComplete="email"
+            maxLength={MAX_EMAIL_LENGTH}
             required
           />
         </label>
@@ -149,6 +203,7 @@ function AiProposalEngineForm() {
             onChange={handleChange}
             placeholder="Describe your app or website concept here..."
             rows="5"
+            maxLength={MAX_PROJECT_IDEA_LENGTH}
             required
           />
         </label>
@@ -212,8 +267,10 @@ export default function AutomationModal({ project, isOpen, onClose }) {
     return null;
   }
 
-  const calendlyUrl =
-    project.calendlyUrl || "https://calendly.com/johnmichaelbonganay1231/30min";
+  const calendlyUrl = getSafeExternalHref(
+    project.calendlyUrl || "https://calendly.com/johnmichaelbonganay1231/30min",
+  );
+  const projectUrl = getSafeExternalHref(project.link);
 
   const technicalFeatures = (project.architectureDetails?.length
     ? project.architectureDetails
@@ -301,18 +358,18 @@ export default function AutomationModal({ project, isOpen, onClose }) {
             <a
               href={calendlyUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="automation-modal__cta"
             >
               Test Live Booking Engine
               <ExternalLink size={16} aria-hidden="true" />
             </a>
 
-            {project.link ? (
+            {projectUrl ? (
               <a
-                href={project.link}
+                href={projectUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="automation-modal__secondary"
               >
                 View Make Scenario

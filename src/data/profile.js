@@ -1,15 +1,32 @@
 export const profile = {
   name: "John Michael Bonganay",
-  role: "Landing Page Developer / Automation Specialist",
+  role: "Landing Page Designer / Developer · Automation Specialist",
   location: "Tabaco City, Philippines",
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
   availability: "Remote ready across US, UK, and AU time zones",
-  headline:
-    "Sales backed landing pages and automations for campaigns that need leads handled properly.",
+  headline: {
+    before: "I design and build landing pages and the",
+    accent: "automations",
+    after: "that turn every lead into action."
+  },
   summary:
-    "I design and build product pages, funnels, and workflow systems that turn traffic into clearer offers, cleaner handoffs, and faster follow up after the form.",
+    "I help brands launch conversion focused pages, then connect forms, CRM routing, notifications, and follow-up workflows so every lead is captured, handled, and moved forward.",
+  heroProof: [
+    {
+      value: "4+ years",
+      label: "design and build experience"
+    },
+    {
+      value: "$52.9K",
+      label: "sales-backed page"
+    },
+    {
+      value: "689+",
+      label: "production leads routed"
+    }
+  ],
   heroBullets: [
     {
       label: "Pages built for action",

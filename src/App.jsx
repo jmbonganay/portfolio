@@ -14,7 +14,6 @@ import {
   Gauge,
   Lock,
   Mail,
-  MapPin,
   Menu,
   Search,
   Send,
@@ -64,16 +63,16 @@ const techStackItems = [
 ];
 const WORK_PAGE_SIZE = 6;
 const COMPACT_WORK_PAGE_SIZE = 3;
-const heroImage = "/assets/hero-command-center.webp";
-// These are public frontend identifiers, not private server secrets.
-// Vercel/Vite environment variables still override these defaults in production.
-const DEFAULT_WEB3FORMS_ACCESS_KEY = "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
-const DEFAULT_HCAPTCHA_SITE_KEY = "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+// These client identifiers are public by design and visible in the browser.
+// Environment values remain preferred so they can be rotated without a code change.
 const WEB3FORMS_ACCESS_KEY =
-  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || DEFAULT_WEB3FORMS_ACCESS_KEY;
+  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
 const HCAPTCHA_SITE_KEY =
-  import.meta.env.VITE_HCAPTCHA_SITE_KEY || DEFAULT_HCAPTCHA_SITE_KEY;
+  import.meta.env.VITE_HCAPTCHA_SITE_KEY || "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
 const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
+const MAX_CONTACT_NAME_LENGTH = 160;
+const MAX_CONTACT_EMAIL_LENGTH = 240;
+const MAX_CONTACT_MESSAGE_LENGTH = 3000;
 
 const ALL_WORK_FILTER = "All";
 
@@ -88,6 +87,29 @@ const workProofHighlights = [
 
 function getProjectBadges(project) {
   return [project.category, project.type].filter(Boolean).slice(0, 3);
+}
+
+function getSafeExternalHref(value) {
+  if (!value) {
+    return "";
+  }
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function getSafeHostname(value, fallback = "Case study preview") {
+  const safeHref = getSafeExternalHref(value);
+
+  if (!safeHref) {
+    return fallback;
+  }
+
+  return new URL(safeHref).hostname.replace("www.", "");
 }
 
 const navLinks = [
@@ -105,44 +127,6 @@ const footerLinks = [
   { label: "Resume", href: profile.resumePath, download: "JohnMichael_Bonganay_Resume.pdf" },
   { label: "Contact", href: "#contact" },
 ];
-
-const heroPlatformTags = [
-  { label: "WordPress LPs", filterId: "WordPress" },
-  { label: "Shopify pages", filterId: "Shopify" },
-  { label: "Automations", filterId: "Automations" },
-];
-
-function LocalPhtClock() {
-  const [currentTime, setCurrentTime] = useState("");
-
-  useEffect(() => {
-    function updateTime() {
-      const formattedTime = new Intl.DateTimeFormat("en-US", {
-        timeZone: "Asia/Manila",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      }).format(new Date());
-
-      setCurrentTime(formattedTime);
-    }
-
-    updateTime();
-    const timer = window.setInterval(updateTime, 60 * 1000);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
-  return (
-    <span
-      className="hero__local-time"
-      aria-label="Current local time in the Philippines"
-    >
-      <span className="local-time-beacon" aria-hidden="true" />
-      Local Time: {currentTime} PHT
-    </span>
-  );
-}
 
 const selectedWorkMeta = {
   "barkchester-united": {
@@ -603,17 +587,26 @@ const capabilityProofs = [
 function validateContactForm(values, selectedProjectType = values.projectType) {
   const errors = {};
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const name = values.name.trim();
+  const email = values.email.trim();
+  const message = values.message.trim();
 
-  if (!values.name.trim()) {
+  if (!name) {
     errors.name = "Enter your name.";
+  } else if (name.length > MAX_CONTACT_NAME_LENGTH) {
+    errors.name = `Keep your name under ${MAX_CONTACT_NAME_LENGTH} characters.`;
   }
 
-  if (!emailPattern.test(values.email.trim())) {
+  if (!emailPattern.test(email)) {
     errors.email = "Enter a valid email address.";
+  } else if (email.length > MAX_CONTACT_EMAIL_LENGTH) {
+    errors.email = `Keep your email under ${MAX_CONTACT_EMAIL_LENGTH} characters.`;
   }
 
-  if (values.message.trim().length < 20) {
+  if (message.length < 20) {
     errors.message = "Add at least 20 characters so I can understand the goal.";
+  } else if (message.length > MAX_CONTACT_MESSAGE_LENGTH) {
+    errors.message = `Keep your message under ${MAX_CONTACT_MESSAGE_LENGTH} characters.`;
   }
 
   return errors;
@@ -687,6 +680,12 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
   const displayTitle = showcase?.title ?? project.title;
   const displayRole = showcase?.role ?? project.role;
   const canOpenCaseStudy = Boolean(project.caseStudy || project.caseStudyData);
+  const projectUrl = getSafeExternalHref(project.link);
+  const projectHost = project.nda
+    ? "NDA safe proof"
+    : projectUrl
+      ? getSafeHostname(projectUrl)
+      : "Case study preview";
 
   return (
     <article
@@ -708,11 +707,7 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
           <span />
           <span />
           <p>
-            {project.nda
-              ? "NDA safe proof"
-              : project.link
-                ? new URL(project.link).hostname.replace("www.", "")
-                : "Case study preview"}
+            {projectHost}
           </p>
         </div>
 
@@ -786,12 +781,12 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
         </div>
 
         <div className="project-actions project-actions--split">
-          {project.link ? (
+          {projectUrl ? (
             <a
               className="project-action project-action--live"
-              href={project.link}
+              href={projectUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               View live page
               <ExternalLink size={16} aria-hidden="true" />
@@ -820,6 +815,8 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
 
 function AutomationArchitectureCard({ project, onOpenModal, index = 0 }) {
+  const safeCalendlyUrl = getSafeExternalHref(project.calendlyUrl);
+  const calendlyHref = safeCalendlyUrl || "#contact";
   const automationMetrics = project.metrics?.length
     ? project.metrics
     : [
@@ -830,7 +827,7 @@ function AutomationArchitectureCard({ project, onOpenModal, index = 0 }) {
       ];
 
   function handleCalendlyClick(event) {
-    if (project.calendlyUrl === "#contact") {
+    if (!safeCalendlyUrl) {
       event.preventDefault();
       document.getElementById("contact")?.scrollIntoView({
         behavior: "smooth",
@@ -906,9 +903,9 @@ function AutomationArchitectureCard({ project, onOpenModal, index = 0 }) {
         <div className="automation-architecture-card__actions">
           <a
             className="automation-architecture-card__cta"
-            href={project.calendlyUrl ?? "#contact"}
-            target={project.calendlyUrl?.startsWith("http") ? "_blank" : undefined}
-            rel={project.calendlyUrl?.startsWith("http") ? "noreferrer" : undefined}
+            href={calendlyHref}
+            target={safeCalendlyUrl ? "_blank" : undefined}
+            rel={safeCalendlyUrl ? "noopener noreferrer" : undefined}
             onClick={handleCalendlyClick}
           >
             Test live engine
@@ -949,10 +946,11 @@ function CaseStudyDrawer({ project, onClose }) {
     ? caseStudy.techStack
     : [project.category, project.type].filter(Boolean);
 
+  const projectUrl = getSafeExternalHref(project.link);
   const projectHost = project.nda
     ? "NDA safe case study"
-    : project.link
-      ? new URL(project.link).hostname.replace("www.", "")
+    : projectUrl
+      ? getSafeHostname(projectUrl)
       : "Case study preview";
 
   function handleStartBuildClick() {
@@ -1068,8 +1066,8 @@ function CaseStudyDrawer({ project, onClose }) {
           </div>
 
           <div className="case-drawer__actions">
-            {project.link ? (
-              <a href={project.link} target="_blank" rel="noreferrer">
+            {projectUrl ? (
+              <a href={projectUrl} target="_blank" rel="noopener noreferrer">
                 View live page
                 <ExternalLink size={16} aria-hidden="true" />
               </a>
@@ -1943,17 +1941,6 @@ function App() {
     }
   }
 
-  function handleHeroPlatformClick(filterId) {
-    handleWorkFilterChange(filterId);
-
-    window.requestAnimationFrame(() => {
-      workSectionRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    });
-  }
-
   function handleWorkVisibilityToggle() {
     if (hasMoreWork) {
       setVisibleWorkCount((currentCount) =>
@@ -2020,8 +2007,8 @@ function App() {
       window.setTimeout(() => {
         setEmailCopied(false);
       }, 2000);
-    } catch (error) {
-      console.error("Email copy failed:", error);
+    } catch {
+      console.error("Email copy failed.");
       window.location.href = `mailto:${profile.email}`;
     }
   }
@@ -2037,6 +2024,15 @@ function App() {
       message: true,
     });
     setContactErrors(nextErrors);
+
+    const formData = new FormData(event.currentTarget);
+    if (formData.get("botcheck")) {
+      setContactStatus({
+        type: "success",
+        message: "Inquiry sent successfully. I will be in touch within 24 hours.",
+      });
+      return;
+    }
 
     if (!isContactIntegrationReady) {
       setContactStatus({
@@ -2066,9 +2062,16 @@ function App() {
     setContactStatus({ type: "", message: "" });
 
     try {
-      const formData = new FormData(event.currentTarget);
+      const sanitizedContactForm = {
+        name: contactForm.name.trim().slice(0, MAX_CONTACT_NAME_LENGTH),
+        email: contactForm.email.trim().toLowerCase().slice(0, MAX_CONTACT_EMAIL_LENGTH),
+        message: contactForm.message.trim().slice(0, MAX_CONTACT_MESSAGE_LENGTH),
+      };
 
       formData.set("access_key", WEB3FORMS_ACCESS_KEY);
+      formData.set("name", sanitizedContactForm.name);
+      formData.set("email", sanitizedContactForm.email);
+      formData.set("message", sanitizedContactForm.message);
       formData.set("project_type", selectedProjectType || "Not selected");
       formData.set(
         "subject",
@@ -2087,7 +2090,7 @@ function App() {
         console.error("Web3Forms submission failed:", {
           status: response.status,
           ok: response.ok,
-          response: data,
+          message: data.message,
         });
 
         setContactStatus({
@@ -2107,12 +2110,12 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: contactForm.name,
-          email: contactForm.email,
-          message: contactForm.message,
-          projectIdea: contactForm.message,
+          name: sanitizedContactForm.name,
+          email: sanitizedContactForm.email,
+          message: sanitizedContactForm.message,
+          projectIdea: sanitizedContactForm.message,
           projectType: selectedProjectType || "Not selected",
-          submissionType: "ai_scoper",
+          submissionType: "contact_form",
         }),
       })
         .then((automationResponse) => {
@@ -2120,8 +2123,8 @@ function App() {
             console.warn("Automation endpoint rejected the lead handoff.");
           }
         })
-        .catch((makeError) => {
-          console.warn("Automation endpoint failed:", makeError);
+        .catch(() => {
+          console.warn("Automation endpoint failed.");
         });
 
       ReactGA.event({
@@ -2146,8 +2149,8 @@ function App() {
         type: "success",
         message: "Inquiry sent successfully. I will be in touch within 24 hours.",
       });
-    } catch (error) {
-      console.error("Web3Forms network error:", error);
+    } catch {
+      console.error("Web3Forms network error.");
 
       setContactStatus({
         type: "error",
@@ -2187,18 +2190,7 @@ function App() {
   return (
     <main className="portfolio-shell">
       <NoiseOverlay />
-      <section className="hero" aria-labelledby="hero-title">
-        <img
-          className="hero__image"
-          src={heroImage}
-          alt=""
-          width="1500"
-          height="844"
-          aria-hidden="true"
-          loading="eager"
-          decoding="async"
-          fetchPriority="high"
-        />
+      <section className="hero hero--portfolio-showcase" aria-labelledby="hero-title">
         <div className="hero__overlay" />
         <div className="hero__grain" />
 
@@ -2232,7 +2224,7 @@ function App() {
             href="#contact"
             onClick={(event) => handleNavClick(event, "#contact")}
           >
-            Start inquiry
+            Start a project
           </a>
 
           <button
@@ -2276,7 +2268,7 @@ function App() {
                   href="#contact"
                   onClick={(event) => handleNavClick(event, "#contact")}
                 >
-                  Start inquiry
+                  Start a project
                 </a>
 
                 <a
@@ -2292,7 +2284,7 @@ function App() {
         </header>
 
         <div
-          className="hero__content hero__content--mobile-optimized hero__content--portrait"
+          className="hero__content hero__content--mobile-optimized hero__content--showcase"
           id="top"
         >
           <div className="hero__copy">
@@ -2302,7 +2294,9 @@ function App() {
             </p>
 
             <h1 id="hero-title" className="hero-animate hero-animate--title">
-              {profile.headline}
+              {profile.headline.before}{" "}
+              <span className="hero__headline-accent">{profile.headline.accent}</span>{" "}
+              {profile.headline.after}
             </h1>
 
             <div className="hero-animate hero-animate--subtext">
@@ -2315,115 +2309,132 @@ function App() {
             >
               <MagneticCTA
                 className="btn btn--primary hero__primary-cta"
-                href="#contact"
+                href="#work"
                 strength={12}
                 onClick={() => {
                   ReactGA.event({
                     category: "User",
                     action: "Clicked Hero CTA",
-                    label: "Contact Inquiry",
+                    label: "Selected Work",
                   });
                 }}
               >
-                <Mail className="hero__primary-cta-icon" size={18} aria-hidden="true" />
-                Start a quick inquiry
+                View selected work
+                <ArrowUpRight className="hero__primary-cta-icon" size={18} aria-hidden="true" />
               </MagneticCTA>
 
-              <a className="btn btn--secondary" href="#work">
-                <ArrowUpRight size={18} aria-hidden="true" />
-                Review selected work
+              <a className="btn btn--secondary" href="#contact">
+                <Mail size={18} aria-hidden="true" />
+                Start a project
               </a>
             </div>
 
-            <div className="hero__value-grid" aria-label="Hybrid conversion and backend systems value">
-              {profile.heroBullets.map((bullet) => (
-                <div className="hero__value-item" key={bullet.label}>
-                  <strong>{bullet.label}</strong>
-                  <span>{bullet.value}</span>
-                </div>
-              ))}
-            </div>
+            <div className="hero-trust hero-animate hero-animate--meta">
+              <div className="hero-trust__identity">
+                <img
+                  src={johnMichaelPortrait}
+                  alt="John Michael Bonganay"
+                  width="64"
+                  height="64"
+                  loading="eager"
+                  decoding="async"
+                />
+                <span>
+                  <strong>{profile.name}</strong>
+                  <small>Philippines · working worldwide</small>
+                </span>
+              </div>
 
-            <div
-              className="hero__meta hero-animate hero-animate--meta"
-              aria-label="Location, availability, and local time"
-            >
-              <span>
-                <MapPin size={16} aria-hidden="true" />
-                {profile.location}
-              </span>
-
-              <span className="hero__availability">
-                <span className="availability-beacon" aria-hidden="true" />
-                Available for remote roles and projects
-              </span>
-
-              <LocalPhtClock />
+              <ul className="hero-trust__proof" aria-label="Portfolio trust signals">
+                {profile.heroProof.map((proof) => (
+                  <li key={proof.label}>
+                    <strong>{proof.value}</strong>
+                    <span>{proof.label}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
           <aside
-            className="hero-portrait hero-animate hero-animate--portrait"
-            aria-label="Professional portrait of John Michael Bonganay"
+            className="hero-showcase hero-animate hero-animate--portrait"
+            aria-label="Selected portfolio project previews"
           >
-            <div className="hero-portrait__frame">
-              <span className="hero-portrait__glow hero-portrait__glow--one" aria-hidden="true" />
-              <span className="hero-portrait__glow hero-portrait__glow--two" aria-hidden="true" />
+            <div className="hero-showcase__glow" aria-hidden="true" />
 
-              <div className="hero-portrait__image-wrap">
-                <img
-                  src={johnMichaelPortrait}
-                  alt="John Michael Bonganay, landing page developer and automation specialist"
-                  className="hero-portrait__image"
-                  width="900"
-                  height="1125"
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-
-              <div className="hero-portrait__caption">
-                <div>
-                  <span>Landing pages + automation systems</span>
-
-                  <div
-                    className="hero-portrait__tags"
-                    aria-label="Filter selected works by platform or skill category"
-                  >
-                    {heroPlatformTags.map((tag) => (
-                      <button
-                        key={tag.filterId}
-                        type="button"
-                        className="hero-portrait__tag"
-                        onClick={() => handleHeroPlatformClick(tag.filterId)}
-                      >
-                        {tag.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <a
-                  className="hero-portrait__link"
-                  href="https://www.onlinejobs.ph/jobseekers/info/1517849"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View resume profile
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </a>
-              </div>
+            <div className="hero-showcase__result">
+              <TrendingUp size={16} aria-hidden="true" />
+              <span>Sales-backed design</span>
+              <strong>$52.9K</strong>
             </div>
+
+            <article className="hero-project hero-project--primary">
+              <div className="hero-project__browser" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <small>barkchester.com</small>
+              </div>
+              <BlurImage
+                src="/work/barkchester-united.webp"
+                alt="Barkchester United Shopify product page"
+                width={1440}
+                height={722}
+                sizes="(max-width: 960px) 92vw, 540px"
+                wrapperClassName="hero-project__image-shell"
+                className="hero-project__image"
+                loading="eager"
+                fetchpriority="high"
+              />
+              <div className="hero-project__caption">
+                <span>
+                  <small>Shopify product page</small>
+                  <strong>Barkchester United</strong>
+                </span>
+                <em>4.82% conversion</em>
+              </div>
+            </article>
+
+            <article className="hero-project hero-project--secondary">
+              <div className="hero-project__browser" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <small>tryvistaveil.com</small>
+              </div>
+              <BlurImage
+                src="/work/vista-veil.webp"
+                alt="VistaVeil beauty product landing page"
+                width={1440}
+                height={723}
+                sizes="(max-width: 960px) 52vw, 300px"
+                wrapperClassName="hero-project__image-shell"
+                className="hero-project__image"
+                loading="lazy"
+              />
+              <div className="hero-project__mini-label">Beauty DTC</div>
+            </article>
+
+            <article className="hero-project hero-project--tertiary">
+              <div className="hero-project__browser" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+                <small>make.com / webhook pipeline</small>
+              </div>
+              <BlurImage
+                src="/work/automation-inbound-triage-pipeline.webp"
+                alt="Inbound lead triage automation pipeline"
+                width={1835}
+                height={879}
+                sizes="(max-width: 960px) 48vw, 280px"
+                wrapperClassName="hero-project__image-shell"
+                className="hero-project__image"
+                loading="lazy"
+              />
+              <div className="hero-project__mini-label">AI lead automation</div>
+            </article>
           </aside>
-        </div>
-
-        <div className="proof-grid" aria-label="Profile highlights">
-          {profile.stats.map((stat) => (
-            <div className="proof-item" key={stat.label}>
-              <strong>{stat.value}</strong>
-              <span>{stat.label}</span>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -2638,7 +2649,7 @@ function App() {
                     <em>{emailCopied ? "Copied" : "Copy"}</em>
                   </button>
 
-                  <a href={profile.linkedin} target="_blank" rel="noreferrer">
+                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
                     <ExternalLink size={18} aria-hidden="true" />
                     <span>
                       <small>LinkedIn</small>
@@ -2733,6 +2744,7 @@ function App() {
                       autoComplete="name"
                       placeholder=" "
                       value={contactForm.name}
+                      maxLength={MAX_CONTACT_NAME_LENGTH}
                       onChange={handleContactChange}
                       onBlur={handleContactBlur}
                       aria-invalid={Boolean(
@@ -2760,6 +2772,7 @@ function App() {
                       autoComplete="email"
                       placeholder=" "
                       value={contactForm.email}
+                      maxLength={MAX_CONTACT_EMAIL_LENGTH}
                       onChange={handleContactChange}
                       onBlur={handleContactBlur}
                       aria-invalid={Boolean(
@@ -2824,6 +2837,7 @@ function App() {
                       rows="5"
                       placeholder=" "
                       value={contactForm.message}
+                      maxLength={MAX_CONTACT_MESSAGE_LENGTH}
                       onChange={handleContactChange}
                       onBlur={handleContactBlur}
                       aria-invalid={Boolean(
@@ -2980,7 +2994,7 @@ function App() {
                 Email me
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
-              <a href={profile.linkedin} target="_blank" rel="noreferrer">
+              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
                 LinkedIn
                 <ArrowUpRight size={15} aria-hidden="true" />
               </a>
