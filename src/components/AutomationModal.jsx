@@ -9,6 +9,30 @@ const MAX_EMAIL_LENGTH = 240;
 const MAX_PROJECT_IDEA_LENGTH = 3000;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function getProposalEngineErrorMessage(status, fallbackMessage = "") {
+  if (status === 503) {
+    return "The AI Proposal Engine webhook is not configured yet. Add MAKE_WEBHOOK_URL and try again.";
+  }
+
+  if (status === 502) {
+    return "The Make.com automation handoff failed. Please check the webhook and try again.";
+  }
+
+  if (status === 429) {
+    return "Too many test requests. Please wait a few minutes and try again.";
+  }
+
+  if (status === 403) {
+    return "The automation request was blocked. Please refresh the page and try again.";
+  }
+
+  if (status === 400) {
+    return "Please check the form details and try again.";
+  }
+
+  return fallbackMessage || "Something went wrong. Please try again.";
+}
+
 function getSafeExternalHref(value) {
   if (!value) {
     return "";
@@ -49,7 +73,7 @@ const automationFeatureFallbacks = [
   {
     title: "LLM Integration & Prompt Engineering",
     copy:
-      "Isolated AI-scoping payloads through a dedicated submissionType signature and routed project ideas into Google Gemini 2.5 Flash using structured system instructions, allowing the workflow to generate concise, client ready proposal content from raw intake data.",
+      "Isolated AI scoping payloads through a dedicated submissionType signature and routed project ideas into Google Gemini 2.5 Flash using structured system instructions, allowing the workflow to generate concise, client ready proposal content from raw intake data.",
   },
   {
     title: "Dynamic Document Compilation",
@@ -128,8 +152,12 @@ function AiProposalEngineForm() {
         }),
       });
 
+      const data = await response.json().catch(() => ({}));
+
       if (!response.ok) {
-        throw new Error("Unable to trigger proposal engine.");
+        throw new Error(
+          getProposalEngineErrorMessage(response.status, data.message || data.error),
+        );
       }
 
       setFormValues({
@@ -138,9 +166,13 @@ function AiProposalEngineForm() {
         projectIdea: "",
       });
       setIsSuccess(true);
-    } catch {
-      console.error("AI Proposal Engine request failed.");
-      setFormError("Something went wrong. Please try again.");
+    } catch (error) {
+      console.error("AI Proposal Engine request failed.", error);
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -271,6 +303,7 @@ export default function AutomationModal({ project, isOpen, onClose }) {
     project.calendlyUrl || "https://calendly.com/johnmichaelbonganay1231/30min",
   );
   const projectUrl = getSafeExternalHref(project.link);
+  const isProposalEngineProject = project.id === "automation-inbound-triage-crm";
 
   const technicalFeatures = (project.architectureDetails?.length
     ? project.architectureDetails
@@ -352,7 +385,7 @@ export default function AutomationModal({ project, isOpen, onClose }) {
             ))}
           </div>
 
-          <AiProposalEngineForm />
+          {isProposalEngineProject ? <AiProposalEngineForm /> : null}
 
           <div className="automation-modal__actions">
             <a

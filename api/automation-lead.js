@@ -1,10 +1,27 @@
 const MAX_BODY_BYTES = 12_000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 5;
+const IP_RATE_LIMIT_MAX_REQUESTS = 5;
+const USER_RATE_LIMIT_MAX_REQUESTS = 3;
 const WEBHOOK_TIMEOUT_MS = 8_000;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_SUBMISSION_TYPES = new Set(["ai_scoper", "contact_form"]);
-const rateLimitStore = new Map();
+const BASE_ALLOWED_FIELDS = new Set([
+  "botcheck",
+  "email",
+  "message",
+  "name",
+  "projectIdea",
+  "projectType",
+  "submissionType",
+]);
+const REQUIRED_FIELDS_BY_SUBMISSION_TYPE = {
+  ai_scoper: ["name", "email", "projectIdea", "submissionType"],
+  contact_form: ["name", "email", "message", "projectIdea", "projectType", "submissionType"],
+};
+const rateLimitStores = {
+  ip: new Map(),
+  user: new Map(),
+};
 
 function getHeader(request, name) {
   if (typeof request.headers?.get === "function") {
@@ -30,6 +47,26 @@ function parsePayload(body) {
   return body;
 }
 
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function getBodyByteLength(body) {
+  if (!body) {
+    return 0;
+  }
+
+  if (typeof body === "string") {
+    return Buffer.byteLength(body, "utf8");
+  }
+
+  try {
+    return Buffer.byteLength(JSON.stringify(body), "utf8");
+  } catch {
+    return MAX_BODY_BYTES + 1;
+  }
+}
+
 function isSameOriginRequest(request) {
   const origin = getHeader(request, "origin");
   const host = getHeader(request, "host");
@@ -45,10 +82,6 @@ function isSameOriginRequest(request) {
   }
 }
 
-function cleanText(value, maxLength = 1200) {
-  return String(value ?? "").trim().slice(0, maxLength);
-}
-
 function getClientIp(request) {
   const forwardedFor = getHeader(request, "x-forwarded-for");
 
@@ -59,20 +92,56 @@ function getClientIp(request) {
   return getHeader(request, "x-real-ip") || request.socket?.remoteAddress || "unknown";
 }
 
-function isRateLimited(clientIp) {
+function checkRateLimit(store, key, maxRequests) {
   const now = Date.now();
-  const currentWindow = rateLimitStore.get(clientIp);
+
+  for (const [storedKey, currentWindow] of store.entries()) {
+    if (currentWindow.resetAt <= now) {
+      store.delete(storedKey);
+    }
+  }
+
+  const currentWindow = store.get(key);
 
   if (!currentWindow || currentWindow.resetAt <= now) {
-    rateLimitStore.set(clientIp, {
+    store.set(key, {
       count: 1,
       resetAt: now + RATE_LIMIT_WINDOW_MS,
     });
-    return false;
+    return { limited: false };
   }
 
   currentWindow.count += 1;
-  return currentWindow.count > RATE_LIMIT_MAX_REQUESTS;
+
+  if (currentWindow.count <= maxRequests) {
+    return { limited: false };
+  }
+
+  return {
+    limited: true,
+    retryAfterSeconds: Math.max(
+      1,
+      Math.ceil((currentWindow.resetAt - now) / 1000),
+    ),
+  };
+}
+
+function applyRateLimits(request, payload) {
+  const ipLimit = checkRateLimit(
+    rateLimitStores.ip,
+    getClientIp(request),
+    IP_RATE_LIMIT_MAX_REQUESTS,
+  );
+
+  if (ipLimit.limited) {
+    return ipLimit;
+  }
+
+  return checkRateLimit(
+    rateLimitStores.user,
+    `${payload.submissionType}:${payload.email}`,
+    USER_RATE_LIMIT_MAX_REQUESTS,
+  );
 }
 
 function isAllowedWebhookUrl(value) {
@@ -84,38 +153,144 @@ function isAllowedWebhookUrl(value) {
   }
 }
 
-function validatePayload(payload) {
-  const cleanedPayload = {
-    name: cleanText(payload.name, 160),
-    email: cleanText(payload.email, 240).toLowerCase(),
-    message: cleanText(payload.message ?? payload.projectIdea, 3000),
-    projectIdea: cleanText(payload.projectIdea ?? payload.message, 3000),
-    projectType: cleanText(payload.projectType || "Not selected", 160),
-    submissionType: cleanText(payload.submissionType || "ai_scoper", 80),
-    botcheck: cleanText(payload.botcheck, 20),
-  };
+function validateStringField(payload, fieldName, options = {}) {
+  const {
+    maxLength = 1200,
+    minLength = 0,
+    pattern = null,
+    required = false,
+  } = options;
+  const value = payload[fieldName];
 
-  if (cleanedPayload.botcheck) {
+  if (value === undefined || value === null) {
+    if (required) {
+      return { ok: false };
+    }
+
+    return { ok: true, value: "" };
+  }
+
+  if (typeof value !== "string") {
+    return { ok: false };
+  }
+
+  const cleanedValue = value.trim();
+
+  if (required && !cleanedValue) {
+    return { ok: false };
+  }
+
+  if (cleanedValue.length < minLength || cleanedValue.length > maxLength) {
+    return { ok: false };
+  }
+
+  if (pattern && !pattern.test(cleanedValue)) {
+    return { ok: false };
+  }
+
+  return { ok: true, value: cleanedValue };
+}
+
+function validatePayload(payload) {
+  if (!isPlainObject(payload)) {
+    return { ok: false, status: 400, error: "Invalid request" };
+  }
+
+  const unexpectedField = Object.keys(payload).find(
+    (fieldName) => !BASE_ALLOWED_FIELDS.has(fieldName),
+  );
+
+  if (unexpectedField) {
+    return { ok: false, status: 400, error: "Invalid request" };
+  }
+
+  const botcheck = validateStringField(payload, "botcheck", {
+    maxLength: 20,
+  });
+
+  if (!botcheck.ok) {
+    return { ok: false, status: 400, error: "Invalid request" };
+  }
+
+  if (botcheck.value) {
     return { ok: false, status: 202, error: null };
   }
 
-  if (!cleanedPayload.name || cleanedPayload.name.length > 160) {
+  const submissionType = validateStringField(payload, "submissionType", {
+    maxLength: 80,
+    required: true,
+  });
+
+  if (
+    !submissionType.ok ||
+    !ALLOWED_SUBMISSION_TYPES.has(submissionType.value)
+  ) {
     return { ok: false, status: 400, error: "Invalid request" };
   }
 
-  if (!EMAIL_PATTERN.test(cleanedPayload.email)) {
+  const requiredFields =
+    REQUIRED_FIELDS_BY_SUBMISSION_TYPE[submissionType.value] || [];
+  const missingRequiredField = requiredFields.find(
+    (fieldName) => payload[fieldName] === undefined || payload[fieldName] === null,
+  );
+
+  if (missingRequiredField) {
     return { ok: false, status: 400, error: "Invalid request" };
   }
 
-  if (cleanedPayload.projectIdea.length < 20) {
+  const name = validateStringField(payload, "name", {
+    maxLength: 160,
+    required: true,
+  });
+  const email = validateStringField(payload, "email", {
+    maxLength: 240,
+    pattern: EMAIL_PATTERN,
+    required: true,
+  });
+  const projectIdea = validateStringField(payload, "projectIdea", {
+    maxLength: 3000,
+    minLength: 20,
+    required: true,
+  });
+  const message = validateStringField(payload, "message", {
+    maxLength: 3000,
+    minLength: submissionType.value === "contact_form" ? 20 : 0,
+    required: submissionType.value === "contact_form",
+  });
+  const projectType = validateStringField(payload, "projectType", {
+    maxLength: 160,
+    required: submissionType.value === "contact_form",
+  });
+
+  if (
+    !name.ok ||
+    !email.ok ||
+    !projectIdea.ok ||
+    !message.ok ||
+    !projectType.ok
+  ) {
     return { ok: false, status: 400, error: "Invalid request" };
   }
 
-  if (!ALLOWED_SUBMISSION_TYPES.has(cleanedPayload.submissionType)) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
+  return {
+    ok: true,
+    payload: {
+      name: name.value,
+      email: email.value.toLowerCase(),
+      message: message.value || projectIdea.value,
+      projectIdea: projectIdea.value,
+      projectType: projectType.value || "Not selected",
+      submissionType: submissionType.value,
+    },
+  };
+}
 
-  return { ok: true, payload: cleanedPayload };
+function sendRateLimitResponse(response, result) {
+  response.setHeader("Retry-After", String(result.retryAfterSeconds));
+  return response.status(429).json({
+    error: "Too many requests",
+    retryAfter: result.retryAfterSeconds,
+  });
 }
 
 export default async function handler(request, response) {
@@ -140,18 +315,8 @@ export default async function handler(request, response) {
     return response.status(413).json({ error: "Request too large" });
   }
 
-  if (isRateLimited(getClientIp(request))) {
-    return response.status(429).json({ error: "Too many requests" });
-  }
-
-  const webhookUrl = process.env.MAKE_WEBHOOK_URL;
-
-  if (!webhookUrl) {
-    return response.status(503).json({ error: "Automation endpoint is not configured" });
-  }
-
-  if (!isAllowedWebhookUrl(webhookUrl)) {
-    return response.status(503).json({ error: "Automation endpoint is not configured" });
+  if (getBodyByteLength(request.body) > MAX_BODY_BYTES) {
+    return response.status(413).json({ error: "Request too large" });
   }
 
   const payload = parsePayload(request.body);
@@ -163,6 +328,22 @@ export default async function handler(request, response) {
     }
 
     return response.status(validation.status).json({ error: validation.error });
+  }
+
+  const rateLimit = applyRateLimits(request, validation.payload);
+
+  if (rateLimit.limited) {
+    return sendRateLimitResponse(response, rateLimit);
+  }
+
+  const webhookUrl = process.env.MAKE_WEBHOOK_URL;
+
+  if (!webhookUrl) {
+    return response.status(503).json({ error: "Automation endpoint is not configured" });
+  }
+
+  if (!isAllowedWebhookUrl(webhookUrl)) {
+    return response.status(503).json({ error: "Automation endpoint is not configured" });
   }
 
   const forwardedPayload = {

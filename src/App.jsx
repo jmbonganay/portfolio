@@ -27,7 +27,6 @@ import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import ScrollToTop from "./components/ScrollToTop";
 import AutomationModal from "./components/AutomationModal";
-import GHLAutomationCard from "./components/GHLAutomationCard";
 import StatusWidget from "./components/StatusWidget";
 import { HoverCard, StaggeredGrid, StaggeredGridItem } from "./components/MotionWrappers";
 import { profile } from "./data/profile";
@@ -61,28 +60,60 @@ const techStackItems = [
   { name: "API Integrations", mark: "API" },
   { name: "n8n", mark: "n8n" },
 ];
-const WORK_PAGE_SIZE = 6;
-const COMPACT_WORK_PAGE_SIZE = 3;
-// These client identifiers are public by design and visible in the browser.
-// Environment values remain preferred so they can be rotated without a code change.
-const WEB3FORMS_ACCESS_KEY =
-  import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "b07a88a1-7a8b-4307-a080-e13b3c51f57c";
-const HCAPTCHA_SITE_KEY =
-  import.meta.env.VITE_HCAPTCHA_SITE_KEY || "50b2fe65-b00b-4b9e-ad62-3ba471098be2";
+const WORK_PAGE_SIZE = 5;
+const COMPACT_WORK_PAGE_SIZE = 4;
+// Public client identifiers are loaded from environment variables so they can
+// be rotated without source-code edits.
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "";
+const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY || "";
 const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
 const MAX_CONTACT_NAME_LENGTH = 160;
 const MAX_CONTACT_EMAIL_LENGTH = 240;
 const MAX_CONTACT_MESSAGE_LENGTH = 3000;
 
-const ALL_WORK_FILTER = "All";
+const ALL_WORK_FILTER = "featured";
+const WORK_ARCHIVE_FILTER = "all";
 
-const workFilters = ["All", "Shopify", "WordPress", "GoHighLevel", "Netlify", "Automations"];
+const featuredWorkIds = [
+  "barkchester-united",
+  "vista-veil",
+  "wordpress-woocommerce-30m",
+  "nest-marketing",
+  "ghl-production-automations",
+];
+
+const automationSpotlightIds = [
+  "automation-inbound-triage-crm",
+  "ghl-production-automations",
+];
+
+const workFilters = [
+  {
+    id: "featured",
+    label: "Featured",
+    description: "A curated mix of the strongest proof, polish, and platform range.",
+  },
+  {
+    id: "ecommerce",
+    label: "Ecommerce",
+    description: "Shopify product pages and DTC storefront work built around purchase clarity.",
+  },
+  {
+    id: "landing",
+    label: "Landing pages",
+    description: "WordPress, Netlify, and advertorial pages shaped for campaign traffic.",
+  },
+  {
+    id: "automation",
+    label: "CRM & automation",
+    description: "GoHighLevel workflows, lead routing, and backend automation systems.",
+  },
+];
 
 const workProofHighlights = [
-  { value: "$52.9K", label: "top Shopify page sales proof" },
-  { value: "1,229", label: "orders from one campaign build" },
-  { value: "689+", label: "production leads routed in GHL" },
-  { value: "99.3%+", label: "email delivery proof" },
+  { value: "$52.9K", label: "top Shopify sales proof" },
+  { value: "1,229", label: "orders from one build" },
+  { value: "689+", label: "production leads routed" },
 ];
 
 function getProjectBadges(project) {
@@ -130,62 +161,319 @@ const footerLinks = [
 
 const selectedWorkMeta = {
   "barkchester-united": {
-    title: "High converting Shopify Product Page",
+    eyebrow: "Flagship Shopify case study",
+    title: "Barkchester United Shopify Product Page",
+    summary:
+      "A pet product page rebuilt around emotional offer framing, review proof, benefit hierarchy, and a cleaner purchase path.",
     role: "Built Shopify product page, improved offer layout, handled responsive QA.",
+    outcome: "$52.9K total sales, 1,229 orders, and a 4.82% conversion rate.",
+    metrics: [
+      { value: "$52.9K", label: "Total sales" },
+      { value: "1,229", label: "Orders" },
+      { value: "4.82%", label: "Conversion" },
+    ],
+    tags: ["Shopify", "Conversion build", "Sales proof"],
   },
   "vista-veil": {
-    title: "Beauty tech Shopify Product Page",
+    eyebrow: "Beauty ecommerce",
+    title: "VistaVeil Beauty Tech Product Page",
+    summary:
+      "A polished beauty tech offer page with product education, pricing contrast, review proof, and a smoother bundle decision flow.",
     role: "Built Shopify offer page, shaped product story, handled responsive QA.",
+    outcome: "$28.7K sales proof across a live Shopify campaign.",
+    metrics: [
+      { value: "$28.7K", label: "Total sales" },
+      { value: "323", label: "Orders" },
+    ],
+    tags: ["Shopify", "Beauty tech"],
   },
   "grippit-strength": {
+    eyebrow: "Health product offer",
     title: "Health Product Shopify Sales Page",
+    summary:
+      "A direct response Shopify page that explains the use case quickly, supports buyer confidence, and keeps bundle cards easy to compare.",
     role: "Shopify build, offer layout, responsive product QA",
+    outcome: "$7,992 total sales with a 3.91% conversion rate.",
+    metrics: [
+      { value: "$7,992", label: "Total sales" },
+      { value: "3.91%", label: "Conversion" },
+    ],
+    tags: ["Shopify", "Health product"],
+  },
+  "purely-nutrient": {
+    eyebrow: "Supplement ecommerce",
+    title: "Purely Nutrient Black Seed Oil Page",
+    summary:
+      "A supplement page structured around trust cues, warning messaging, product education, review proof, and bundle purchase cards.",
+    role: "Shopify product page build, supplement offer layout, responsive QA.",
+    outcome: "Clear supplement positioning with trust led product education and bundle purchase flow.",
+    metrics: [
+      { value: "Shopify", label: "Platform" },
+      { value: "Supplement", label: "Category" },
+    ],
+    tags: ["Shopify", "Supplement"],
+  },
+  "pimax-shopify": {
+    eyebrow: "Premium ecommerce",
+    title: "Pimax VR Ecommerce Website",
+    summary:
+      "A polished Shopify brand experience for premium VR hardware, supporting product discovery and campaign presentation.",
+    role: "Supported Shopify website design, front end build, and responsive QA.",
+    outcome: "Premium storefront presentation for a high consideration tech product.",
+    metrics: [
+      { value: "Shopify", label: "Platform" },
+      { value: "VR Tech", label: "Category" },
+    ],
+    tags: ["Shopify", "Brand site"],
+  },
+  "wordpress-woocommerce-30m": {
+    eyebrow: "NDA safe revenue proof",
+    title: "WordPress / WooCommerce Sales Dashboard",
+    summary:
+      "A confidential WordPress commerce project presented through cropped revenue proof while protecting client and campaign details.",
+    role: "Supported WordPress/WooCommerce commerce flow, tracking aware launch execution, and proof safe presentation.",
+    outcome: "$30.0M total sales exposure across a high volume WooCommerce environment.",
+    metrics: [
+      { value: "$30.0M", label: "Total sales" },
+      { value: "8,806", label: "Orders" },
+    ],
+    tags: ["WordPress", "NDA proof"],
   },
   "wordpress-funnelkit-2m": {
+    eyebrow: "Funnel performance",
     title: "Marketing Funnel Revenue Snapshot",
+    summary:
+      "A WordPress funnel proof snapshot showing revenue, contacts, orders, and upsell activity without exposing private campaign creative.",
     role: "Supported WordPress funnel flow, reviewed checkout UX, documented sales proof.",
+    outcome: "$2.35M revenue proof from a WordPress funnel environment.",
+    metrics: [
+      { value: "$2.35M", label: "Revenue" },
+      { value: "16,566", label: "Orders" },
+    ],
+    tags: ["WordPress", "Funnel proof"],
   },
   "wordpress-campaign-2m": {
+    eyebrow: "WooCommerce proof",
     title: "WooCommerce Campaign Sales Proof",
+    summary:
+      "An NDA safe commerce proof entry showing WordPress campaign performance while keeping the client and offer private.",
     role: "Supported WooCommerce campaign flow, prepared NDA safe performance proof.",
+    outcome: "$2.32M total sales proof from WooCommerce campaign activity.",
+    metrics: [
+      { value: "$2.32M", label: "Total sales" },
+      { value: "19,216", label: "Orders" },
+    ],
+    tags: ["WordPress", "Sales proof"],
   },
   "wordpress-checkout-153k": {
+    eyebrow: "Checkout flow proof",
     title: "Checkout Flow Performance Snapshot",
+    summary:
+      "A private WordPress checkout example showing sales and order activity without exposing product, client, or campaign details.",
     role: "Reviewed checkout flow, supported payment path QA, prepared sales proof.",
+    outcome: "$153.7K checkout flow proof with order activity preserved in an NDA safe format.",
+    metrics: [
+      { value: "$153.7K", label: "Total sales" },
+      { value: "128", label: "Orders" },
+    ],
+    tags: ["WordPress", "Checkout"],
   },
   aquablast: {
+    eyebrow: "Campaign landing page",
     title: "Responsive WordPress Landing Page",
+    summary:
+      "A bright family product landing page with a clear hero offer, benefit checklist, product use visuals, and direct CTA timing.",
     role: "Built WordPress landing page, improved hero flow, handled mobile layout.",
+    outcome: "Responsive campaign page with cleaner hero hierarchy and mobile order flow.",
+    tags: ["WordPress", "Landing page"],
   },
   "brite-buff": {
+    eyebrow: "Beauty landing page",
     title: "Beauty Product WordPress Page",
+    summary:
+      "A beauty product page using softer brand styling, product first visuals, benefit copy, and a clear order path.",
     role: "Built WordPress product page, clarified benefits, improved CTA path.",
+    outcome: "Clean beauty offer flow with clearer benefits and purchase direction.",
+    tags: ["WordPress", "Beauty"],
   },
   "medtraker-pro": {
+    eyebrow: "Health landing page",
     title: "Health Product Landing Page",
+    summary:
+      "A health focused product page structured around problem solution messaging, product education, and an accessible CTA path.",
     role: "Built WordPress landing page, organized product education, improved CTA flow.",
+    outcome: "Clearer health product education with responsive section flow.",
+    tags: ["WordPress", "Health"],
   },
   "ziptite-pro": {
+    eyebrow: "Product landing page",
     title: "eCommerce WordPress Product Page",
+    summary:
+      "A clean food sealer landing page with review proof, benefit led copy, green brand direction, and a prominent order CTA.",
     role: "Built WordPress product page, added proof flow, improved order CTA layout.",
+    outcome: "Sharper proof flow and order focused CTA hierarchy for a utility product.",
+    tags: ["WordPress", "Product page"],
   },
   "nest-marketing": {
+    eyebrow: "Agency website",
     title: "Lead generation Agency Website",
+    summary:
+      "A premium dark agency website with strong hero messaging, service clarity, lead generation CTA flow, and responsive polish.",
     role: "Built responsive agency site, refined service positioning, supported Netlify launch.",
+    outcome: "A polished lead generation site with clearer service positioning and launch ready responsiveness.",
+    metrics: [
+      { value: "Netlify", label: "Platform" },
+      { value: "Agency", label: "Website" },
+    ],
+    tags: ["Netlify", "Agency site"],
   },
   "skeeter-strike-update": {
+    eyebrow: "Advertorial bridge page",
     title: "Direct response Advertorial Page",
+    summary:
+      "A long form advertorial built around urgency, location based messaging, a strong curiosity headline, and a click through path.",
     role: "Built advertorial page, shaped story flow, improved CTA hierarchy.",
+    outcome: "Story led warm up page designed to bridge cold traffic into the product offer.",
+    tags: ["GoHighLevel", "Advertorial"],
   },
   "vistaveil-executives": {
+    eyebrow: "Beauty advertorial",
     title: "Beauty tech Advertorial Page",
+    summary:
+      "A premium beauty tech advertorial using problem aware framing, editorial credibility cues, and before/after visual context.",
     role: "Built advertorial UX, structured problem aware messaging, improved offer bridge.",
+    outcome: "Editorial offer bridge designed for beauty tech shopper education.",
+    tags: ["GoHighLevel", "Beauty"],
   },
   "grippit-nurse": {
+    eyebrow: "Health advertorial",
     title: "Health Product Advertorial",
+    summary:
+      "A health product story page using a relatable daily frustration hook, problem solution framing, and mobile first reading flow.",
     role: "Built long form sales page, refined story flow, improved mobile reading.",
+    outcome: "Long form sales story structured to warm readers before the product page.",
+    tags: ["GoHighLevel", "Health"],
+  },
+  "automation-inbound-triage-crm": {
+    eyebrow: "AI automation system",
+    title: "Lead Triage & AI Proposal Engine",
+    summary:
+      "A backend workflow that captures portfolio leads, enriches company context, scopes requests with Gemini, and sends PDF proposals.",
+    role: "Architected webhook intake, enrichment routing, LLM scoping, document generation, CRM sync, and email dispatch.",
+    outcome: "A fast, automated follow up layer behind the portfolio contact flow.",
+    metrics: [
+      { value: "Gemini", label: "AI scoping" },
+      { value: "PDF", label: "Proposal output" },
+      { value: "Make.com", label: "Webhook engine" },
+    ],
+    tags: ["Automation", "AI workflow"],
+  },
+  "ghl-production-automations": {
+    eyebrow: "Production CRM automation",
+    title: "GoHighLevel Lead Nurture & LTO Pipelines",
+    summary:
+      "A production CRM workflow handling lead capture, tagging, timed nurture delays, and NDA safe email performance reporting.",
+    role: "Configured GoHighLevel routing, CRM fields, follow up sequences, wait nodes, and deliverability monitoring.",
+    outcome: "689+ leads routed with 99.3%+ email delivery performance.",
+    metrics: [
+      { value: "689+", label: "Leads routed" },
+      { value: "99.3%+", label: "Delivery" },
+    ],
+    tags: ["GoHighLevel", "Automation"],
   },
 };
+
+function getWorkFilterDefinition(filterId) {
+  if (filterId === WORK_ARCHIVE_FILTER) {
+    return {
+      id: WORK_ARCHIVE_FILTER,
+      label: "All projects",
+      description: "The full project archive, with the curated presentation kept up front.",
+    };
+  }
+
+  return (
+    workFilters.find((filter) => filter.id === filterId) ?? workFilters[0]
+  );
+}
+
+function getProjectsForWorkFilter(filterId, entries) {
+  if (filterId === WORK_ARCHIVE_FILTER) {
+    return entries;
+  }
+
+  if (filterId === "featured") {
+    return featuredWorkIds
+      .map((projectId) => entries.find((project) => project.id === projectId))
+      .filter(Boolean);
+  }
+
+  if (filterId === "ecommerce") {
+    return entries.filter((project) => project.category === "Shopify");
+  }
+
+  if (filterId === "landing") {
+    return entries.filter((project) =>
+      ["WordPress", "Netlify", "GoHighLevel"].includes(project.category),
+    );
+  }
+
+  if (filterId === "automation") {
+    const automationProjects = entries.filter((project) =>
+      ["GoHighLevel", "Automations"].includes(project.category),
+    );
+
+    const spotlightProjects = automationSpotlightIds
+      .map((projectId) =>
+        automationProjects.find((project) => project.id === projectId),
+      )
+      .filter(Boolean);
+
+    return [
+      ...spotlightProjects,
+      ...automationProjects.filter(
+        (project) => !automationSpotlightIds.includes(project.id),
+      ),
+    ];
+  }
+
+  return entries;
+}
+
+function getShowcaseMeta(project) {
+  return selectedWorkMeta[project.id] ?? {};
+}
+
+function getShowcaseTitle(project) {
+  return getShowcaseMeta(project).title ?? project.title;
+}
+
+function getShowcaseEyebrow(project) {
+  return getShowcaseMeta(project).eyebrow ?? project.type ?? project.category;
+}
+
+function getShowcaseSummary(project) {
+  return getShowcaseMeta(project).summary ?? getCompactProjectSummary(project);
+}
+
+function getShowcaseRole(project) {
+  return getShowcaseMeta(project).role ?? project.role;
+}
+
+function getShowcaseOutcome(project) {
+  return getShowcaseMeta(project).outcome ?? getProjectResult(project);
+}
+
+function getShowcaseTags(project) {
+  return getShowcaseMeta(project).tags ?? getCompactProjectBadges(project);
+}
+
+function getShowcaseMetrics(project, limit = 2) {
+  return (getShowcaseMeta(project).metrics ?? getResultMetrics(project)).slice(
+    0,
+    limit,
+  );
+}
 
 function getCompactProjectSummary(project) {
   const summary = project.summary || project.description || "";
@@ -401,112 +689,179 @@ const automationFlowSteps = [
 const roleFitPaths = [
   {
     icon: ShoppingCart,
-    title: "For project clients",
+    audience: "For founders, brands, and project clients",
+    title: "Project Builds & Campaign Support",
+    fitHeadline: "When you need a page built and launched cleanly.",
     summary:
-      "A practical fit when you need a landing page, product page, or funnel rebuilt with clearer messaging, stronger proof, and cleaner lead handoff.",
-    points: [
-      "Shopify, WordPress, GoHighLevel, and campaign pages",
-      "Offer hierarchy, CTA flow, proof blocks, and responsive QA",
-      "Form, tracking, notification, and CRM handoff support",
+      "A practical fit when you need more than a nice layout. I help shape CTA clarity, responsive QA, proof sections, and the lead handoff around the page.",
+    chips: [
+      "Landing pages",
+      "Shopify pages",
+      "WordPress builds",
+      "Funnels",
+      "Form handoff",
     ],
-    ctaLabel: "Start project inquiry",
-    ctaHref: "#contact",
+    points: [
+      "Offer hierarchy, CTA flow, proof blocks, and mobile behavior",
+      "Shopify, WordPress, GoHighLevel, and campaign page support",
+      "Forms, tracking, notifications, and CRM handoff awareness",
+    ],
   },
   {
     icon: BriefcaseBusiness,
-    title: "For remote teams",
+    audience: "For agencies, recruiters, and hiring teams",
+    title: "Remote Team & Hiring Support",
+    fitHeadline: "When you need dependable remote execution.",
     summary:
-      "A strong fit for agencies, founders, and hiring teams that need dependable front end execution plus automation awareness.",
+      "A strong fit when you need someone who can plug into async workflows, ask practical questions, send clear updates, and support launch details.",
+    chips: [
+      "Remote support",
+      "Front end build",
+      "QA",
+      "Automation aware",
+      "Handoff notes",
+    ],
     points: [
-      "Async updates, practical handoff notes, and steady delivery",
       "US, UK, and AU timezone overlap from the Philippines",
       "Available for freelance support and full time remote roles",
+      "Organized updates, practical handoff notes, and steady delivery",
     ],
-    ctaLabel: "Download resume",
-    ctaHref: profile.resumePath,
-    download: "JohnMichael_Bonganay_Resume.pdf",
   },
+];
+const roleFitTrustSignals = [
+  "Available for freelance projects",
+  "Open to full time remote roles",
+  "US, UK, and AU overlap",
+  "Async communication ready",
+  "Design, build, QA, and handoff support",
 ];
 const hireConfidencePillars = [
   {
-    icon: TrendingUp,
-    title: "Proof before polish",
+    icon: Search,
+    label: "Offer strategy",
+    title: "Offer clarity before visuals",
     summary:
-      "The layout is planned around the offer, result proof, CTA path, and mobile scanning behavior before visual details take over.",
+      "The layout starts with the offer, CTA path, proof, objections, and mobile scanning behavior before visual styling takes over.",
+    proof: "Offer, proof, CTA path",
   },
   {
     icon: Gauge,
+    label: "Launch support",
     title: "Launch checks are included",
     summary:
-      "Responsive behavior, links, forms, basic tracking support, and handoff notes are checked before a page is sent traffic.",
+      "Responsive states, links, forms, buttons, and key CTA paths are checked before handoff or traffic launch.",
+    proof: "Responsive, forms, links",
   },
   {
     icon: Workflow,
+    label: "Lead handoff",
     title: "Handoff risk is reduced",
     summary:
-      "Forms, routing, notifications, and CRM movement can be planned alongside the page so leads do not stop after submission.",
+      "Forms, routing, notifications, CRM movement, and follow up notes can be planned around the page so leads keep moving.",
+    proof: "Forms, CRM, routing",
   },
   {
     icon: BriefcaseBusiness,
-    title: "Communication stays clear",
+    label: "Remote workflow",
+    title: "Remote communication stays clear",
     summary:
-      "You get straightforward updates, practical questions, and handoff notes that make remote work easier to manage.",
+      "You get direct updates, practical questions, and clean handoff notes that make async work easier to manage.",
+    proof: "Updates, questions, notes",
   },
   {
     icon: Code2,
+    label: "Platform range",
     title: "Platform flexible",
     summary:
-      "I can support Shopify, WordPress, GoHighLevel, funnels, product pages, and custom front end campaign builds.",
+      "I can support Shopify, WordPress, GoHighLevel, React, Netlify, product pages, funnels, and campaign builds.",
+    proof: "Shopify, WP, GHL, React",
+  },
+  {
+    icon: TrendingUp,
+    label: "Campaign mindset",
+    title: "Conversion support is part of the build",
+    summary:
+      "I look beyond the screen design and shape the page around trust cues, CTA timing, proof sections, and buying confidence.",
+    proof: "Trust, CTA, mobile flow",
   },
 ];
 
 
 const faqItems = [
   {
+    category: "Process",
+    question: "What happens after I reach out?",
+    answer:
+      "I review the page goal, platform, timeline, assets, and handoff needs first. From there, I can suggest the cleanest next step, whether that is a scoped build, page review, or remote support conversation.",
+  },
+  {
+    category: "Timeline",
     question: "How long does a landing page or funnel build usually take?",
     answer:
-      "A focused landing page can often move in one to two weeks once copy, assets, and the offer are clear. Larger funnels or automation supported builds need a scoped timeline first.",
+      "A focused landing page can often move in one to two weeks once copy, assets, and the offer are clear. Larger funnels, ecommerce pages, or automation supported builds need a scoped timeline first.",
   },
   {
+    category: "Pricing",
     question: "How do you price project work?",
     answer:
-      "I usually scope based on page count, platform, design complexity, integrations, and QA needs. For remote roles or ongoing support, I can discuss hourly, part time, or full time arrangements.",
+      "Pricing depends on page count, platform, design complexity, integrations, QA needs, and handoff requirements. For ongoing support or remote roles, I can discuss hourly, part time, or full time arrangements.",
   },
   {
+    category: "Scope",
     question: "What do you need from me before starting?",
     answer:
-      "The offer, product or service details, brand assets, page goal, preferred platform, examples you like, and any existing tracking or CRM requirements are enough to start a useful scope conversation.",
+      "The offer, product or service details, brand assets, page goal, preferred platform, examples you like, and any tracking or CRM requirements are enough to start a useful scope conversation.",
   },
   {
-    question: "Do you handle revisions?",
+    category: "QA",
+    question: "Do you handle revisions and QA?",
     answer:
-      "Yes. I prefer clear review rounds tied to scope, so feedback can improve clarity, trust, mobile flow, and conversion details without turning the project into guesswork.",
+      "Yes. I prefer clear review rounds tied to scope, with QA focused on mobile behavior, CTA paths, forms, links, responsive states, and handoff details.",
   },
   {
+    category: "Optimization",
     question: "Can you improve an existing landing page?",
     answer:
       "Yes. I can review an existing page, tighten the hierarchy, improve the CTA path, clean up mobile issues, and support the rebuild or refinement.",
   },
   {
-    question: "Do you also support automations and tracking setup?",
+    category: "Handoff",
+    question: "Can you support forms, tracking, CRM, or automation handoff?",
     answer:
-      "Yes. I can help connect forms, webhooks, CRM routing, notifications, and basic tracking support so the page has a clear handoff after someone submits.",
+      "Yes. I can help connect forms, webhooks, CRM routing, notifications, and basic tracking support so the page has a clear next step after someone submits.",
   },
   {
+    category: "Platforms",
     question: "Which platforms do you work with?",
     answer:
       "My strongest fit is Shopify, WordPress, GoHighLevel, React front ends, Make.com, Zapier, n8n, and campaign landing page workflows.",
   },
   {
-    question: "Do you work with remote teams and freelance clients?",
+    category: "Remote",
+    question: "Do you work with remote teams or ongoing support?",
     answer:
-      "Yes. I work well with async teams, agencies, founders, and recruiters who need clear updates, reliable handoff, and steady execution.",
+      "Yes. I work well with async teams, agencies, founders, and recruiters who need clear updates, reliable handoff, steady execution, and practical campaign support.",
   },
 ];
+const faqConfidenceSignals = [
+  "Scope starts with goals and platform",
+  "Pricing depends on build complexity",
+  "QA and handoff can be included",
+  "Remote friendly communication",
+];
 const hireConfidenceSignals = [
-  "4+ years across landing pages and campaign assets",
-  "Front end build, QA, tracking, and automation support",
-  "Remote ready for freelance builds and team roles",
+  {
+    value: "4+ years",
+    label: "Landing pages and campaign assets",
+  },
+  {
+    value: "Design + build + QA",
+    label: "One partner for the page and launch details",
+  },
+  {
+    value: "Remote ready",
+    label: "Freelance builds and team workflows",
+  },
 ];
 const contactProjectTypes = [
   "Landing page",
@@ -675,11 +1030,19 @@ function MagneticCTA({
   );
 }
 
-function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
-  const showcase = selectedWorkMeta[project.id];
-  const displayTitle = showcase?.title ?? project.title;
-  const displayRole = showcase?.role ?? project.role;
+function isAutomationShowcaseProject(project) {
+  return ["Automations"].includes(project.category);
+}
+
+function FeaturedProjectCard({
+  project,
+  onOpenCaseStudy,
+  onOpenAutomationModal,
+}) {
+  const displayTitle = getShowcaseTitle(project);
+  const displayRole = getShowcaseRole(project);
   const canOpenCaseStudy = Boolean(project.caseStudy || project.caseStudyData);
+  const opensAutomationModal = isAutomationShowcaseProject(project);
   const projectUrl = getSafeExternalHref(project.link);
   const projectHost = project.nda
     ? "NDA safe proof"
@@ -689,13 +1052,130 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
   return (
     <article
-      className={[
-        "project-card",
-        "reveal-item",
-        index === 0 ? "project-card--featured" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      className="work-feature-card reveal-item"
+      style={{
+        "--reveal-delay": "0ms",
+      }}
+    >
+      <div className="work-feature-card__media">
+        <div className="project-browser" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <p>{projectHost}</p>
+        </div>
+
+        <BlurImage
+          className="work-feature-card__image"
+          wrapperClassName="work-feature-card__image-shell"
+          src={project.image}
+          alt={project.imageAlt}
+          width={getImageDimensions(project.image).width}
+          height={getImageDimensions(project.image).height}
+          sizes="(max-width: 760px) 92vw, (max-width: 1120px) 86vw, 650px"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <div className="work-feature-card__proof-pill">
+          <TrendingUp size={15} aria-hidden="true" />
+          <span>Flagship proof</span>
+        </div>
+      </div>
+
+      <div className="work-feature-card__content">
+        <p className="work-feature-card__eyebrow">{getShowcaseEyebrow(project)}</p>
+        <h3>{displayTitle}</h3>
+        <p className="work-feature-card__summary">{getShowcaseSummary(project)}</p>
+
+        <div className="work-feature-card__role">
+          <BriefcaseBusiness size={17} aria-hidden="true" />
+          <span>
+            <strong>My role</strong>
+            {getContributionLine(project, displayRole)}
+          </span>
+        </div>
+
+        <div
+          className="work-feature-card__metrics"
+          aria-label={`${project.title} featured proof metrics`}
+        >
+          {getShowcaseMetrics(project, 3).map((metric) => (
+            <div key={`feature-${project.id}-${metric.label}`}>
+              <strong>{metric.value}</strong>
+              <span>{metric.label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="work-feature-card__outcome">
+          <BarChart3 size={16} aria-hidden="true" />
+          <span>{getShowcaseOutcome(project)}</span>
+        </div>
+
+        <div className="project-tags">
+          {getShowcaseTags(project).map((badge) => (
+            <span key={`feature-${project.id}-${badge}`}>{badge}</span>
+          ))}
+        </div>
+
+        <div className="project-actions project-actions--editorial">
+          <button
+            className="project-action project-action--case-study"
+            type="button"
+            onClick={() =>
+              opensAutomationModal
+                ? onOpenAutomationModal(project.id)
+                : onOpenCaseStudy(project.id)
+            }
+            disabled={!canOpenCaseStudy}
+          >
+            View case study
+            <FileText size={16} aria-hidden="true" />
+          </button>
+
+          {projectUrl ? (
+            <a
+              className="project-action project-action--live"
+              href={projectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visit live site
+              <ExternalLink size={16} aria-hidden="true" />
+            </a>
+          ) : (
+            <span className="project-locked">
+              <Lock size={15} aria-hidden="true" />
+              Live page hidden by NDA
+            </span>
+          )}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ProjectCard({
+  project,
+  onOpenCaseStudy,
+  onOpenAutomationModal,
+  index = 0,
+}) {
+  const displayTitle = getShowcaseTitle(project);
+  const displayRole = getShowcaseRole(project);
+  const canOpenCaseStudy = Boolean(project.caseStudy || project.caseStudyData);
+  const opensAutomationModal = isAutomationShowcaseProject(project);
+  const projectUrl = getSafeExternalHref(project.link);
+  const projectHost = project.nda
+    ? "NDA safe proof"
+    : projectUrl
+      ? getSafeHostname(projectUrl)
+      : "Case study preview";
+
+  return (
+    <article
+      className="project-card reveal-item"
       style={{
         "--card-delay": `${Math.min(index, 8) * 45}ms`,
         "--reveal-delay": `${Math.min(index % WORK_PAGE_SIZE, 5) * 70}ms`,
@@ -724,7 +1204,7 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
         />
 
         <div className="project-overlay" aria-hidden="true">
-          <span>{project.type}</span>
+          <span>{getShowcaseEyebrow(project)}</span>
           <h3>{displayTitle}</h3>
           <p>{displayRole}</p>
         </div>
@@ -732,12 +1212,12 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
 
       <div className="project-body">
         <div className="project-topline">
-          <span>{project.type}</span>
+          <span>{getShowcaseEyebrow(project)}</span>
           <strong>{project.number}</strong>
         </div>
 
         <h3>{displayTitle}</h3>
-        <p className="project-summary">{getCompactProjectSummary(project)}</p>
+        <p className="project-summary">{getShowcaseSummary(project)}</p>
 
         <div className="project-role">
           <BriefcaseBusiness size={16} aria-hidden="true" />
@@ -751,7 +1231,7 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
           <BarChart3 size={16} aria-hidden="true" />
           <span>
             <strong>Result</strong>
-            {getProjectResult(project)}
+            {getShowcaseOutcome(project)}
           </span>
         </div>
 
@@ -759,7 +1239,7 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
           className="project-metrics project-metrics--compact"
           aria-label={`${project.title} key metrics`}
         >
-          {getResultMetrics(project).map((metric) => (
+          {getShowcaseMetrics(project).map((metric) => (
             <div className="project-metric" key={`${project.id}-${metric.label}`}>
               <strong className="project-metric__value">{metric.value}</strong>
               <span className="project-metric__label">{metric.label}</span>
@@ -775,12 +1255,26 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
         ) : null}
 
         <div className="project-tags">
-          {getCompactProjectBadges(project).map((badge) => (
+          {getShowcaseTags(project).map((badge) => (
             <span key={`${project.id}-${badge}`}>{badge}</span>
           ))}
         </div>
 
-        <div className="project-actions project-actions--split">
+        <div className="project-actions project-actions--editorial">
+          <button
+            className="project-action project-action--case-study"
+            type="button"
+            onClick={() =>
+              opensAutomationModal
+                ? onOpenAutomationModal(project.id)
+                : onOpenCaseStudy(project.id)
+            }
+            disabled={!canOpenCaseStudy}
+          >
+            View case study
+            <FileText size={16} aria-hidden="true" />
+          </button>
+
           {projectUrl ? (
             <a
               className="project-action project-action--live"
@@ -788,7 +1282,7 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              View live page
+              Live page
               <ExternalLink size={16} aria-hidden="true" />
             </a>
           ) : (
@@ -797,16 +1291,6 @@ function ProjectCard({ project, onOpenCaseStudy, index = 0 }) {
               Live page hidden by NDA
             </span>
           )}
-
-          <button
-            className="project-action project-action--case-study"
-            type="button"
-            onClick={() => onOpenCaseStudy(project.id)}
-            disabled={!canOpenCaseStudy}
-          >
-            <FileText size={16} aria-hidden="true" />
-            Case study
-          </button>
         </div>
       </div>
     </article>
@@ -1106,64 +1590,97 @@ function HireConfidenceSection() {
         <div className="hire-confidence-heading">
           <p className="section-kicker">Why clients hire me</p>
           <h2 id="hire-confidence-title">
-            A lower risk hire for landing pages, funnels, and the systems behind them.
+            A lower risk build partner for pages that need to launch cleanly.
           </h2>
           <p>
-            I do not treat a page as a standalone design file. I think through the offer,
-            CTA path, mobile behavior, form handoff, and launch details so the work is
-            easier to trust before traffic goes live.
+            You get someone who thinks through offer clarity, responsive behavior,
+            form handoff, tracking support, and launch QA before traffic goes live.
           </p>
         </div>
 
         <div className="hire-confidence-layout">
-          <aside className="hire-confidence-lead-card">
-            <span className="hire-confidence-lead-card__eyebrow">Decision support</span>
-            <h3>Built for clients who need a page to work, not just look finished.</h3>
+          <aside
+            className="hire-confidence-lead-card reveal-item"
+            style={{ "--reveal-delay": "0ms" }}
+          >
+            <span className="hire-confidence-lead-card__eyebrow">Risk reduced at launch</span>
+            <h3>Built for clients who need the page to work after the handoff.</h3>
             <p>
-              A good fit when you need someone who can design, build, QA, and support
-              the workflow around a campaign without adding extra coordination burden.
+              A strong fit when you need design, front end execution, QA, and workflow
+              awareness handled together without adding extra coordination burden.
             </p>
 
             <div className="hire-confidence-signal-list" aria-label="Trust signals">
               {hireConfidenceSignals.map((signal) => (
-                <span key={signal}>
+                <span key={signal.value}>
                   <CheckCircle2 size={15} aria-hidden="true" />
-                  {signal}
+                  <span>
+                    <strong>{signal.value}</strong>
+                    <small>{signal.label}</small>
+                  </span>
                 </span>
               ))}
+            </div>
+
+            <div className="hire-confidence-fit-note">
+              <span>Best fit</span>
+              <p>
+                Landing pages, funnels, ecommerce pages, CRM handoffs, automation
+                supported campaigns, and remote team execution.
+              </p>
             </div>
           </aside>
 
           <div className="hire-confidence-grid">
-            {hireConfidencePillars.map((pillar) => {
+            {hireConfidencePillars.map((pillar, index) => {
               const Icon = pillar.icon;
 
               return (
-                <article className="hire-confidence-card" key={pillar.title}>
+                <article
+                  className={[
+                    "hire-confidence-card",
+                    "reveal-item",
+                    index === 0 ? "hire-confidence-card--featured" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                  key={pillar.title}
+                  style={{ "--reveal-delay": `${80 + index * 55}ms` }}
+                >
                   <span className="hire-confidence-card__icon">
                     <Icon size={20} aria-hidden="true" />
                   </span>
-                  <h3>{pillar.title}</h3>
+                  <div className="hire-confidence-card__copy">
+                    <span className="hire-confidence-card__label">{pillar.label}</span>
+                    <h3>{pillar.title}</h3>
+                  </div>
                   <p>{pillar.summary}</p>
+                  <span className="hire-confidence-card__proof">{pillar.proof}</span>
                 </article>
               );
             })}
           </div>
         </div>
 
-        <div className="hire-confidence-footer">
-          <p>
-            Strong fit for conversion focused builds, launch support, and remote team execution.
-          </p>
+        <div
+          className="hire-confidence-footer reveal-item"
+          style={{ "--reveal-delay": "160ms" }}
+        >
+          <div>
+            <span>Ready for practical execution</span>
+            <p>
+              Need a page, funnel, or campaign asset that is easier to launch and trust?
+            </p>
+          </div>
 
           <div className="hire-confidence-actions">
             <a className="btn btn--primary" href="#contact">
               <Mail size={18} aria-hidden="true" />
-              Start a quick inquiry
+              Start a project conversation
             </a>
             <a className="btn btn--secondary" href="#automation">
               <Workflow size={18} aria-hidden="true" />
-              View automation support
+              View workflow support
             </a>
           </div>
         </div>
@@ -1174,31 +1691,71 @@ function HireConfidenceSection() {
 
 
 function FAQSection() {
+  const [openFaqIndex, setOpenFaqIndex] = useState(0);
+
   return (
     <section className="faq-section" aria-labelledby="faq-title">
       <div className="faq-shell">
         <div className="faq-heading">
           <p className="section-kicker">Common questions</p>
-          <h2 id="faq-title">A few practical answers before you reach out.</h2>
+          <h2 id="faq-title">Clear answers before we talk scope.</h2>
           <p>
-            Clear scope, smoother handoff, and fewer unknowns before a landing page,
-            funnel, or automation supported build starts.
+            Quick answers on timelines, pricing, platforms, revisions, handoff,
+            and remote collaboration so you know what to expect before starting a conversation.
           </p>
+
+          <div className="faq-confidence-card" aria-label="Before you reach out checklist">
+            <span>Before you reach out</span>
+            <ul>
+              {faqConfidenceSignals.map((signal) => (
+                <li key={signal}>
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  {signal}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="faq-cta-card">
+            <span>Still sounds like a fit?</span>
+            <a href="#contact">
+              <Mail size={17} aria-hidden="true" />
+              Start a project conversation
+            </a>
+          </div>
         </div>
 
         <div className="faq-list">
-          {faqItems.map((item, index) => (
-            <details className="faq-item" key={item.question} open={index === 0}>
-              <summary>
-                <span>{item.question}</span>
-                <span className="faq-item__control" aria-hidden="true">
-                  <span />
-                  <span />
-                </span>
-              </summary>
-              <p>{item.answer}</p>
-            </details>
-          ))}
+          {faqItems.map((item, index) => {
+            const isOpen = openFaqIndex === index;
+
+            return (
+              <details
+                className="faq-item"
+                key={item.question}
+                open={isOpen}
+                onToggle={(event) => {
+                  if (event.currentTarget.open) {
+                    setOpenFaqIndex(index);
+                  } else if (isOpen) {
+                    setOpenFaqIndex(null);
+                  }
+                }}
+              >
+                <summary>
+                  <span className="faq-item__question">
+                    <small>{item.category}</small>
+                    {item.question}
+                  </span>
+                  <span className="faq-item__control" aria-hidden="true">
+                    <span />
+                    <span />
+                  </span>
+                </summary>
+                <p>{item.answer}</p>
+              </details>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -1216,26 +1773,49 @@ function RoleFitSection() {
       <div className="role-fit-shell">
         <div className="role-fit-heading">
           <p className="section-kicker">Role Fit</p>
-          <h2 id="role-fit-title">I fit teams that need pages built well and leads handled properly.</h2>
+          <h2 id="role-fit-title">
+            I am a strong fit when the page, handoff, and launch details all matter.
+          </h2>
           <p>
-            I bring front end execution, conversion thinking, automation support,
-            and clear handoff into one practical workflow. That makes me useful
-            for freelance builds, campaign support, and remote roles.
+            I support founders, agencies, ecommerce teams, and hiring teams that
+            need front end execution, conversion thinking, automation awareness,
+            and clear remote communication in one practical workflow.
           </p>
         </div>
 
         <div className="role-fit-grid role-fit-grid--paths">
-          {roleFitPaths.map((card) => {
+          {roleFitPaths.map((card, index) => {
             const Icon = card.icon;
 
             return (
-              <article className="role-fit-card role-fit-card--path" key={card.title}>
-                <span className="role-fit-card__icon">
-                  <Icon size={20} aria-hidden="true" />
-                </span>
+              <article
+                className="role-fit-card role-fit-card--path"
+                key={card.title}
+              >
+                <div className="role-fit-card__top">
+                  <span className="role-fit-card__icon">
+                    <Icon size={20} aria-hidden="true" />
+                  </span>
+                  <span className="role-fit-card__index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
 
-                <h3>{card.title}</h3>
-                <p>{card.summary}</p>
+                <div className="role-fit-card__copy">
+                  <span className="role-fit-card__audience">{card.audience}</span>
+                  <h3>{card.title}</h3>
+                  <strong>{card.fitHeadline}</strong>
+                  <p>{card.summary}</p>
+                </div>
+
+                <div
+                  className="role-fit-card__chips"
+                  aria-label={`${card.title} best fit work`}
+                >
+                  {card.chips.map((chip) => (
+                    <span key={chip}>{chip}</span>
+                  ))}
+                </div>
 
                 <ul>
                   {card.points.map((point) => (
@@ -1245,39 +1825,44 @@ function RoleFitSection() {
                     </li>
                   ))}
                 </ul>
-
-                <a
-                  className="role-fit-card__cta"
-                  href={card.ctaHref}
-                  download={card.download}
-                >
-                  {card.ctaLabel}
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </a>
               </article>
             );
           })}
         </div>
 
         <div className="role-fit-actions-wrap">
-          <p className="role-fit-availability">
-            Open to project work, ongoing support, and full time remote opportunities.
-          </p>
+          <div className="role-fit-trust-strip" aria-label="Role fit trust signals">
+            {roleFitTrustSignals.map((signal) => (
+              <span key={signal}>
+                <CheckCircle2 size={15} aria-hidden="true" />
+                {signal}
+              </span>
+            ))}
+          </div>
 
-          <div className="role-fit-actions">
-            <a className="btn btn--primary" href="#contact">
-              <Mail size={18} aria-hidden="true" />
-              Contact me
-            </a>
+          <div className="role-fit-cta-panel">
+            <div>
+              <span>Ready to check fit?</span>
+              <p className="role-fit-availability">
+                Open to project work, ongoing support, and full time remote opportunities.
+              </p>
+            </div>
 
-            <a
-              className="btn btn--secondary"
-              href={profile.resumePath}
-              download="JohnMichael_Bonganay_Resume.pdf"
-            >
-              <FileText size={18} aria-hidden="true" />
-              Download resume
-            </a>
+            <div className="role-fit-actions">
+              <a className="btn btn--primary" href="#contact">
+                <Mail size={18} aria-hidden="true" />
+                Start a project conversation
+              </a>
+
+              <a
+                className="btn btn--secondary"
+                href={profile.resumePath}
+                download="JohnMichael_Bonganay_Resume.pdf"
+              >
+                <FileText size={18} aria-hidden="true" />
+                Download resume
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -1647,25 +2232,16 @@ function App() {
     [],
   );
 
-  function getWorkFilterCount(filterName) {
-    if (filterName === ALL_WORK_FILTER) {
-      return selectedWorkEntries.length;
-    }
-
-    return selectedWorkEntries.filter(
-      (project) => project.category === filterName,
-    ).length;
+  function getWorkFilterCount(filterId) {
+    return getProjectsForWorkFilter(filterId, selectedWorkEntries).length;
   }
 
   const selectedWorkProjects = useMemo(
-    () =>
-      renderedWorkFilter === ALL_WORK_FILTER
-        ? selectedWorkEntries
-        : selectedWorkEntries.filter(
-            (project) => project.category === renderedWorkFilter,
-          ),
+    () => getProjectsForWorkFilter(renderedWorkFilter, selectedWorkEntries),
     [renderedWorkFilter, selectedWorkEntries],
   );
+  const activeWorkFilterDefinition = getWorkFilterDefinition(activeWorkFilter);
+  const renderedWorkFilterDefinition = getWorkFilterDefinition(renderedWorkFilter);
   const workPageSize = isCompactWorkViewport
     ? COMPACT_WORK_PAGE_SIZE
     : WORK_PAGE_SIZE;
@@ -1673,13 +2249,15 @@ function App() {
     () => selectedWorkProjects.slice(0, visibleWorkCount),
     [selectedWorkProjects, visibleWorkCount],
   );
+  const featuredProject = visibleWorkProjects[0] ?? null;
+  const supportingWorkProjects = visibleWorkProjects.slice(1);
   const hasMoreWork = visibleWorkCount < selectedWorkProjects.length;
   const canToggleWorkCount = selectedWorkProjects.length > workPageSize;
   const visibleWorkTotal = Math.min(
     visibleWorkCount,
     selectedWorkProjects.length,
   );
-  const isAutomationWorkFilter = renderedWorkFilter === "Automations";
+  const isArchiveWorkFilter = renderedWorkFilter === WORK_ARCHIVE_FILTER;
 
   const selectedCaseStudyProject = useMemo(
     () =>
@@ -1798,9 +2376,11 @@ function App() {
     const animatedItems = document.querySelectorAll(
       [
         ".project-card",
+        ".work-feature-card",
         ".contact-card",
         ".contact-form",
         ".work-proof-row",
+        ".work-proof-strip",
         ".hire-confidence-lead-card",
         ".hire-confidence-card",
         ".hire-confidence-footer",
@@ -2473,18 +3053,17 @@ function App() {
             <p className="section-kicker">Selected Works</p>
             <div>
               <h2 id="work-title">
-                Selected builds that show the front end and the systems behind it.
+                Selected work built to convert, scale, and perform.
               </h2>
               <p>
-                A focused set of Shopify, WordPress, Netlify, GoHighLevel, and
-                automation projects showing what I designed, built, optimized,
-                routed, or launched.
+                Ecommerce experiences, campaign pages, and automation systems,
+                designed and built with measurable outcomes behind them.
               </p>
             </div>
           </div>
 
-          <div className="work-proof-strip" aria-label="Proof-backed selected work highlights">
-            <span>Proof-backed builds</span>
+          <div className="work-proof-strip" aria-label="Proof backed selected work highlights">
+            <span>Proof backed showcase</span>
             {workProofHighlights.map((proof) => (
               <strong key={proof.label}>
                 {proof.value}
@@ -2493,83 +3072,83 @@ function App() {
             ))}
           </div>
 
-          <p className="work-filter-note">Featured case studies first. Browse by platform.</p>
-          <p className="work-proof-note">
-            Dashboard screenshots are kept NDA-safe, with sensitive data removed when proof appears inside case studies.
-          </p>
+          <div className="work-curation-row">
+            <div>
+              <p className="work-filter-note">
+                {activeWorkFilterDefinition.label} case studies first.
+              </p>
+              <p className="work-proof-note">
+                {activeWorkFilterDefinition.description} Dashboard screenshots stay NDA safe when proof appears inside case studies.
+              </p>
+            </div>
 
-          <div className="work-controls-shell work-controls-shell--fade">
-            <div className="work-controls" aria-label="Filter selected works by platform or skill category">
+            <div className="work-controls-shell work-controls-shell--fade">
+              <div className="work-controls" aria-label="Filter selected works by project type">
               {workFilters.map((filter) => {
-                const isActive = activeWorkFilter === filter;
+                const isActive = activeWorkFilter === filter.id;
 
                 return (
                   <button
                     className={isActive ? "work-filter is-active" : "work-filter"}
                     type="button"
-                    key={filter}
-                    onClick={() => handleWorkFilterChange(filter)}
+                    key={filter.id}
+                    onClick={() => handleWorkFilterChange(filter.id)}
                     aria-pressed={isActive}
                   >
-                    <span>{filter}</span>
-                    <strong>{getWorkFilterCount(filter)}</strong>
+                    <span>{filter.label}</span>
                   </button>
                 );
               })}
+              </div>
             </div>
           </div>
 
-          {isAutomationWorkFilter ? (
-            <StaggeredGrid
-              key={`automation-grid-${renderedWorkFilter}-${visibleWorkProjects.length}`}
-              className={`automation-work-grid ${workGridPhase}`}
-              id="selected-work-grid"
-              aria-live="polite"
-            >
-              {visibleWorkProjects.map((project, index) => (
-                <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
-                  <HoverCard className="motion-work-hover">
-                    <GHLAutomationCard
-                      project={project}
-                      onViewMetrics={setSelectedAutomationModalId}
-                    />
-                  </HoverCard>
-                </StaggeredGridItem>
-              ))}
-            </StaggeredGrid>
-          ) : (
-            <StaggeredGrid
-              key={`work-grid-${renderedWorkFilter}-${visibleWorkProjects.length}`}
-              className={`work-grid ${workGridPhase}`}
-              id="selected-work-grid"
-              aria-live="polite"
-            >
-              {visibleWorkProjects.map((project, index) => (
-                <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
-                  <HoverCard className="motion-work-hover">
-                    {project.category === "Automations" ? (
-                      <GHLAutomationCard
-                        project={project}
-                        onViewMetrics={setSelectedAutomationModalId}
-                      />
-                    ) : (
+          <div
+            className={
+              isArchiveWorkFilter
+                ? "work-showcase work-showcase--archive"
+                : "work-showcase"
+            }
+            id="selected-work-grid"
+            aria-live="polite"
+          >
+            {featuredProject ? (
+              <FeaturedProjectCard
+                project={featuredProject}
+                onOpenCaseStudy={setSelectedCaseStudyId}
+                onOpenAutomationModal={setSelectedAutomationModalId}
+              />
+            ) : null}
+
+            {supportingWorkProjects.length ? (
+              <StaggeredGrid
+                key={`work-grid-${renderedWorkFilter}-${visibleWorkProjects.length}`}
+                className={`work-grid work-grid--supporting ${workGridPhase}`}
+              >
+                {supportingWorkProjects.map((project, index) => (
+                  <StaggeredGridItem key={`${renderedWorkFilter}-${project.id}`} className="motion-work-item">
+                    <HoverCard className="motion-work-hover">
                       <ProjectCard
                         project={project}
-                        index={index}
+                        index={index + 1}
                         onOpenCaseStudy={setSelectedCaseStudyId}
+                        onOpenAutomationModal={setSelectedAutomationModalId}
                       />
-                    )}
-                  </HoverCard>
-                </StaggeredGridItem>
-              ))}
-            </StaggeredGrid>
-          )}
+                    </HoverCard>
+                  </StaggeredGridItem>
+                ))}
+              </StaggeredGrid>
+            ) : null}
+          </div>
 
           {canToggleWorkCount ? (
             <div className="work-more" aria-label="Selected works pagination">
               <p className="work-more__count">
                 Showing <strong>{visibleWorkTotal}</strong> of{" "}
-                <strong>{selectedWorkProjects.length}</strong> projects
+                <strong>{selectedWorkProjects.length}</strong>{" "}
+                {isArchiveWorkFilter
+                  ? "projects"
+                  : `${renderedWorkFilterDefinition.label.toLowerCase()} projects`}
               </p>
 
               <button
@@ -2584,6 +3163,23 @@ function App() {
                 aria-expanded={!hasMoreWork}
               >
                 <span>{hasMoreWork ? "Show more work" : "Show less"}</span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </button>
+            </div>
+          ) : !isArchiveWorkFilter ? (
+            <div className="work-more work-more--archive" aria-label="Selected works archive">
+              <p className="work-more__count">
+                Viewing <strong>{renderedWorkFilterDefinition.label}</strong>. Full archive includes{" "}
+                <strong>{getWorkFilterCount(WORK_ARCHIVE_FILTER)}</strong> projects.
+              </p>
+
+              <button
+                className="show-work-toggle"
+                type="button"
+                onClick={() => handleWorkFilterChange(WORK_ARCHIVE_FILTER)}
+                aria-controls="selected-work-grid"
+              >
+                <span>Explore all projects</span>
                 <ArrowUpRight size={17} aria-hidden="true" />
               </button>
             </div>
