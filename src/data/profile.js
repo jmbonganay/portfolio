@@ -12,7 +12,7 @@ export const profile = {
     after: "that turn every lead into action."
   },
   summary:
-    "I help brands launch conversion focused pages, then connect forms, CRM routing, notifications, and follow-up workflows so every lead is captured, handled, and moved forward.",
+    "I help brands launch conversion focused pages, then connect forms, CRM routing, notifications, and follow up workflows so every lead is captured, handled, and moved forward.",
   heroProof: [
     {
       value: "4+ years",
