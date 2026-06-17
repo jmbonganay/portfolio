@@ -2364,7 +2364,7 @@ function App() {
 
             <div className="hero-showcase__result">
               <TrendingUp size={16} aria-hidden="true" />
-              <span>Sales-backed design</span>
+              <span>Sales backed design</span>
               <strong>$52.9K</strong>
             </div>
 
@@ -2400,19 +2400,19 @@ function App() {
                 <span />
                 <span />
                 <span />
-                <small>tryvistaveil.com</small>
+                <small>purelynutrient.com</small>
               </div>
               <BlurImage
-                src="/work/vista-veil.webp"
-                alt="VistaVeil beauty product landing page"
-                width={1440}
-                height={723}
+                src="/work/purely-nutrient.webp"
+                alt="Purely Nutrient Black Seed Oil Shopify product page"
+                width={1901}
+                height={951}
                 sizes="(max-width: 960px) 52vw, 300px"
                 wrapperClassName="hero-project__image-shell"
                 className="hero-project__image"
                 loading="lazy"
               />
-              <div className="hero-project__mini-label">Beauty DTC</div>
+              <div className="hero-project__mini-label">Shopify supplement</div>
             </article>
 
             <article className="hero-project hero-project--tertiary">
