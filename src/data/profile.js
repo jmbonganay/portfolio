@@ -20,7 +20,7 @@ export const profile = {
     },
     {
       value: "$52.9K",
-      label: "sales-backed page"
+      label: "sales backed page"
     },
     {
       value: "689+",
