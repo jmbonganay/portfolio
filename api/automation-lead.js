@@ -1,70 +1,20 @@
-const MAX_BODY_BYTES = 12_000;
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const IP_RATE_LIMIT_MAX_REQUESTS = 5;
-const USER_RATE_LIMIT_MAX_REQUESTS = 3;
-const WEBHOOK_TIMEOUT_MS = 8_000;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ALLOWED_SUBMISSION_TYPES = new Set(["ai_scoper", "contact_form"]);
-const BASE_ALLOWED_FIELDS = new Set([
-  "botcheck",
-  "email",
-  "message",
-  "name",
-  "projectIdea",
-  "projectType",
-  "submissionType",
-]);
-const REQUIRED_FIELDS_BY_SUBMISSION_TYPE = {
-  ai_scoper: ["name", "email", "projectIdea", "submissionType"],
-  contact_form: ["name", "email", "message", "projectIdea", "projectType", "submissionType"],
-};
-const rateLimitStores = {
-  ip: new Map(),
-  user: new Map(),
-};
+import { verifyHCaptcha } from "./security/hcaptcha.js";
+import { createUpstashRateLimitService } from "./security/rate-limit.js";
+import {
+  MAX_BODY_BYTES,
+  getBodyByteLength,
+  parsePayload,
+  validatePayload,
+} from "./security/validation.js";
+
+const MAKE_TIMEOUT_MS = 8_000;
 
 function getHeader(request, name) {
   if (typeof request.headers?.get === "function") {
     return request.headers.get(name);
   }
 
-  return request.headers[name] || request.headers[name.toLowerCase()];
-}
-
-function parsePayload(body) {
-  if (!body) {
-    return {};
-  }
-
-  if (typeof body === "string") {
-    try {
-      return JSON.parse(body);
-    } catch {
-      return {};
-    }
-  }
-
-  return body;
-}
-
-function isPlainObject(value) {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function getBodyByteLength(body) {
-  if (!body) {
-    return 0;
-  }
-
-  if (typeof body === "string") {
-    return Buffer.byteLength(body, "utf8");
-  }
-
-  try {
-    return Buffer.byteLength(JSON.stringify(body), "utf8");
-  } catch {
-    return MAX_BODY_BYTES + 1;
-  }
+  return request.headers?.[name] || request.headers?.[name.toLowerCase()] || "";
 }
 
 function isSameOriginRequest(request) {
@@ -84,63 +34,11 @@ function isSameOriginRequest(request) {
 
 function getClientIp(request) {
   const forwardedFor = getHeader(request, "x-forwarded-for");
-
-  if (forwardedFor) {
-    return forwardedFor.split(",")[0].trim();
-  }
-
-  return getHeader(request, "x-real-ip") || request.socket?.remoteAddress || "unknown";
-}
-
-function checkRateLimit(store, key, maxRequests) {
-  const now = Date.now();
-
-  for (const [storedKey, currentWindow] of store.entries()) {
-    if (currentWindow.resetAt <= now) {
-      store.delete(storedKey);
-    }
-  }
-
-  const currentWindow = store.get(key);
-
-  if (!currentWindow || currentWindow.resetAt <= now) {
-    store.set(key, {
-      count: 1,
-      resetAt: now + RATE_LIMIT_WINDOW_MS,
-    });
-    return { limited: false };
-  }
-
-  currentWindow.count += 1;
-
-  if (currentWindow.count <= maxRequests) {
-    return { limited: false };
-  }
-
-  return {
-    limited: true,
-    retryAfterSeconds: Math.max(
-      1,
-      Math.ceil((currentWindow.resetAt - now) / 1000),
-    ),
-  };
-}
-
-function applyRateLimits(request, payload) {
-  const ipLimit = checkRateLimit(
-    rateLimitStores.ip,
-    getClientIp(request),
-    IP_RATE_LIMIT_MAX_REQUESTS,
-  );
-
-  if (ipLimit.limited) {
-    return ipLimit;
-  }
-
-  return checkRateLimit(
-    rateLimitStores.user,
-    `${payload.submissionType}:${payload.email}`,
-    USER_RATE_LIMIT_MAX_REQUESTS,
+  return (
+    forwardedFor.split(",")[0]?.trim() ||
+    getHeader(request, "x-real-ip") ||
+    request.socket?.remoteAddress ||
+    "unknown"
   );
 }
 
@@ -153,139 +51,7 @@ function isAllowedWebhookUrl(value) {
   }
 }
 
-function validateStringField(payload, fieldName, options = {}) {
-  const {
-    maxLength = 1200,
-    minLength = 0,
-    pattern = null,
-    required = false,
-  } = options;
-  const value = payload[fieldName];
-
-  if (value === undefined || value === null) {
-    if (required) {
-      return { ok: false };
-    }
-
-    return { ok: true, value: "" };
-  }
-
-  if (typeof value !== "string") {
-    return { ok: false };
-  }
-
-  const cleanedValue = value.trim();
-
-  if (required && !cleanedValue) {
-    return { ok: false };
-  }
-
-  if (cleanedValue.length < minLength || cleanedValue.length > maxLength) {
-    return { ok: false };
-  }
-
-  if (pattern && !pattern.test(cleanedValue)) {
-    return { ok: false };
-  }
-
-  return { ok: true, value: cleanedValue };
-}
-
-function validatePayload(payload) {
-  if (!isPlainObject(payload)) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
-
-  const unexpectedField = Object.keys(payload).find(
-    (fieldName) => !BASE_ALLOWED_FIELDS.has(fieldName),
-  );
-
-  if (unexpectedField) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
-
-  const botcheck = validateStringField(payload, "botcheck", {
-    maxLength: 20,
-  });
-
-  if (!botcheck.ok) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
-
-  if (botcheck.value) {
-    return { ok: false, status: 202, error: null };
-  }
-
-  const submissionType = validateStringField(payload, "submissionType", {
-    maxLength: 80,
-    required: true,
-  });
-
-  if (
-    !submissionType.ok ||
-    !ALLOWED_SUBMISSION_TYPES.has(submissionType.value)
-  ) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
-
-  const requiredFields =
-    REQUIRED_FIELDS_BY_SUBMISSION_TYPE[submissionType.value] || [];
-  const missingRequiredField = requiredFields.find(
-    (fieldName) => payload[fieldName] === undefined || payload[fieldName] === null,
-  );
-
-  if (missingRequiredField) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
-
-  const name = validateStringField(payload, "name", {
-    maxLength: 160,
-    required: true,
-  });
-  const email = validateStringField(payload, "email", {
-    maxLength: 240,
-    pattern: EMAIL_PATTERN,
-    required: true,
-  });
-  const projectIdea = validateStringField(payload, "projectIdea", {
-    maxLength: 3000,
-    minLength: 20,
-    required: true,
-  });
-  const message = validateStringField(payload, "message", {
-    maxLength: 3000,
-    minLength: submissionType.value === "contact_form" ? 20 : 0,
-    required: submissionType.value === "contact_form",
-  });
-  const projectType = validateStringField(payload, "projectType", {
-    maxLength: 160,
-    required: submissionType.value === "contact_form",
-  });
-
-  if (
-    !name.ok ||
-    !email.ok ||
-    !projectIdea.ok ||
-    !message.ok ||
-    !projectType.ok
-  ) {
-    return { ok: false, status: 400, error: "Invalid request" };
-  }
-
-  return {
-    ok: true,
-    payload: {
-      name: name.value,
-      email: email.value.toLowerCase(),
-      message: message.value || projectIdea.value,
-      projectIdea: projectIdea.value,
-      projectType: projectType.value || "Not selected",
-      submissionType: submissionType.value,
-    },
-  };
-}
-
-function sendRateLimitResponse(response, result) {
+function sendLimitResponse(response, result) {
   response.setHeader("Retry-After", String(result.retryAfterSeconds));
   return response.status(429).json({
     error: "Too many requests",
@@ -293,97 +59,126 @@ function sendRateLimitResponse(response, result) {
   });
 }
 
-export default async function handler(request, response) {
-  if (request.method !== "POST") {
-    response.setHeader("Allow", "POST");
-    return response.status(405).json({ error: "Method not allowed" });
-  }
-
-  response.setHeader("Cache-Control", "no-store");
-
-  if (!isSameOriginRequest(request)) {
-    return response.status(403).json({ error: "Forbidden" });
-  }
-
-  const contentType = getHeader(request, "content-type") || "";
-  if (!contentType.includes("application/json")) {
-    return response.status(415).json({ error: "Unsupported media type" });
-  }
-
-  const contentLength = Number.parseInt(getHeader(request, "content-length") || "0", 10);
-  if (contentLength > MAX_BODY_BYTES) {
-    return response.status(413).json({ error: "Request too large" });
-  }
-
-  if (getBodyByteLength(request.body) > MAX_BODY_BYTES) {
-    return response.status(413).json({ error: "Request too large" });
-  }
-
-  const payload = parsePayload(request.body);
-  const validation = validatePayload(payload);
-
-  if (!validation.ok) {
-    if (validation.status === 202) {
-      return response.status(202).json({ ok: true });
+export function createAutomationLeadHandler({
+  env = process.env,
+  fetchImpl = fetch,
+  rateLimits,
+  verifyCaptcha = verifyHCaptcha,
+} = {}) {
+  return async function automationLeadHandler(request, response) {
+    if (request.method !== "POST") {
+      response.setHeader("Allow", "POST");
+      return response.status(405).json({ error: "Method not allowed" });
     }
 
-    return response.status(validation.status).json({ error: validation.error });
-  }
+    response.setHeader("Cache-Control", "no-store");
 
-  const rateLimit = applyRateLimits(request, validation.payload);
+    if (!isSameOriginRequest(request)) {
+      return response.status(403).json({ error: "Forbidden" });
+    }
 
-  if (rateLimit.limited) {
-    return sendRateLimitResponse(response, rateLimit);
-  }
+    const contentType = getHeader(request, "content-type");
+    if (!contentType.includes("application/json")) {
+      return response.status(415).json({ error: "Unsupported media type" });
+    }
 
-  const webhookUrl = process.env.MAKE_WEBHOOK_URL;
+    const contentLength = Number.parseInt(getHeader(request, "content-length") || "0", 10);
+    if (contentLength > MAX_BODY_BYTES || getBodyByteLength(request.body) > MAX_BODY_BYTES) {
+      return response.status(413).json({ error: "Request too large" });
+    }
 
-  if (!webhookUrl) {
-    return response.status(503).json({ error: "Automation endpoint is not configured" });
-  }
+    const validation = validatePayload(parsePayload(request.body));
+    if (!validation.ok) {
+      if (validation.honeypot) {
+        return response.status(202).json({ ok: true });
+      }
+      return response.status(validation.status || 400).json({ error: "Invalid request" });
+    }
 
-  if (!isAllowedWebhookUrl(webhookUrl)) {
-    return response.status(503).json({ error: "Automation endpoint is not configured" });
-  }
-
-  const forwardedPayload = {
-    name: validation.payload.name,
-    email: validation.payload.email,
-    message: validation.payload.message,
-    projectIdea: validation.payload.projectIdea,
-    projectType: validation.payload.projectType,
-    submissionType: validation.payload.submissionType,
-    forwardedAt: new Date().toISOString(),
-  };
-
-  const timeout = new AbortController();
-  const timeoutId = setTimeout(() => timeout.abort(), WEBHOOK_TIMEOUT_MS);
-
-  let makeResponse;
-
-  try {
-    makeResponse = await fetch(webhookUrl, {
-      method: "POST",
-      signal: timeout.signal,
-      headers: {
-        "Content-Type": "application/json",
-        "X-Portfolio-Source": "vercel-api",
-        ...(process.env.MAKE_WEBHOOK_SECRET
-          ? { "X-Portfolio-Secret": process.env.MAKE_WEBHOOK_SECRET }
-          : {}),
-      },
-      body: JSON.stringify(forwardedPayload),
+    const clientIp = getClientIp(request);
+    const limiter = rateLimits || createUpstashRateLimitService(env);
+    const ipLimit = await limiter.checkIp({
+      ip: clientIp,
+      submissionType: validation.payload.submissionType,
+      userAgent: getHeader(request, "user-agent"),
     });
-  } catch {
-    clearTimeout(timeoutId);
-    return response.status(502).json({ error: "Automation handoff failed" });
-  }
 
-  clearTimeout(timeoutId);
+    if (ipLimit.unavailable) {
+      return response.status(503).json({ error: "Security service unavailable" });
+    }
+    if (ipLimit.limited) {
+      return sendLimitResponse(response, ipLimit);
+    }
 
-  if (!makeResponse.ok) {
-    return response.status(502).json({ error: "Automation handoff failed" });
-  }
+    const captcha = await verifyCaptcha({
+      remoteIp: clientIp,
+      secret: env.HCAPTCHA_SECRET_KEY,
+      siteKey: env.VITE_HCAPTCHA_SITE_KEY,
+      token: validation.payload.captchaToken,
+    });
 
-  return response.status(202).json({ ok: true });
+    if (!captcha.success) {
+      if (captcha.reason === "challenge") {
+        return response.status(403).json({ error: "Security verification failed" });
+      }
+      if (captcha.reason === "configuration") {
+        return response.status(503).json({ error: "Security service unavailable" });
+      }
+      return response.status(502).json({ error: "Security verification unavailable" });
+    }
+
+    const emailLimit = await limiter.checkEmail({
+      email: validation.payload.email,
+      submissionType: validation.payload.submissionType,
+    });
+
+    if (emailLimit.unavailable) {
+      return response.status(503).json({ error: "Security service unavailable" });
+    }
+    if (emailLimit.limited) {
+      return sendLimitResponse(response, emailLimit);
+    }
+
+    const webhookUrl = env.MAKE_WEBHOOK_URL;
+    const webhookSecret = env.MAKE_WEBHOOK_SECRET;
+    if (!webhookSecret || !isAllowedWebhookUrl(webhookUrl)) {
+      return response.status(503).json({ error: "Automation endpoint is not configured" });
+    }
+
+    const forwardedPayload = {
+      email: validation.payload.email,
+      forwardedAt: new Date().toISOString(),
+      message: validation.payload.message,
+      name: validation.payload.name,
+      projectIdea: validation.payload.projectIdea,
+      projectType: validation.payload.projectType,
+      submissionType: validation.payload.submissionType,
+    };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), MAKE_TIMEOUT_MS);
+
+    try {
+      const makeResponse = await fetchImpl(webhookUrl, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          "x-make-apikey": webhookSecret,
+        },
+        body: JSON.stringify(forwardedPayload),
+      });
+
+      if (!makeResponse.ok) {
+        return response.status(502).json({ error: "Automation handoff failed" });
+      }
+    } catch {
+      return response.status(502).json({ error: "Automation handoff failed" });
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    return response.status(202).json({ ok: true });
+  };
 }
+
+export default createAutomationLeadHandler();

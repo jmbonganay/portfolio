@@ -1,7 +1,7 @@
 export const profile = {
   name: "John Michael Bonganay",
   role: "Landing Page Designer / Developer · Automation Specialist",
-  location: "Tabaco City, Philippines",
+  location: "Philippines - Remote",
   email: "johnmichaelbonganay1231@gmail.com",
   linkedin: "https://www.linkedin.com/in/john-michael-bonganay-802950167/",
   resumePath: "/JohnMichael_Bonganay_Resume.pdf",
@@ -36,7 +36,7 @@ export const profile = {
     {
       label: "Systems after the form",
       value:
-        "Web3Forms, Make.com, GoHighLevel, CRM routes, AI scoping flows, and follow up logic planned around the page."
+        "Verified form gateways, Make.com, GoHighLevel, CRM routes, AI scoping flows, and follow up logic planned around the page."
     },
     {
       label: "Launch ready support",

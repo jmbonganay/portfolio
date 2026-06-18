@@ -2,11 +2,11 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState } from "react";
 import ReactGA from "react-ga4";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import {
+  ArrowUp,
   ArrowUpRight,
   BarChart3,
   Bot,
   BriefcaseBusiness,
-  CalendarClock,
   CheckCircle2,
   Code2,
   ExternalLink,
@@ -27,11 +27,19 @@ import johnMichaelPortrait from "./assets/john-michael.webp";
 import BlurImage from "./components/BlurImage";
 import ScrollToTop from "./components/ScrollToTop";
 import AutomationModal from "./components/AutomationModal";
+import PrivacyConsent from "./components/PrivacyConsent";
 import StatusWidget from "./components/StatusWidget";
 import { HoverCard, StaggeredGrid, StaggeredGridItem } from "./components/MotionWrappers";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
 import { imageDimensions } from "./data/imageDimensions";
+import {
+  contactCopy,
+  contactProjectTypes,
+  contactTrustSignals,
+  getFirstInvalidContactField,
+} from "./data/contact";
+import { readAnalyticsConsent } from "./privacy/analytics-consent";
 
 
 const TechMatrix = lazy(() => import("./components/TechMatrix"));
@@ -64,12 +72,20 @@ const WORK_PAGE_SIZE = 5;
 const COMPACT_WORK_PAGE_SIZE = 4;
 // Public client identifiers are loaded from environment variables so they can
 // be rotated without source-code edits.
-const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || "";
 const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY || "";
 const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
 const MAX_CONTACT_NAME_LENGTH = 160;
 const MAX_CONTACT_EMAIL_LENGTH = 240;
 const MAX_CONTACT_MESSAGE_LENGTH = 3000;
+
+function sendAnalyticsEvent(...args) {
+  if (
+    typeof window !== "undefined" &&
+    readAnalyticsConsent(window.localStorage) === "granted"
+  ) {
+    ReactGA.event(...args);
+  }
+}
 
 const ALL_WORK_FILTER = "featured";
 const WORK_ARCHIVE_FILTER = "all";
@@ -127,7 +143,7 @@ function getSafeExternalHref(value) {
 
   try {
     const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+    return url.protocol === "https:" ? url.href : "";
   } catch {
     return "";
   }
@@ -152,11 +168,11 @@ const navLinks = [
 ];
 
 const footerLinks = [
-  { label: "Work", href: "#work" },
-  { label: "Stack", href: "#stack" },
+  { label: "Selected work", href: "#work" },
   { label: "Automation", href: "#automation" },
+  { label: "Engineered stack", href: "#stack" },
+  { label: "Role fit", href: "#role-fit" },
   { label: "Resume", href: profile.resumePath, download: "JohnMichael_Bonganay_Resume.pdf" },
-  { label: "Contact", href: "#contact" },
 ];
 
 const selectedWorkMeta = {
@@ -862,17 +878,6 @@ const hireConfidenceSignals = [
     value: "Remote ready",
     label: "Freelance builds and team workflows",
   },
-];
-const contactProjectTypes = [
-  "Landing page",
-  "Website build",
-  "Automation",
-  "Remote role",
-];
-const contactTrustSignals = [
-  "US, UK, and AU overlap",
-  "Remote ready setup",
-  "Clear updates and handoff",
 ];
 const initialContactForm = {
   name: "",
@@ -2217,8 +2222,10 @@ function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#top");
   const [isCompactWorkViewport, setIsCompactWorkViewport] = useState(false);
+  const [privacyPreferencesOpen, setPrivacyPreferencesOpen] = useState(false);
   const workFilterTimers = useRef([]);
   const workSectionRef = useRef(null);
+  const contactFormRef = useRef(null);
   const captchaRef = useRef(null);
 
   const selectedWorkEntries = useMemo(
@@ -2597,7 +2604,7 @@ function App() {
     event.preventDefault();
 
     const nextErrors = validateContactForm(contactForm, selectedProjectType);
-    const isContactIntegrationReady = Boolean(WEB3FORMS_ACCESS_KEY && HCAPTCHA_SITE_KEY);
+    const isContactIntegrationReady = Boolean(HCAPTCHA_SITE_KEY);
     setContactTouched({
       name: true,
       email: true,
@@ -2614,19 +2621,27 @@ function App() {
       return;
     }
 
+    if (Object.keys(nextErrors).length > 0) {
+      const firstInvalidField = getFirstInvalidContactField(nextErrors);
+
+      window.requestAnimationFrame(() => {
+        contactFormRef.current
+          ?.querySelector(`[name="${firstInvalidField}"]`)
+          ?.focus();
+      });
+
+      setContactStatus({
+        type: "error",
+        message: "Please complete the required fields before sending.",
+      });
+      return;
+    }
+
     if (!isContactIntegrationReady) {
       setContactStatus({
         type: "error",
         message:
           "Contact form security keys are not configured. Please add the Vercel environment variables first.",
-      });
-      return;
-    }
-
-    if (Object.keys(nextErrors).length > 0) {
-      setContactStatus({
-        type: "error",
-        message: "Please complete the required fields before sending.",
       });
       return;
     }
@@ -2648,72 +2663,46 @@ function App() {
         message: contactForm.message.trim().slice(0, MAX_CONTACT_MESSAGE_LENGTH),
       };
 
-      formData.set("access_key", WEB3FORMS_ACCESS_KEY);
-      formData.set("name", sanitizedContactForm.name);
-      formData.set("email", sanitizedContactForm.email);
-      formData.set("message", sanitizedContactForm.message);
-      formData.set("project_type", selectedProjectType || "Not selected");
-      formData.set(
-        "subject",
-        `New portfolio inquiry${selectedProjectType ? ` | ${selectedProjectType}` : ""}`,
-      );
-      formData.set("from_name", "John Michael Portfolio");
-      formData.set("h-captcha-response", captchaToken);
-
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch(AUTOMATION_LEAD_ENDPOINT, {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          captchaToken,
+          email: sanitizedContactForm.email,
+          message: sanitizedContactForm.message,
+          name: sanitizedContactForm.name,
+          projectIdea: sanitizedContactForm.message,
+          projectType: selectedProjectType || "Not selected",
+          submissionType: "contact_form",
+        }),
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => ({}));
 
-      if (!response.ok || !data.success) {
-        console.error("Web3Forms submission failed:", {
-          status: response.status,
-          ok: response.ok,
-          message: data.message,
-        });
-
+      if (!response.ok) {
+        const errorMessages = {
+          403: "Security verification failed. Please complete the captcha again.",
+          429: "Too many requests. Please wait a few minutes and try again.",
+          502: "The secure form service is temporarily unavailable. Please try again.",
+          503: "The secure form service is temporarily unavailable. Please try again.",
+        };
         setContactStatus({
           type: "error",
-          message:
-            data.message ||
-            "Something went wrong while sending your inquiry. Please try again.",
+          message: errorMessages[response.status] || data.error || "Unable to send right now. Please try again.",
         });
         setCaptchaToken("");
         captchaRef.current?.resetCaptcha();
         return;
       }
 
-      void fetch(AUTOMATION_LEAD_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: sanitizedContactForm.name,
-          email: sanitizedContactForm.email,
-          message: sanitizedContactForm.message,
-          projectIdea: sanitizedContactForm.message,
-          projectType: selectedProjectType || "Not selected",
-          submissionType: "contact_form",
-        }),
-      })
-        .then((automationResponse) => {
-          if (!automationResponse.ok) {
-            console.warn("Automation endpoint rejected the lead handoff.");
-          }
-        })
-        .catch(() => {
-          console.warn("Automation endpoint failed.");
-        });
-
-      ReactGA.event({
+      sendAnalyticsEvent({
         category: "Form",
         action: "Submitted Contact Form",
         label: "Quick Inquiry",
       });
 
-      ReactGA.event("generate_lead", {
+      sendAnalyticsEvent("generate_lead", {
         form_name: "Quick Inquiry",
         source: "Portfolio Contact Form",
       });
@@ -2730,8 +2719,6 @@ function App() {
         message: "Inquiry sent successfully. I will be in touch within 24 hours.",
       });
     } catch {
-      console.error("Web3Forms network error.");
-
       setContactStatus({
         type: "error",
         message: "Unable to send right now. Please try again in a moment.",
@@ -2763,8 +2750,7 @@ function App() {
   }
 
   const contactSucceeded = contactStatus.type === "success";
-  const isCaptchaReady = Boolean(captchaToken);
-  const isContactIntegrationReady = Boolean(WEB3FORMS_ACCESS_KEY && HCAPTCHA_SITE_KEY);
+  const isContactIntegrationReady = Boolean(HCAPTCHA_SITE_KEY);
   const contactSubmitDisabled = contactSubmitting || !isContactIntegrationReady;
 
   return (
@@ -2892,7 +2878,7 @@ function App() {
                 href="#work"
                 strength={12}
                 onClick={() => {
-                  ReactGA.event({
+                  sendAnalyticsEvent({
                     category: "User",
                     action: "Clicked Hero CTA",
                     label: "Selected Work",
@@ -3206,44 +3192,40 @@ function App() {
         aria-labelledby="contact-title"
       >
         <div className="contact-shell">
-          <div className="contact-card">
+          <div className="contact-card contact-card--project-first">
             <div className="contact-cta">
-              <p className="section-kicker">Contact</p>
+              <p className="section-kicker">{contactCopy.eyebrow}</p>
 
-              <h2 id="contact-title">Discuss a role, project, or automation build.</h2>
+              <h2 id="contact-title">{contactCopy.headline}</h2>
 
-              <p>
-                Share a brief overview of what you need. I will review it
-                personally and reply with the best next step.
-              </p>
+              <p>{contactCopy.introduction}</p>
 
               <div className="contact-secondary">
                 <p>Prefer direct contact?</p>
 
                 <div className="contact-direct" aria-label="Direct contact links">
-                  <button
-                    className={
-                      emailCopied
-                        ? "contact-copy-card is-copied"
-                        : "contact-copy-card"
-                    }
-                    type="button"
-                    onClick={handleCopyEmail}
-                    aria-label={`Copy email address ${profile.email}`}
-                  >
-                    {emailCopied ? (
-                      <CheckCircle2 size={18} aria-hidden="true" />
-                    ) : (
+                  <div className="contact-email-actions">
+                    <a href={`mailto:${profile.email}`}>
                       <Mail size={18} aria-hidden="true" />
-                    )}
+                      <span>
+                        <small>Email John</small>
+                        <strong>{profile.email}</strong>
+                      </span>
+                    </a>
 
-                    <span>
-                      <small>Email</small>
-                      <strong>{profile.email}</strong>
-                    </span>
-
-                    <em>{emailCopied ? "Copied" : "Copy"}</em>
-                  </button>
+                    <button
+                      className={
+                        emailCopied
+                          ? "contact-copy-action is-copied"
+                          : "contact-copy-action"
+                      }
+                      type="button"
+                      onClick={handleCopyEmail}
+                      aria-label={`Copy email address ${profile.email}`}
+                    >
+                      {emailCopied ? "Copied" : "Copy address"}
+                    </button>
+                  </div>
 
                   <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
                     <ExternalLink size={18} aria-hidden="true" />
@@ -3255,30 +3237,21 @@ function App() {
                 </div>
               </div>
 
-              <div className="contact-availability">
-                <div className="contact-availability__main">
-                  <CalendarClock size={18} aria-hidden="true" />
-                  <p>
-                    <strong>Available for freelance projects and remote roles.</strong>
-                    <span>Organized, responsive, and ready for async collaboration.</span>
-                  </p>
-                </div>
-
-                <div
-                  className="trust-signal-grid"
-                  aria-label="Availability and remote work signals"
-                >
-                  {contactTrustSignals.map((signal) => (
-                    <span key={signal}>
-                      <CheckCircle2 size={14} aria-hidden="true" />
-                      {signal}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <ul
+                className="contact-trust-list"
+                aria-label="Availability and project support signals"
+              >
+                {contactTrustSignals.map((signal) => (
+                  <li key={signal}>
+                    <CheckCircle2 size={15} aria-hidden="true" />
+                    {signal}
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <form
+              ref={contactFormRef}
               className={
                 contactSucceeded
                   ? "contact-form contact-form--success"
@@ -3323,69 +3296,75 @@ function App() {
                   />
 
                   <div className="contact-form__top">
-                    <div className="contact-form__eyebrow">
-                      <span className="status-dot" aria-hidden="true" />
-                      <p>Quick inquiry</p>
+                    <div>
+                      <div className="contact-form__eyebrow">
+                        <span className="status-dot" aria-hidden="true" />
+                        <p>{contactCopy.formEyebrow}</p>
+                      </div>
+
+                      <h3>{contactCopy.formTitle}</h3>
+                      <small>{contactCopy.formHelper}</small>
                     </div>
 
-                    <h3>Send the details here</h3>
-                    <small>Use 2 to 3 sentences. I will reply with the next step.</small>
+                    <span className="contact-duration">2 to 3 minutes</span>
                   </div>
 
-                  <div className={`form-field ${getContactFieldState("name")}`}>
-                    <input
-                      id="contact-name"
-                      name="name"
-                      type="text"
-                      autoComplete="name"
-                      placeholder=" "
-                      value={contactForm.name}
-                      maxLength={MAX_CONTACT_NAME_LENGTH}
-                      onChange={handleContactChange}
-                      onBlur={handleContactBlur}
-                      aria-invalid={Boolean(
-                        contactErrors.name && contactTouched.name,
-                      )}
-                      aria-describedby={
-                        contactErrors.name && contactTouched.name
-                          ? "contact-name-error"
-                          : undefined
-                      }
-                      required
-                    />
-                    <label htmlFor="contact-name">Name</label>
+                  <div className="contact-primary-fields">
+                    <div className={`form-field ${getContactFieldState("name")}`}>
+                      <input
+                        id="contact-name"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        placeholder=" "
+                        value={contactForm.name}
+                        maxLength={MAX_CONTACT_NAME_LENGTH}
+                        onChange={handleContactChange}
+                        onBlur={handleContactBlur}
+                        aria-invalid={Boolean(
+                          contactErrors.name && contactTouched.name,
+                        )}
+                        aria-describedby={
+                          contactErrors.name && contactTouched.name
+                            ? "contact-name-error"
+                            : undefined
+                        }
+                        required
+                      />
+                      <label htmlFor="contact-name">Name</label>
 
-                    {contactErrors.name && contactTouched.name ? (
-                      <small id="contact-name-error">{contactErrors.name}</small>
-                    ) : null}
-                  </div>
+                      {contactErrors.name && contactTouched.name ? (
+                        <small id="contact-name-error">{contactErrors.name}</small>
+                      ) : null}
+                    </div>
 
-                  <div className={`form-field ${getContactFieldState("email")}`}>
-                    <input
-                      id="contact-email"
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      placeholder=" "
-                      value={contactForm.email}
-                      maxLength={MAX_CONTACT_EMAIL_LENGTH}
-                      onChange={handleContactChange}
-                      onBlur={handleContactBlur}
-                      aria-invalid={Boolean(
-                        contactErrors.email && contactTouched.email,
-                      )}
-                      aria-describedby={
-                        contactErrors.email && contactTouched.email
-                          ? "contact-email-error"
-                          : undefined
-                      }
-                      required
-                    />
-                    <label htmlFor="contact-email">Email address</label>
+                    <div className={`form-field ${getContactFieldState("email")}`}>
+                      <input
+                        id="contact-email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        placeholder=" "
+                        value={contactForm.email}
+                        maxLength={MAX_CONTACT_EMAIL_LENGTH}
+                        onChange={handleContactChange}
+                        onBlur={handleContactBlur}
+                        aria-invalid={Boolean(
+                          contactErrors.email && contactTouched.email,
+                        )}
+                        aria-describedby={
+                          contactErrors.email && contactTouched.email
+                            ? "contact-email-error"
+                            : undefined
+                        }
+                        required
+                      />
+                      <label htmlFor="contact-email">Email address</label>
 
-                    {contactErrors.email && contactTouched.email ? (
-                      <small id="contact-email-error">{contactErrors.email}</small>
-                    ) : null}
+                      {contactErrors.email && contactTouched.email ? (
+                        <small id="contact-email-error">{contactErrors.email}</small>
+                      ) : null}
+                    </div>
                   </div>
 
                   <div
@@ -3395,7 +3374,7 @@ function App() {
                     aria-labelledby="contact-project-type-label"
                   >
                     <div className="project-type-label-row">
-                      <span id="contact-project-type-label">Inquiry type</span>
+                      <span id="contact-project-type-label">What can I help with?</span>
                       <small>Optional</small>
                     </div>
 
@@ -3442,11 +3421,15 @@ function App() {
                       aria-describedby={
                         contactErrors.message && contactTouched.message
                           ? "contact-message-error"
-                          : undefined
+                          : "contact-message-hint"
                       }
                       required
                     />
-                    <label htmlFor="contact-message">What do you need help with?</label>
+                    <label htmlFor="contact-message">{contactCopy.messageLabel}</label>
+
+                    <span className="form-field__hint" id="contact-message-hint">
+                      {contactCopy.messageHint}
+                    </span>
 
                     {contactErrors.message && contactTouched.message ? (
                       <small id="contact-message-error">
@@ -3455,81 +3438,83 @@ function App() {
                     ) : null}
                   </div>
 
-                  <div className="contact-captcha">
-                    {HCAPTCHA_SITE_KEY ? (
-                      <HCaptcha
-                        ref={captchaRef}
-                        sitekey={HCAPTCHA_SITE_KEY}
-                        reCaptchaCompat={false}
-                        theme="dark"
-                        onVerify={(token) => {
-                          setCaptchaToken(token);
-                          setCaptchaError("");
-                          setContactStatus((currentStatus) => {
-                            if (
-                              currentStatus.type === "error" &&
-                              /captcha|hcaptcha/i.test(currentStatus.message)
-                            ) {
-                              return { type: "", message: "" };
-                            }
+                  <div className="contact-security-row">
+                    <div className="contact-captcha">
+                      {HCAPTCHA_SITE_KEY ? (
+                        <HCaptcha
+                          ref={captchaRef}
+                          sitekey={HCAPTCHA_SITE_KEY}
+                          reCaptchaCompat={false}
+                          theme="dark"
+                          onVerify={(token) => {
+                            setCaptchaToken(token);
+                            setCaptchaError("");
+                            setContactStatus((currentStatus) => {
+                              if (
+                                currentStatus.type === "error" &&
+                                /captcha|hcaptcha/i.test(currentStatus.message)
+                              ) {
+                                return { type: "", message: "" };
+                              }
 
-                            return currentStatus;
-                          });
-                        }}
-                        onExpire={() => {
-                          setCaptchaToken("");
-                          setCaptchaError("Captcha expired. Please verify again.");
-                        }}
-                        onError={() => {
-                          setCaptchaToken("");
-                          setCaptchaError("Captcha failed to load. Please try again.");
-                        }}
+                              return currentStatus;
+                            });
+                          }}
+                          onExpire={() => {
+                            setCaptchaToken("");
+                            setCaptchaError("Captcha expired. Please verify again.");
+                          }}
+                          onError={() => {
+                            setCaptchaToken("");
+                            setCaptchaError("Captcha failed to load. Please try again.");
+                          }}
+                        />
+                      ) : (
+                        <small className="contact-captcha__error" role="alert">
+                          hCaptcha site key is missing. Add VITE_HCAPTCHA_SITE_KEY in Vercel or .env.local.
+                        </small>
+                      )}
+
+                      <input
+                        type="hidden"
+                        name="h-captcha-response"
+                        value={captchaToken}
+                        readOnly
                       />
-                    ) : (
-                      <small className="contact-captcha__error" role="alert">
-                        hCaptcha site key is missing. Add VITE_HCAPTCHA_SITE_KEY in Vercel or .env.local.
-                      </small>
-                    )}
 
-                    <input
-                      type="hidden"
-                      name="h-captcha-response"
-                      value={captchaToken}
-                      readOnly
-                    />
+                      {captchaError ? (
+                        <small className="contact-captcha__error" role="alert">
+                          {captchaError}
+                        </small>
+                      ) : null}
+                    </div>
 
-                    {captchaError ? (
-                      <small className="contact-captcha__error" role="alert">
-                        {captchaError}
-                      </small>
-                    ) : null}
+                    <button
+                      className="submit-button"
+                      type="submit"
+                      disabled={contactSubmitDisabled}
+                      aria-disabled={contactSubmitDisabled}
+                      title={
+                        !isContactIntegrationReady
+                          ? "Add Vercel environment variables first"
+                          : undefined
+                      }
+                    >
+                      <span>
+                        {contactSubmitting
+                          ? "Sending..."
+                          : !isContactIntegrationReady
+                            ? "Contact form not configured"
+                            : contactCopy.submitLabel}
+                      </span>
+                      <Send size={18} aria-hidden="true" />
+                    </button>
                   </div>
 
                   <p className="contact-reply-note">
                     <CheckCircle2 size={16} aria-hidden="true" />
-                    Usually replies within 24 hours. Email and LinkedIn stay available if captcha blocks submission.
+                    {contactCopy.fallback}
                   </p>
-
-                  <button
-                    className="submit-button"
-                    type="submit"
-                    disabled={contactSubmitDisabled}
-                    aria-disabled={contactSubmitDisabled}
-                    title={
-                      !isContactIntegrationReady
-                        ? "Add Vercel environment variables first"
-                        : undefined
-                    }
-                  >
-                    <span>
-                      {contactSubmitting
-                        ? "Sending..."
-                        : !isContactIntegrationReady
-                          ? "Contact form not configured"
-                          : "Send inquiry"}
-                    </span>
-                    <Send size={18} aria-hidden="true" />
-                  </button>
 
                   {contactStatus.message && contactStatus.type === "error" ? (
                     <div
@@ -3549,60 +3534,125 @@ function App() {
       </section>
       <footer className="site-footer" aria-label="Portfolio footer">
         <div className="footer-shell">
-          <div className="footer-brand">
-            <a
-              className="brand"
-              href="#top"
-              aria-label="Back to top"
-              onClick={(event) => handleNavClick(event, "#top")}
-            >
-              <span>JM</span>
-              <strong>Bonganay</strong>
-            </a>
-            <p>
-              Conversion focused front end work with clean handoffs and practical
-              automation systems that keep campaigns moving.
-            </p>
-            <StatusWidget />
-          </div>
+          <section className="footer-cta-card" aria-labelledby="footer-cta-title">
+            <div className="footer-cta-copy">
+              <p className="footer-eyebrow">Available for freelance and remote support</p>
+              <h2 id="footer-cta-title">Have a page, funnel, or workflow to launch?</h2>
+              <p>
+                Let&apos;s turn the brief into a clear build, tested handoff, and
+                launch ready system your team can use with confidence.
+              </p>
+            </div>
 
-          <nav className="footer-links" aria-label="Footer navigation">
-            {footerLinks.map((link) => (
+            <div className="footer-cta-actions">
               <a
-                key={link.label}
-                href={link.href}
-                download={link.download}
-                onClick={
-                  link.href.startsWith("#")
-                    ? (event) => handleNavClick(event, link.href)
-                    : undefined
-                }
+                className="footer-cta-primary"
+                href={`mailto:${profile.email}?subject=Portfolio%20project%20inquiry`}
               >
-                {link.label}
+                <Mail size={18} aria-hidden="true" />
+                Start a conversation
               </a>
-            ))}
-          </nav>
+              <a
+                className="footer-cta-secondary"
+                href={profile.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Connect on LinkedIn
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </a>
+            </div>
+          </section>
 
-          <div className="footer-action-panel" aria-label="Quick contact links">
-            <p>Available for freelance projects and remote roles.</p>
-            <div className="footer-actions">
-              <a href={`mailto:${profile.email}`}>
-                Email me
-                <ArrowUpRight size={15} aria-hidden="true" />
+          <div className="footer-main">
+            <div className="footer-brand">
+              <a
+                className="brand"
+                href="#top"
+                aria-label="John Michael Bonganay home"
+                onClick={(event) => handleNavClick(event, "#top")}
+              >
+                <span>JM</span>
+                <div className="footer-brand__identity">
+                  <strong>{profile.name}</strong>
+                  <small>Conversion focused Front End Developer and Automation Support</small>
+                </div>
               </a>
-              <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
-                LinkedIn
-                <ArrowUpRight size={15} aria-hidden="true" />
-              </a>
+              <p>
+                I build landing pages, ecommerce experiences, and lead workflows
+                that are easier to launch, test, and hand off.
+              </p>
+            </div>
+
+            <nav className="footer-links" aria-label="Footer navigation">
+              <p className="footer-column-label">Explore</p>
+              <ul>
+                {footerLinks.map((link) => (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      download={link.download}
+                      onClick={
+                        link.href.startsWith("#")
+                          ? (event) => handleNavClick(event, link.href)
+                          : undefined
+                      }
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="footer-availability" aria-label="Availability and work fit">
+              <p className="footer-column-label">Work fit</p>
+              <StatusWidget />
+              <ul className="footer-trust-list">
+                <li>
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  Design, build, QA, and handoff
+                </li>
+                <li>
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  Async friendly communication
+                </li>
+                <li>
+                  <CheckCircle2 size={15} aria-hidden="true" />
+                  US, UK, and AU timezone overlap
+                </li>
+              </ul>
             </div>
           </div>
 
-          <p className="footer-copy">
-            © {new Date().getFullYear()} John Michael Bonganay. Designed and built
-            with React.
-          </p>
+          <div className="footer-bottom">
+            <p className="footer-copy">
+              © {new Date().getFullYear()} John Michael Bonganay. Designed and built
+              with React.
+            </p>
+            <button
+              className="footer-privacy-preferences"
+              type="button"
+              onClick={() => setPrivacyPreferencesOpen(true)}
+            >
+              Privacy preferences
+            </button>
+            <a
+              className="footer-back-to-top"
+              href="#top"
+              onClick={(event) => handleNavClick(event, "#top")}
+            >
+              Back to top
+              <ArrowUp size={17} aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </footer>
+
+      <PrivacyConsent
+        forceOpen={privacyPreferencesOpen}
+        onClose={() => setPrivacyPreferencesOpen(false)}
+      />
 
       <ScrollToTop />
 

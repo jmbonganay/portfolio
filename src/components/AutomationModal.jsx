@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { ExternalLink, X } from "lucide-react";
 import TerminalLoader from "./TerminalLoader";
 
 const AUTOMATION_LEAD_ENDPOINT = "/api/automation-lead";
+const HCAPTCHA_SITE_KEY = import.meta.env.VITE_HCAPTCHA_SITE_KEY || "";
 const MAX_NAME_LENGTH = 160;
 const MAX_EMAIL_LENGTH = 240;
 const MAX_PROJECT_IDEA_LENGTH = 3000;
@@ -11,7 +13,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function getProposalEngineErrorMessage(status, fallbackMessage = "") {
   if (status === 503) {
-    return "The AI Proposal Engine webhook is not configured yet. Add MAKE_WEBHOOK_URL and try again.";
+    return "The secure proposal service is temporarily unavailable. Please try again.";
   }
 
   if (status === 502) {
@@ -40,7 +42,7 @@ function getSafeExternalHref(value) {
 
   try {
     const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+    return url.protocol === "https:" ? url.href : "";
   } catch {
     return "";
   }
@@ -92,6 +94,9 @@ function AiProposalEngineForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formError, setFormError] = useState("");
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+  const captchaRef = useRef(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -134,9 +139,15 @@ function AiProposalEngineForm() {
       return;
     }
 
+    if (!HCAPTCHA_SITE_KEY || !captchaToken) {
+      setCaptchaError("Please complete the captcha before sending.");
+      return;
+    }
+
     setIsLoading(true);
     setIsSuccess(false);
     setFormError("");
+    setCaptchaError("");
 
     try {
       const response = await fetch(AUTOMATION_LEAD_ENDPOINT, {
@@ -145,6 +156,7 @@ function AiProposalEngineForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          captchaToken,
           name: sanitizedValues.name,
           email: sanitizedValues.email,
           projectIdea: sanitizedValues.projectIdea,
@@ -174,6 +186,8 @@ function AiProposalEngineForm() {
           : "Something went wrong. Please try again.",
       );
     } finally {
+      setCaptchaToken("");
+      captchaRef.current?.resetCaptcha();
       setIsLoading(false);
     }
   };
@@ -240,6 +254,38 @@ function AiProposalEngineForm() {
           />
         </label>
 
+        <div className="ai-proposal-engine__captcha">
+          {HCAPTCHA_SITE_KEY ? (
+            <HCaptcha
+              ref={captchaRef}
+              sitekey={HCAPTCHA_SITE_KEY}
+              reCaptchaCompat={false}
+              theme="dark"
+              onVerify={(token) => {
+                setCaptchaToken(token);
+                setCaptchaError("");
+              }}
+              onExpire={() => {
+                setCaptchaToken("");
+                setCaptchaError("Captcha expired. Please verify again.");
+              }}
+              onError={() => {
+                setCaptchaToken("");
+                setCaptchaError("Captcha failed to load. Please try again.");
+              }}
+            />
+          ) : (
+            <p className="ai-proposal-engine__error" role="alert">
+              hCaptcha is not configured for this environment.
+            </p>
+          )}
+          {captchaError ? (
+            <p className="ai-proposal-engine__error" role="alert">
+              {captchaError}
+            </p>
+          ) : null}
+        </div>
+
         {formError ? (
           <p className="ai-proposal-engine__error" role="alert">
             {formError}
@@ -255,7 +301,7 @@ function AiProposalEngineForm() {
         <button
           type="submit"
           className="ai-proposal-engine__submit"
-          disabled={isLoading}
+          disabled={isLoading || !HCAPTCHA_SITE_KEY}
         >
           {isLoading ? "Analyzing Concept..." : "Trigger AI Proposal Engine"}
         </button>

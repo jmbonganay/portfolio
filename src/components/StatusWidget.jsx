@@ -1,13 +1,12 @@
 export default function StatusWidget() {
   return (
-    <div className="status-widget" aria-label="System status">
+    <div className="status-widget" aria-label="Availability">
       <span className="status-widget__dot" aria-hidden="true">
-        <span />
         <i />
       </span>
       <span className="status-widget__content">
-        <strong>Systems operational</strong>
-        <em>Remote ready workflow</em>
+        <strong>Open to projects and remote roles</strong>
+        <em>Remote from the Philippines</em>
       </span>
     </div>
   );

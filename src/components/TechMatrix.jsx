@@ -80,7 +80,7 @@ const techCategories = [
       "GA4",
       "Google Tag Manager",
       "Cloudflare DNS",
-      "Web3Forms",
+      "Secure form gateway",
       "hCaptcha",
       "SendGrid",
       "PayMongo",
