@@ -1263,6 +1263,9 @@ export const projects = [
       "Client deployment CRM orchestration, multi trigger routing, wait node sequencing, email deliverability monitoring, and NDA safe performance reporting.",
     image: "/work/ghl-production-automations.webp",
     imageAlt: "GoHighLevel workflow builder screenshot showing multi trigger lead nurture automation",
+    proofImage: "/work/ghl-acc-optin-performance.webp",
+    proofNote:
+      "Aggregate GoHighLevel email performance proof; contact identities and private campaign details are excluded.",
     modalAddress: "gohighlevel.com/workflows",
     drawerDescription:
       "A client deployment GoHighLevel automation system built during professional agency work to route production campaign traffic, apply CRM tags, preserve data integrity, delay nurture delivery intentionally, and execute high deliverability follow up sequences at scale.",
@@ -1312,6 +1315,170 @@ export const projects = [
         "Maintained 99.3%+ delivery performance",
         "Used timed wait nodes for follow up cadence",
         "Kept campaign proof NDA safe and client data excluded"
+      ]
+    }
+  },
+  {
+    id: "ghl-buyer-follow-up-automation",
+    number: "41",
+    category: "Automations",
+    caseStudyData: true,
+    type: "Production CRM Automation",
+    title: "GoHighLevel Buyer Follow Up Automation",
+    summary:
+      "A post purchase GoHighLevel workflow handling buyer tagging, n8n wishlist handoff, and timed email and SMS follow up after successful payment.",
+    role:
+      "Configured GoHighLevel payment triggers, CRM tags, n8n handoff, wait steps, email sequences, SMS follow ups, and compliance aware timing.",
+    result:
+      "Created a cleaner post purchase follow up system with organized buyer tracking, timely communication, and smoother campaign backend support.",
+    focus:
+      "Automation / CRM Workflow / Email and SMS Follow Up",
+    image: "/work/ghl-buyer-follow-up-automation.png",
+    imageAlt:
+      "GoHighLevel buyer follow up workflow showing a successful payment trigger, buyer tagging, n8n handoff, and message sequencing",
+    proofImage: "/work/ghl-buyer-follow-up-performance.png",
+    proofNote:
+      "Aggregate email performance proof; buyer identities and private campaign details are excluded.",
+    nda: true,
+    modalAddress: "gohighlevel.com/workflows",
+    drawerDescription:
+      "This project shows the system behind a campaign: post purchase automation, CRM tagging, email and SMS sequencing, compliance aware timing, and workflow handoff support.",
+    metrics: [
+      { value: "Post purchase flow", label: "Workflow" },
+      { value: "Email + SMS", label: "Sequence" },
+      { value: "CRM handoff", label: "Buyer tracking" },
+      { value: "Timed waits", label: "Compliance aware timing" }
+    ],
+    badges: ["GoHighLevel", "Automation"],
+    architectureDetails: [
+      {
+        title: "Successful payment trigger",
+        copy:
+          "Started the workflow when payment is received for the ACC Workshop Purchase and required a successful payment status before any buyer follow up actions run."
+      },
+      {
+        title: "Buyer tagging and n8n handoff",
+        copy:
+          "Applied the buyer tag inside GoHighLevel, then passed the buyer into an n8n wishlist step to support the campaign backend handoff."
+      },
+      {
+        title: "Timed email and SMS sequence",
+        copy:
+          "Configured Email 1 followed by a compliant wait before SMS 1, then continued the sequence through Email 2, SMS 2, Email 3, SMS 3, SMS 4, Email 5, SMS 5, Email 6, and SMS 6."
+      },
+      {
+        title: "Compliance aware workflow completion",
+        copy:
+          "Used one day waits and compliant hour delays between messages, then closed the workflow with the ACC workshop buyer registration status step."
+      }
+    ],
+    caseStudy: {
+      headline:
+        "A post purchase GoHighLevel workflow for buyer tracking, CRM handoff, and timed follow up.",
+      overview:
+        "This automation supports the system behind a campaign after purchase, connecting payment confirmation to buyer tagging, n8n wishlist handling, and an organized email and SMS sequence.",
+      challenge:
+        "New workshop buyers needed a clear post purchase communication flow after payment, with buyer tagging, follow up messages, and workflow handoff handled in one organized system.",
+      approach:
+        "Built a GoHighLevel automation that starts after successful payment, applies buyer tags, sends data into an n8n wishlist step, then runs a timed email and SMS follow up sequence using compliant wait periods between messages.",
+      outcome:
+        "A more organized buyer follow up workflow that supports timely communication, cleaner CRM tracking, and a smoother backend flow after purchase.",
+      techStack: [
+        "GoHighLevel",
+        "n8n",
+        "Email Automation",
+        "SMS Automation",
+        "CRM Tags",
+        "Payment Trigger Workflows"
+      ],
+      highlights: [
+        "Post purchase flow",
+        "Email + SMS sequence",
+        "CRM handoff",
+        "Compliance aware timing"
+      ]
+    }
+  },
+  {
+    id: "ghl-phantom-optin-tracker",
+    number: "42",
+    category: "Automations",
+    caseStudyData: true,
+    type: "Lead Routing Automation",
+    title: "GoHighLevel Phantom Opt in URL Tracker",
+    summary:
+      "A GoHighLevel opt in tracking workflow that routes Phantom Protocol leads, applies tags, checks missing contact fields, and sends contacts into the right follow up path.",
+    role:
+      "Configured GoHighLevel form triggers, CRM tags, workflow routing, contact field checks, conditional branches, update field actions, and follow up handoffs.",
+    result:
+      "Created a cleaner lead routing system that helps organize opt in contacts, reduce incomplete contact data issues, and send leads into the correct follow up workflow.",
+    focus:
+      "CRM Automation / Lead Routing / Opt in Tracking Workflow",
+    image: "/work/ghl-phantom-optin-tracker.png",
+    imageAlt:
+      "GoHighLevel Phantom Protocol opt in workflow showing form submission, CRM tagging, workflow handoff, and conditional routing",
+    proofImage: "/work/ghl-phantom-optin-performance.png",
+    proofNote:
+      "Aggregate email performance proof; contact identities and private campaign details are excluded.",
+    nda: true,
+    modalAddress: "gohighlevel.com/workflows",
+    drawerDescription:
+      "This project shows the backend system behind a funnel through CRM routing, lead tagging, data cleanup, conditional logic, workflow handoff, and campaign automation support.",
+    metrics: [
+      { value: "Opt in routing", label: "Lead workflow" },
+      { value: "CRM tagging", label: "Segmentation" },
+      { value: "Field cleanup", label: "Contact data" },
+      { value: "Drip handoff", label: "Follow up readiness" }
+    ],
+    badges: ["GoHighLevel", "CRM Automation"],
+    architectureDetails: [
+      {
+        title: "Opt in trigger and CRM tagging",
+        copy:
+          "Started the workflow when the Phantom Protocol opt in form is submitted, applied the required CRM tag, and added the contact to the related workflow."
+      },
+      {
+        title: "Contact data cleanup",
+        copy:
+          "Checked whether the contact is a media buyer, tested for missing first and last name fields, and updated contact data according to each condition result."
+      },
+      {
+        title: "Conditional lead routing",
+        copy:
+          "Routed contacts through source and tag based campaign branches with a protected fallback path, keeping private account labels out of the public case study."
+      },
+      {
+        title: "Follow up workflow handoff",
+        copy:
+          "Sent contacts into Drip where needed and used wait and follow up routing steps to support lead organization and follow up readiness after opt in."
+      }
+    ],
+    caseStudy: {
+      headline:
+        "A GoHighLevel opt in workflow for CRM tagging, contact cleanup, and conditional lead routing.",
+      overview:
+        "This automation supports the backend system behind a funnel by organizing opt in contacts before follow up and handing each lead to the appropriate workflow path.",
+      challenge:
+        "Opt in leads needed to be routed cleanly after form submission, with tags, contact fields, and workflow paths organized before follow up started.",
+      approach:
+        "Built a GoHighLevel automation that starts from a Phantom Protocol opt in form, applies CRM tags, checks missing first and last name fields, updates contact data, and routes contacts through the correct workflow path based on conditions and tags.",
+      outcome:
+        "A more organized opt in routing system that supports cleaner lead data, better workflow segmentation, and smoother follow up handoff after form submission.",
+      techStack: [
+        "GoHighLevel",
+        "CRM Tags",
+        "Conditional Logic",
+        "Contact Field Updates",
+        "Lead Routing",
+        "Drip Handoff",
+        "Opt in Workflow Automation"
+      ],
+      highlights: [
+        "Opt in lead routing",
+        "CRM tagging",
+        "Contact field cleanup",
+        "Conditional workflow paths",
+        "Drip handoff"
       ]
     }
   }

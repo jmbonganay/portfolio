@@ -101,6 +101,8 @@ const featuredWorkIds = [
 const automationSpotlightIds = [
   "automation-inbound-triage-crm",
   "ghl-production-automations",
+  "ghl-buyer-follow-up-automation",
+  "ghl-phantom-optin-tracker",
 ];
 
 const workFilters = [
@@ -477,7 +479,7 @@ function getShowcaseRole(project) {
 }
 
 function getShowcaseOutcome(project) {
-  return getShowcaseMeta(project).outcome ?? getProjectResult(project);
+  return getShowcaseMeta(project).outcome ?? project.result ?? getProjectResult(project);
 }
 
 function getShowcaseTags(project) {
