@@ -16160,6 +16160,165 @@ h2 {
   text-transform: uppercase;
 }
 
+.project-performance-proof {
+  overflow: hidden;
+  border: 1px solid rgba(7, 94, 88, 0.18);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 16px 42px rgba(16, 32, 31, 0.1);
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.project-performance-proof[open] {
+  border-color: rgba(7, 94, 88, 0.34);
+  box-shadow: 0 24px 58px rgba(16, 32, 31, 0.14);
+}
+
+.project-performance-proof summary {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  cursor: pointer;
+  list-style: none;
+  background:
+    linear-gradient(135deg, rgba(22, 214, 200, 0.055), rgba(255, 255, 255, 0.94)),
+    #f8faf4;
+}
+
+.project-performance-proof summary::-webkit-details-marker {
+  display: none;
+}
+
+.project-performance-proof summary:focus-visible {
+  outline-offset: -3px;
+}
+
+.project-performance-proof__heading,
+.project-performance-proof__heading > span,
+.project-performance-proof__heading strong {
+  display: flex;
+  align-items: center;
+}
+
+.project-performance-proof__heading {
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.project-performance-proof__heading > span {
+  gap: 8px;
+  color: #075e58;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-performance-proof__heading strong {
+  gap: 6px;
+  color: rgba(11, 23, 21, 0.68);
+  font-size: 0.74rem;
+  white-space: nowrap;
+}
+
+.project-performance-proof__heading strong svg {
+  transition: transform 200ms ease;
+}
+
+.project-performance-proof:hover .project-performance-proof__heading strong,
+.project-performance-proof summary:focus-visible .project-performance-proof__heading strong {
+  color: #075e58;
+}
+
+.project-performance-proof[open] .project-performance-proof__heading strong svg {
+  transform: rotate(90deg);
+}
+
+.project-performance-proof__close-label {
+  display: none;
+}
+
+.project-performance-proof[open] .project-performance-proof__open-label {
+  display: none;
+}
+
+.project-performance-proof[open] .project-performance-proof__close-label {
+  display: inline;
+}
+
+.project-performance-proof__preview-shell {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(7, 94, 88, 0.12);
+  border-radius: 10px;
+  background: #f1f4ee;
+}
+
+.project-performance-proof__preview.blur-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: none;
+  transition: filter 200ms ease;
+}
+
+.project-performance-proof summary:hover .project-performance-proof__preview,
+.project-performance-proof summary:focus-visible .project-performance-proof__preview {
+  filter: contrast(1.04);
+}
+
+.project-performance-proof__expanded {
+  display: grid;
+  gap: 10px;
+  padding: 0 12px 12px;
+  background: #f8faf4;
+}
+
+.project-performance-proof__expanded > p {
+  margin: 0;
+  color: rgba(11, 23, 21, 0.64);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.project-performance-proof__viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid rgba(7, 94, 88, 0.16);
+  border-radius: 10px;
+  background: #ffffff;
+  scrollbar-color: #075e58 #e4ece7;
+}
+
+.project-performance-proof__viewport:focus-visible {
+  outline: 2px solid #16d6c8;
+  outline-offset: 2px;
+}
+
+.project-performance-proof__image-shell {
+  width: max(100%, 960px);
+}
+
+.project-performance-proof__image.blur-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  transform: none;
+}
+
+.work-feature-card:has(.project-performance-proof[open]) {
+  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
+}
+
+.work-grid--supporting .motion-work-item:has(.project-performance-proof[open]) {
+  grid-column: 1 / -1;
+}
+
 .work-grid.work-grid--supporting {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(18px, 2.2vw, 24px);
@@ -16387,6 +16546,10 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .work-feature-card:has(.project-performance-proof[open]) {
+    grid-template-columns: 1fr;
+  }
+
   .work-feature-card__media {
     min-height: 440px;
   }
@@ -16490,6 +16653,22 @@ h2 {
 
   .work-feature-card h3 {
     font-size: clamp(1.86rem, 9vw, 2.5rem);
+  }
+
+  .project-performance-proof__heading {
+    align-items: flex-start;
+  }
+
+  .project-performance-proof__heading strong {
+    font-size: 0.7rem;
+  }
+
+  .project-performance-proof__expanded {
+    padding: 0 10px 10px;
+  }
+
+  .project-performance-proof__image-shell {
+    width: 960px;
   }
 
   .project-media {

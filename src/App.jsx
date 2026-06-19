@@ -1039,6 +1039,65 @@ function isAutomationShowcaseProject(project) {
   return ["Automations"].includes(project.category);
 }
 
+function ProjectPerformanceProof({ project }) {
+  const dimensions = getImageDimensions(project.proofImage, {
+    width: 1200,
+    height: 180,
+  });
+
+  return (
+    <details className="project-performance-proof">
+      <summary aria-label={`Enlarge ${project.title} performance proof`}>
+        <span className="project-performance-proof__heading">
+          <span>
+            <BarChart3 size={16} aria-hidden="true" />
+            Performance proof
+          </span>
+          <strong>
+            <span className="project-performance-proof__open-label">View larger</span>
+            <span className="project-performance-proof__close-label">Close enlarged view</span>
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </strong>
+        </span>
+
+        <BlurImage
+          className="project-performance-proof__preview"
+          wrapperClassName="project-performance-proof__preview-shell"
+          src={project.proofImage}
+          alt=""
+          width={dimensions.width}
+          height={dimensions.height}
+          sizes="(max-width: 720px) 88vw, (max-width: 1120px) 44vw, 520px"
+          loading="lazy"
+          decoding="async"
+        />
+      </summary>
+
+      <div className="project-performance-proof__expanded">
+        <p>{project.proofNote ?? "Cropped dashboard proof with sensitive details excluded."}</p>
+        <div
+          className="project-performance-proof__viewport"
+          role="region"
+          aria-label={`${project.title} enlarged performance screenshot`}
+          tabIndex="0"
+        >
+          <BlurImage
+            className="project-performance-proof__image"
+            wrapperClassName="project-performance-proof__image-shell"
+            src={project.proofImage}
+            alt={`${project.title} performance dashboard proof`}
+            width={dimensions.width}
+            height={dimensions.height}
+            sizes="(max-width: 720px) 960px, min(1100px, 90vw)"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </details>
+  );
+}
+
 function FeaturedProjectCard({
   project,
   onOpenCaseStudy,
@@ -1101,17 +1160,21 @@ function FeaturedProjectCard({
           </span>
         </div>
 
-        <div
-          className="work-feature-card__metrics"
-          aria-label={`${project.title} featured proof metrics`}
-        >
-          {getShowcaseMetrics(project, 3).map((metric) => (
-            <div key={`feature-${project.id}-${metric.label}`}>
-              <strong>{metric.value}</strong>
-              <span>{metric.label}</span>
-            </div>
-          ))}
-        </div>
+        {project.proofImage ? (
+          <ProjectPerformanceProof project={project} />
+        ) : (
+          <div
+            className="work-feature-card__metrics"
+            aria-label={`${project.title} featured proof metrics`}
+          >
+            {getShowcaseMetrics(project, 3).map((metric) => (
+              <div key={`feature-${project.id}-${metric.label}`}>
+                <strong>{metric.value}</strong>
+                <span>{metric.label}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="work-feature-card__outcome">
           <BarChart3 size={16} aria-hidden="true" />
@@ -1240,24 +1303,21 @@ function ProjectCard({
           </span>
         </div>
 
-        <div
-          className="project-metrics project-metrics--compact"
-          aria-label={`${project.title} key metrics`}
-        >
-          {getShowcaseMetrics(project).map((metric) => (
-            <div className="project-metric" key={`${project.id}-${metric.label}`}>
-              <strong className="project-metric__value">{metric.value}</strong>
-              <span className="project-metric__label">{metric.label}</span>
-            </div>
-          ))}
-        </div>
-
         {project.proofImage ? (
-          <div className="project-proof-compact">
-            <BarChart3 size={15} aria-hidden="true" />
-            <span>Dashboard proof available. Sensitive data excluded.</span>
+          <ProjectPerformanceProof project={project} />
+        ) : (
+          <div
+            className="project-metrics project-metrics--compact"
+            aria-label={`${project.title} key metrics`}
+          >
+            {getShowcaseMetrics(project).map((metric) => (
+              <div className="project-metric" key={`${project.id}-${metric.label}`}>
+                <strong className="project-metric__value">{metric.value}</strong>
+                <span className="project-metric__label">{metric.label}</span>
+              </div>
+            ))}
           </div>
-        ) : null}
+        )}
 
         <div className="project-tags">
           {getShowcaseTags(project).map((badge) => (
