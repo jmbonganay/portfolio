@@ -13677,6 +13677,7 @@ button.automation-architecture-card__secondary {
 
   .hire-confidence-footer {
     display: grid;
+    grid-template-columns: 1fr;
     align-items: start;
   }
 
