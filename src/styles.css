@@ -3982,6 +3982,61 @@ body:has(.privacy-consent) .scroll-to-top {
   pointer-events: none !important;
 }
 
+.app-error-fallback {
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  padding: 24px;
+  color: #f8f3e8;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(22, 214, 200, 0.16), transparent 35%),
+    #050b0a;
+}
+
+.app-error-fallback__card {
+  width: min(620px, 100%);
+  padding: clamp(28px, 6vw, 52px);
+  border: 1px solid rgba(125, 255, 245, 0.2);
+  border-radius: 24px;
+  background: rgba(9, 20, 26, 0.94);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.app-error-fallback__card p {
+  margin: 0 0 10px;
+  color: #69efe2;
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-error-fallback__card h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  line-height: 1.04;
+}
+
+.app-error-fallback__card span {
+  display: block;
+  margin-top: 18px;
+  color: rgba(248, 243, 232, 0.72);
+  line-height: 1.65;
+}
+
+.app-error-fallback__card button {
+  min-height: 44px;
+  margin-top: 24px;
+  padding: 0 20px;
+  border: 1px solid #52e8d9;
+  border-radius: 999px;
+  color: #071517;
+  background: #69efe2;
+  font: inherit;
+  font-weight: 850;
+  cursor: pointer;
+}
+
 @media (max-width: 720px) {
   .privacy-consent {
     right: 12px;

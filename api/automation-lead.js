@@ -1,5 +1,6 @@
 import { verifyHCaptcha } from "./security/hcaptcha.js";
 import { createUpstashRateLimitService } from "./security/rate-limit.js";
+import { reportServerError } from "./monitoring/sentry.js";
 import {
   MAX_BODY_BYTES,
   getBodyByteLength,
@@ -8,6 +9,26 @@ import {
 } from "./security/validation.js";
 
 const MAKE_TIMEOUT_MS = 8_000;
+const OPERATIONAL_ERRORS = {
+  handler: "Unexpected automation lead failure",
+  hcaptcha: "hCaptcha service unavailable",
+  make_configuration: "Make webhook configuration unavailable",
+  make_network: "Make webhook network failure",
+  make_response: "Make webhook rejected request",
+  upstash: "Rate limit service unavailable",
+};
+
+async function safelyReport(reportError, stage, submissionType) {
+  try {
+    await reportError({
+      error: new Error(OPERATIONAL_ERRORS[stage]),
+      stage,
+      submissionType: submissionType || "unknown",
+    });
+  } catch {
+    // Monitoring must never change the form response.
+  }
+}
 
 function getHeader(request, name) {
   if (typeof request.headers?.get === "function") {
@@ -59,13 +80,12 @@ function sendLimitResponse(response, result) {
   });
 }
 
-export function createAutomationLeadHandler({
-  env = process.env,
-  fetchImpl = fetch,
-  rateLimits,
-  verifyCaptcha = verifyHCaptcha,
-} = {}) {
-  return async function automationLeadHandler(request, response) {
+async function processAutomationLead(
+  { env, fetchImpl, rateLimits, reportError, verifyCaptcha },
+  request,
+  response,
+  onSubmissionType,
+) {
     if (request.method !== "POST") {
       response.setHeader("Allow", "POST");
       return response.status(405).json({ error: "Method not allowed" });
@@ -94,6 +114,8 @@ export function createAutomationLeadHandler({
       }
       return response.status(validation.status || 400).json({ error: "Invalid request" });
     }
+    const submissionType = validation.payload.submissionType;
+    onSubmissionType(submissionType);
 
     const clientIp = getClientIp(request);
     const limiter = rateLimits || createUpstashRateLimitService(env);
@@ -104,6 +126,7 @@ export function createAutomationLeadHandler({
     });
 
     if (ipLimit.unavailable) {
+      await safelyReport(reportError, "upstash", submissionType);
       return response.status(503).json({ error: "Security service unavailable" });
     }
     if (ipLimit.limited) {
@@ -122,8 +145,10 @@ export function createAutomationLeadHandler({
         return response.status(403).json({ error: "Security verification failed" });
       }
       if (captcha.reason === "configuration") {
+        await safelyReport(reportError, "hcaptcha", submissionType);
         return response.status(503).json({ error: "Security service unavailable" });
       }
+      await safelyReport(reportError, "hcaptcha", submissionType);
       return response.status(502).json({ error: "Security verification unavailable" });
     }
 
@@ -133,6 +158,7 @@ export function createAutomationLeadHandler({
     });
 
     if (emailLimit.unavailable) {
+      await safelyReport(reportError, "upstash", submissionType);
       return response.status(503).json({ error: "Security service unavailable" });
     }
     if (emailLimit.limited) {
@@ -142,6 +168,7 @@ export function createAutomationLeadHandler({
     const webhookUrl = env.MAKE_WEBHOOK_URL;
     const webhookSecret = env.MAKE_WEBHOOK_SECRET;
     if (!webhookSecret || !isAllowedWebhookUrl(webhookUrl)) {
+      await safelyReport(reportError, "make_configuration", submissionType);
       return response.status(503).json({ error: "Automation endpoint is not configured" });
     }
 
@@ -169,15 +196,53 @@ export function createAutomationLeadHandler({
       });
 
       if (!makeResponse.ok) {
+        await safelyReport(reportError, "make_response", submissionType);
         return response.status(502).json({ error: "Automation handoff failed" });
       }
     } catch {
+      await safelyReport(reportError, "make_network", submissionType);
       return response.status(502).json({ error: "Automation handoff failed" });
     } finally {
       clearTimeout(timeoutId);
     }
 
     return response.status(202).json({ ok: true });
+}
+
+export function createAutomationLeadHandler({
+  env = process.env,
+  fetchImpl = fetch,
+  rateLimits,
+  reportError = reportServerError,
+  verifyCaptcha = verifyHCaptcha,
+} = {}) {
+  const dependencies = {
+    env,
+    fetchImpl,
+    rateLimits,
+    reportError,
+    verifyCaptcha,
+  };
+
+  return async function automationLeadHandler(request, response) {
+    let submissionType = "unknown";
+
+    try {
+      return await processAutomationLead(
+        dependencies,
+        request,
+        response,
+        (value) => {
+          submissionType = value;
+        },
+      );
+    } catch {
+      await safelyReport(reportError, "handler", submissionType);
+      if (!response.headersSent && !response.writableEnded) {
+        return response.status(500).json({ error: "Unable to process request" });
+      }
+      return undefined;
+    }
   };
 }
 

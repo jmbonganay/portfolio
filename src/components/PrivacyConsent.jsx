@@ -50,8 +50,10 @@ export default function PrivacyConsent({ forceOpen = false, onClose }) {
           <p>
             hCaptcha helps prevent abuse; Upstash applies request limits; Make,
             Gmail, and Google Sheets process form submissions and replies. Google
-            Analytics 4 measures site use only with consent. Do not submit
-            sensitive personal information through the forms.
+            Analytics 4 measures site use only with consent. Sentry provides
+            essential error monitoring in Preview and Production; default PII,
+            session replay, and submitted form contents are disabled. Do not
+            submit sensitive personal information through the forms.
           </p>
         </details>
       </div>

@@ -45,6 +45,8 @@ test("Vercel security headers retain the hardening baseline", async () => {
   assert.match(contentSecurityPolicy, /frame-ancestors 'none'/);
   assert.match(contentSecurityPolicy, /object-src 'none'/);
   assert.doesNotMatch(contentSecurityPolicy, /web3forms/i);
+  assert.match(contentSecurityPolicy, /https:\/\/\*\.ingest\.sentry\.io/);
+  assert.match(contentSecurityPolicy, /https:\/\/\*\.ingest\.us\.sentry\.io/);
 });
 
 test("analytics is consent-gated and privacy preferences remain accessible", async () => {
@@ -95,4 +97,44 @@ test("both forms use the verified same-origin submission gateway", async () => {
   assert.match(automationSource, /<HCaptcha/);
   assert.match(automationSource, /captchaToken,/);
   assert.match(automationSource, /fetch\(AUTOMATION_LEAD_ENDPOINT/);
+});
+
+test("React uses a visitor-safe Sentry error boundary", async () => {
+  const mainSource = await readProjectFile("src/main.jsx");
+  const fallbackSource = await readProjectFile("src/components/AppErrorFallback.jsx");
+  const styles = await readProjectFile("src/styles.css");
+
+  assert.match(mainSource, /initializeBrowserSentry\(/);
+  assert.match(mainSource, /<Sentry\.ErrorBoundary/);
+  assert.match(mainSource, /fallback=\{<AppErrorFallback\s*\/?>\}/);
+  assert.match(fallbackSource, /role="alert"/);
+  assert.match(fallbackSource, /Reload page/);
+  assert.match(fallbackSource, /window\.location\.reload\(\)/);
+  assert.doesNotMatch(fallbackSource, /componentStack|eventId|error\.toString/);
+  assert.match(styles, /\.app-error-fallback[\s\S]*min-height:\s*100(?:svh|vh)/);
+});
+
+test("Sentry environment variables and privacy disclosure stay separated", async () => {
+  const envExample = await readProjectFile(".env.example");
+  const setupGuide = await readProjectFile("SECURITY_ENV_SETUP.md");
+  const privacySource = await readProjectFile("src/components/PrivacyConsent.jsx");
+
+  for (const variable of [
+    "VITE_SENTRY_DSN",
+    "SENTRY_DSN",
+    "SENTRY_AUTH_TOKEN",
+    "SENTRY_ORG",
+    "SENTRY_PROJECT",
+  ]) {
+    assert.match(envExample, new RegExp(`^${variable}=`, "m"));
+    assert.match(setupGuide, new RegExp(variable));
+  }
+  assert.doesNotMatch(envExample, /VITE_SENTRY_AUTH_TOKEN/);
+  assert.match(setupGuide, /org:ci/);
+  assert.match(setupGuide, /Preview and Production/i);
+  assert.match(privacySource, /Sentry/);
+  assert.match(privacySource, /error monitoring/i);
+  assert.match(privacySource, /default PII/i);
+  assert.match(privacySource, /session replay/i);
+  assert.match(privacySource, /form contents/i);
 });

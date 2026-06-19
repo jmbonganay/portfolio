@@ -148,3 +148,124 @@ test("forwards only normalized lead fields with Make API-key authentication", as
     "submissionType",
   ]);
 });
+
+test("does not report expected request, challenge, or rate-limit outcomes", async () => {
+  const reports = [];
+  const reportError = async (context) => reports.push(context);
+
+  await run(createHandler({ reportError }), createRequest({ method: "GET" }));
+  await run(createHandler({ reportError }), createRequest({ body: {} }));
+  await run(
+    createHandler({
+      reportError,
+      verifyCaptcha: async () => ({ success: false, reason: "challenge" }),
+    }),
+  );
+  await run(
+    createHandler({
+      reportError,
+      rateLimits: {
+        checkIp: async () => ({
+          success: false,
+          limited: true,
+          retryAfterSeconds: 30,
+        }),
+      },
+    }),
+  );
+
+  assert.deepEqual(reports, []);
+});
+
+test("reports operational failures using fixed metadata only", async () => {
+  const cases = [
+    {
+      expectedStatus: 503,
+      overrides: {
+        rateLimits: {
+          checkIp: async () => ({ success: false, unavailable: true }),
+        },
+      },
+      stage: "upstash",
+    },
+    {
+      expectedStatus: 502,
+      overrides: {
+        verifyCaptcha: async () => ({ success: false, reason: "provider" }),
+      },
+      stage: "hcaptcha",
+    },
+    {
+      expectedStatus: 503,
+      overrides: {
+        verifyCaptcha: async () => ({ success: false, reason: "configuration" }),
+      },
+      stage: "hcaptcha",
+    },
+    {
+      expectedStatus: 503,
+      overrides: { env: {} },
+      stage: "make_configuration",
+    },
+    {
+      expectedStatus: 502,
+      overrides: { fetchImpl: async () => ({ ok: false }) },
+      stage: "make_response",
+    },
+    {
+      expectedStatus: 502,
+      overrides: {
+        fetchImpl: async () => {
+          throw new Error("network failed for private webhook URL");
+        },
+      },
+      stage: "make_network",
+    },
+  ];
+
+  for (const failureCase of cases) {
+    const reports = [];
+    const response = await run(
+      createHandler({
+        ...failureCase.overrides,
+        reportError: async (context) => reports.push(context),
+      }),
+    );
+
+    assert.equal(response.statusCode, failureCase.expectedStatus);
+    assert.equal(reports.length, 1);
+    assert.deepEqual(Object.keys(reports[0]).sort(), [
+      "error",
+      "stage",
+      "submissionType",
+    ]);
+    assert.equal(reports[0].stage, failureCase.stage);
+    assert.equal(reports[0].submissionType, "contact_form");
+    assert.ok(reports[0].error instanceof Error);
+    assert.doesNotMatch(
+      JSON.stringify(reports[0]),
+      /jane@|Jane Client|captcha-token|make-secret|test-hook|conversion-focused/i,
+    );
+  }
+});
+
+test("reports unexpected handler exceptions and returns a safe response", async () => {
+  const reports = [];
+  const response = await run(
+    createHandler({
+      rateLimits: {
+        checkIp: async () => {
+          throw new Error("unexpected private provider failure");
+        },
+      },
+      reportError: async (context) => reports.push(context),
+    }),
+  );
+
+  assert.equal(response.statusCode, 500);
+  assert.deepEqual(response.body, { error: "Unable to process request" });
+  assert.equal(reports.length, 1);
+  assert.equal(reports[0].stage, "handler");
+  assert.equal(reports[0].submissionType, "contact_form");
+  assert.equal(reports[0].error.message, "Unexpected automation lead failure");
+});
